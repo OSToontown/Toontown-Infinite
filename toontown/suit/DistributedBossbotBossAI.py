@@ -467,8 +467,12 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         avId = self.air.getAvatarIdFromSender()
         if not self.validate(avId, avId in self.involvedToons, 'hitBoss from unknown avatar'):
             return
-        self.validate(avId, bossDamage <= 3, 'invalid bossDamage %s' % bossDamage)
+        if bossDamage > 3:
+            self.air.writeServerEvent('suspicious', avId, 'Bossbot: Toon sent an attack over 3 damage!')
+            self.air.banManager.ban(avId, 0, 'sys-hack')
+            return
         if bossDamage < 1:
+            self.air.writeServerEvent('suspicious', avId, 'Bossbot: Toon sent an attack less than 1 damage!')
             return
         currState = self.getCurrentOrNextState()
         if currState != 'BattleFour':
