@@ -41,7 +41,3 @@ boarding-group-merges #t
 show-population #t
 force-skip-tutorial #t
 want-instant-parties #t
-
-# winter
-want-christmas #t
-active-holidays 4, 57
