@@ -1,5 +1,6 @@
 from toontown.coghq.CashbotCogHQLoader import CashbotCogHQLoader
-from toontown.toonbase import ToontownGlobals, TTLocalizer
+from toontown.toonbase import ToontownGlobals
+from toontown.toonbase import TTLocalizer
 from toontown.hood.CogHood import CogHood
 from toontown.hood import ZoneUtil
 
