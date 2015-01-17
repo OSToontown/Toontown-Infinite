@@ -476,7 +476,33 @@ class QuestManagerAI:
         pass
 
     def toonKilledCogs(self, av, suitsKilled, zoneId, activeToonList):
-        pass
+        # Get the avatar's current quests.
+        avQuests = av.getQuests()
+        questList = []
+
+        # Make a list of the activeToonDoIds
+        activeToonDoIds = [toon.doId for toon in activeToonList if not None]
+
+        # Iterate through the avatar's current quests.
+        for i in xrange(0, len(avQuests), 5):
+            questDesc = avQuests[i : i + 5]
+            questClass = Quests.getQuest(questDesc[QuestIdIndex])
+
+            # Check if they are doing a cog quest
+            if isinstance(questClass, Quests.CogQuest):
+
+                # Check if the cog counts...
+                if questClass.doesCogCount(av.doId, suitsKilled, zoneId, activeToonDoIds):
+
+                    # Looks like the cog counts!
+                    questDesc[QuestProgressIndex] += 1
+
+            # Add the quest to the questList
+            questList.append(questDesc)
+
+        # Update the avatar's quests
+        av.b_setQuests(questList)
+
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int])
 def quests(command, arg0=0, arg1=0):
