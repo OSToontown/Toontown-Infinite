@@ -492,10 +492,12 @@ class QuestManagerAI:
             if isinstance(questClass, Quests.CogQuest):
 
                 # Check if the cog counts...
-                if questClass.doesCogCount(av.doId, suitsKilled, zoneId, activeToonDoIds):
+                for suit in suitsKilled:
+                    if questClass.doesCogCount(av.doId, suit, zoneId, activeToonDoIds):
 
-                    # Looks like the cog counts!
-                    questDesc[QuestProgressIndex] += 1
+                        # Looks like the cog counts!
+                        if questClass.getCompletionStatus(av, questDesc) != Quests.COMPLETE:
+                            questDesc[QuestProgressIndex] += 1
 
             # Add the quest to the questList
             questList.append(questDesc)
