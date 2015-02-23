@@ -10,6 +10,7 @@ import re
 import sys
 import token
 import tokenize
+import QuestScripts
 
 import BlinkingArrows
 from otp.speedchat import SpeedChatGlobals
@@ -51,27 +52,28 @@ def init():
 def clear():
     globalVarDict.clear()
 
-def readFile(filename):
+def readFile():
     global curId
-    scriptFile = StreamReader(vfs.openReadFile(filename, 1), 1)
-    def readline():
-        return scriptFile.readline().replace('\r', '')
-
-    gen = tokenize.generate_tokens(readline)
-    line = getLineOfTokens(gen)
-    while line is not None:
-        if line == []:
-            line = getLineOfTokens(gen)
-            continue
-        if line[0] == 'ID':
-            parseId(line)
-        elif curId is None:
-            notify.error('Every script must begin with an ID')
-        else:
-            lineDict[curId].append(line)
+    contents = QuestScripts.SCRIPT
+    lines = contents.split('\n')
+    for line in lines:
+        def readline():
+            return line
+        gen = tokenize.generate_tokens(readline)
         line = getLineOfTokens(gen)
+        while line is not None:
+            if line == []:
+                line = getLineOfTokens(gen)
+                continue
+            if line[0] == 'ID':
+                parseId(line)
+            elif curId is None:
+                notify.error('Every script must begin with an ID')
+            else:
+                lineDict[curId].append(line)
+            line = getLineOfTokens(gen)
 
-    return
+        return
 
 
 def getLineOfTokens(gen):
@@ -1083,13 +1085,4 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         else:
             return Wait(0.0)
 
-
-searchPath = DSearchPath()
-if __debug__:
-    searchPath.appendDirectory(Filename('../resources/phase_3/etc'))
-searchPath.appendDirectory(Filename('/phase_3/etc'))
-scriptFile = Filename('QuestScripts.txt')
-found = vfs.resolveFilename(scriptFile, searchPath)
-if not found:
-    notify.error('Could not find QuestScripts.txt file')
-readFile(scriptFile)
+readFile()
