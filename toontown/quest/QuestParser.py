@@ -10,6 +10,7 @@ import re
 import sys
 import token
 import tokenize
+from StringIO import StringIO
 
 import BlinkingArrows
 from otp.speedchat import SpeedChatGlobals
@@ -23,6 +24,7 @@ from toontown.toon import ToonHeadFrame
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.quest import QuestScripts
+
 
 notify = DirectNotifyGlobal.directNotify.newCategory('QuestParser')
 lineDict = {}
@@ -56,25 +58,31 @@ def clear():
 
 def readFile():
     global curId
-    contents = QuestScripts.SCRIPT
-    lines = contents.split('\n')
-    for line in lines:
-        def readline():
-            return line
-        gen = tokenize.generate_tokens(readline)
-        line = getLineOfTokens(gen)
-        while line is not None:
-            if line == []:
-                line = getLineOfTokens(gen)
-                continue
-            if line[0] == 'ID':
-                parseId(line)
-            elif curId is None:
-                notify.error('Every script must begin with an ID')
-            else:
-                lineDict[curId].append(line)
-            line = getLineOfTokens(gen)
 
+    script = StringIO(QuestScripts.SCRIPT)
+
+    def readLine():
+        return script.readline().replace('\r', '')
+
+    gen = tokenize.generate_tokens(readLine)
+    line = getLineOfTokens(gen)
+
+    while line is not None:
+
+        if line == []:
+            line = getLineOfTokens(gen)
+            continue
+
+        if line[0] == 'ID':
+            parseId(line)
+        elif curId is None:
+            notify.error('Every script must begin with an ID')
+        else:
+            lineDict[curId].append(line)
+
+        line = getLineOfTokens(gen)
+
+    script.close()
 
 def getLineOfTokens(gen):
     tokens = []
