@@ -10,6 +10,7 @@ import re
 import sys
 import token
 import tokenize
+from StringIO import StringIO
 
 import BlinkingArrows
 from otp.speedchat import SpeedChatGlobals
@@ -22,6 +23,7 @@ from toontown.suit import SuitDNA
 from toontown.toon import ToonHeadFrame
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
+from toontown.quest import QuestScripts
 
 
 notify = DirectNotifyGlobal.directNotify.newCategory('QuestParser')
@@ -29,6 +31,7 @@ lineDict = {}
 globalVarDict = {}
 curId = None
 FLOAT = re.compile(r'[+-]?\d+[.]\d*([e][+-]\d+)?')
+
 
 def init():
     globalVarDict.update({'render': render,
@@ -48,31 +51,38 @@ def init():
      'chatScButton': base.localAvatar.chatMgr.scButton,
      'arrows': BlinkingArrows.BlinkingArrows()})
 
+
 def clear():
     globalVarDict.clear()
 
-def readFile(filename):
-    global curId
-    scriptFile = StreamReader(vfs.openReadFile(filename, 1), 1)
-    def readline():
-        return scriptFile.readline().replace('\r', '')
 
-    gen = tokenize.generate_tokens(readline)
+def readFile():
+    global curId
+
+    script = StringIO(QuestScripts.SCRIPT)
+
+    def readLine():
+        return script.readline().replace('\r', '')
+
+    gen = tokenize.generate_tokens(readLine)
     line = getLineOfTokens(gen)
+
     while line is not None:
+
         if line == []:
             line = getLineOfTokens(gen)
             continue
+
         if line[0] == 'ID':
             parseId(line)
         elif curId is None:
             notify.error('Every script must begin with an ID')
         else:
             lineDict[curId].append(line)
+
         line = getLineOfTokens(gen)
 
-    return
-
+    script.close()
 
 def getLineOfTokens(gen):
     tokens = []
@@ -1083,13 +1093,4 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         else:
             return Wait(0.0)
 
-
-searchPath = DSearchPath()
-if __debug__:
-    searchPath.appendDirectory(Filename('../resources/phase_3/etc'))
-searchPath.appendDirectory(Filename('/phase_3/etc'))
-scriptFile = Filename('QuestScripts.txt')
-found = vfs.resolveFilename(scriptFile, searchPath)
-if not found:
-    notify.error('Could not find QuestScripts.txt file')
-readFile(scriptFile)
+readFile()
