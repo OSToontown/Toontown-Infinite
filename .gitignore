@@ -5,6 +5,9 @@
 .project
 .pydevproject
 
+# PyCharm IDE:
+.idea
+
 # Mac directory info:
 .DS_Store
 
