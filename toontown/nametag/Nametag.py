@@ -290,5 +290,9 @@ class Nametag:
                     self.drawChatBalloon(model, modelWidth, modelHeight)
                     return
 
+        if hasattr(self.avatar, 'ghostMode'):
+            if self.avatar.ghostMode == 2:
+                return
+
         if self.getText() and (not self.nametagHidden):
             self.drawNametag()
