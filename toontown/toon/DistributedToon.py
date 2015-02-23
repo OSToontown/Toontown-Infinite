@@ -2604,7 +2604,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.gmIcon.flattenStrong()
         self.gmIcon.reparentTo(np)
         self.gmIcon.setScale(4)
-        self.gmIcon.setZ(-2.4)
+        self.gmIcon.setZ(-2.6)
         self.setTrophyScore(self.trophyScore)
         self.gmIconInterval = LerpHprInterval(self.gmIcon, 3.0, Point3(0, 0, 0), Point3(-360, 0, 0))
         self.gmIconInterval.loop()
