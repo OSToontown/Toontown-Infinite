@@ -48,6 +48,8 @@ CEPumpkin = 12
 CEBigWhite = 13
 CESnowMan = 14
 CEGreenToon = 15
+CETinyToon = 16
+CEGiantToon = 17
 CEGhost = 'g'
 CEName2Id = {
     'normal': CENormal,
@@ -65,10 +67,14 @@ CEName2Id = {
     'pumpkin': CEPumpkin,
     'bigwhite': CEBigWhite,
     'snowman': CESnowMan,
-    'greentoon': CEGreenToon
+    'greentoon': CEGreenToon,
+    'tinytoon': CETinyToon,
+    'gianttoon': CEGiantToon
 }
+GiantToonScale = 1.9
 BigToonScale = 1.5
 SmallToonScale = 0.5
+TinyToonScale = 0.3
 DisconnectUnknown = 0
 DisconnectBookExit = 1
 DisconnectCloseWindow = 2

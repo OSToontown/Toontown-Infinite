@@ -132,6 +132,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.maxMoney = 10000
         self.maxBankMoney = ToontownGlobals.MaxBankMoney
         self.gardenSpecials = []
+        self.houseType = 0
         self.houseId = 0
         self.posIndex = 0
         self.savedCheesyEffect = ToontownGlobals.CENormal
@@ -2445,6 +2446,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def setNumPies(self, numPies):
         self.numPies = numPies
 
+    def getNumPies(self):
+        return self.numPies
+
     def b_setPieType(self, pieType):
         self.setPieType(pieType)
         self.d_setPieType(pieType)
@@ -4285,6 +4289,19 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.setBuffs(buffs)
         self.d_setBuffs(buffs)
 
+    def getHouseType(self):
+        return self.houseType
+
+    def setHouseType(self, houseType):
+        self.houseType = houseType
+
+    def d_setHouseType(self, houseType):
+        self.sendUpdate('setHouseType', [houseType])
+
+    def b_setHouseType(self, houseType):
+        self.setHouseType(houseType)
+        self.d_setHouseType(houseType)
+
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int])
 def cheesyEffect(value, hood=0, expire=0):
@@ -4299,7 +4316,7 @@ def cheesyEffect(value, hood=0, expire=0):
         if value not in OTPGlobals.CEName2Id:
             return 'Invalid cheesy effect value: %s' % value
         value = OTPGlobals.CEName2Id[value]
-    elif not 0 <= value <= 15:
+    elif not 0 <= value <= 17:
         return 'Invalid cheesy effect value: %d' % value
     if (hood != 0) and (not 1000 <= hood < ToontownGlobals.DynamicZonesBegin):
         return 'Invalid hood ID: %d' % hood
@@ -5147,4 +5164,11 @@ def disguise(command, suitIndex, value):
         invoker.d_setCogMerits(invoker.cogMerits)
         return 'Merits set.'
     else:
-        return 'Unknow command: %s' % command
+        return 'Unknown command: %s' % command
+
+@magicWord(category=CATEGORY_PROGRAMMER)
+def immortal():
+    """ Makes invoker immune to attacks. """
+    invoker = spellbook.getInvoker()
+    invoker.setImmortalMode(not invoker.immortalMode)
+    return 'Immortal Mode: %s' % ('ON' if invoker.immortalMode else 'OFF')
