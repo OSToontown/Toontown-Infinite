@@ -107,6 +107,10 @@ class OZSafeZoneLoader(SafeZoneLoader):
         self.waterfallActor.setPos(waterfallPlacer.getPos())
         self.accept('clientLogout', self._handleLogout)
 
+        self.constructionSign = loader.loadModel('phase_4/models/props/construction_sign.bam')
+        self.constructionSign.reparentTo(render)
+        self.constructionSign.setPosHpr(-47.941, -138.724, 0.122, 181, 0, 0)
+
         # If Chestnut Park is under construction, create the construction site:
         if base.config.GetBool('want-chestnut-park-construction', False):
             self.constructionSite = render.attachNewNode('constructionSite')
@@ -137,10 +141,6 @@ class OZSafeZoneLoader(SafeZoneLoader):
             self.paintersWantedSign = loader.loadModel('phase_6/models/props/tti_painters_wanted_sign.bam')
             self.paintersWantedSign.reparentTo(self.constructionSite)
             self.paintersWantedSign.setPosHpr(-57, -129.613, 0.025, 160, 0, 0)
-
-            self.constructionSign = loader.loadModel('phase_4/models/props/construction_sign.bam')
-            self.constructionSign.reparentTo(self.constructionSite)
-            self.constructionSign.setPosHpr(-47.941, -138.724, 0.122, 181, 0, 0)
 
             if base.config.GetBool('want-oz-painter-pete', False):
                 self.painterPete = Toon.Toon()
@@ -381,7 +381,6 @@ class OZSafeZoneLoader(SafeZoneLoader):
             self.cone0.cleanup()
             self.cone1.cleanup()
             self.coneModel.removeNode()
-            self.constructionSiteBlocker.removeNode()
             self.constructionSite.removeNode()
             del self.paintersWantedSign
             del self.ladder
@@ -390,6 +389,9 @@ class OZSafeZoneLoader(SafeZoneLoader):
             del self.coneModel
             del self.constructionSiteBlocker
             del self.constructionSite
+        if self.constructionSign is not None:
+            self.constructionSign.removeNode()
+            self.constructionSign = None
 
     def enterPlayground(self, requestStatus):
         self.playgroundClass = OZPlayground
