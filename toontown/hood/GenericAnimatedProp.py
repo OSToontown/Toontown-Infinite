@@ -82,7 +82,7 @@ class GenericAnimatedProp(AnimatedProp.AnimatedProp):
         fullString = str(node)
         splits = fullString.split('/')
         try:
-            visId = int(splits[2])
+            visId = int(splits[4])
             self.visId = visId
             self.hoodId = ZoneUtil.getCanonicalHoodId(visId)
             self.notify.debug('calcHoodId %d from %s' % (self.hoodId, fullString))
