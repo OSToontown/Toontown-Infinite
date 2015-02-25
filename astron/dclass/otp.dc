@@ -24,7 +24,6 @@ from otp.uberdog import OtpAvatarManager/AI/UD
 from otp.chat import ChatAgent/UD
 from otp.uberdog import SpeedchatRelay/UD
 from otp.distributed import CentralLogger/AI/UD
-from otp.web import SettingsMgr/AI/UD
 from otp.status import StatusDatabase/UD
 from otp.avatar import AvatarHandle
 
@@ -480,11 +479,6 @@ dclass SpeedchatRelay : DistributedObject, TalkPath_account {
 dclass CentralLogger : DistributedObject {
   sendMessage(string(0-256), string(0-1024), uint32, uint32) clsend;
   logAIGarbage() airecv;
-};
-
-dclass SettingsMgr : DistributedObject {
-  requestAllChangedSettings() airecv clsend;
-  settingChange(string, string) airecv;
 };
 
 dclass StatusDatabase : DistributedObject {
