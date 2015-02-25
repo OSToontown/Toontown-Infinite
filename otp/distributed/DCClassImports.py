@@ -2,7 +2,7 @@
 from pandac.PandaModules import *
 
 
-hashVal = 3844664701L
+hashVal = 3894372954L
 
 
 from toontown.cogdominium import DistributedCogdoInterior, DistributedCogdoBattleBldg, DistributedCogdoElevatorExt, DistributedCogdoElevatorInt, DistributedCogdoBarrel, DistCogdoGame, DistCogdoLevelGame, DistCogdoBoardroomGame, DistCogdoCraneGame, DistCogdoMazeGame, DistCogdoFlyingGame, DistCogdoCrane, DistCogdoCraneMoneyBag, DistCogdoCraneCog
@@ -16,7 +16,6 @@ from toontown.shtiker import DeleteManager, PurchaseManager, NewbiePurchaseManag
 from toontown.pets import DistributedPetProxy
 from toontown.uberdog.ClientServicesManager import ClientServicesManager
 from toontown.ai import WelcomeValleyManager, NewsManager, DistributedAprilToonsMgr, DistributedBlackCatMgr, DistributedPolarBearMgr, DistributedPolarPlaceEffectMgr, DistributedGreenToonEffectMgr, DistributedResistanceEmoteMgr, DistributedScavengerHuntTarget, DistributedTrickOrTreatTarget, DistributedWinterCarolingTarget, DistributedSillyMeterMgr
-from otp.web import SettingsMgr
 from toontown.ai.DistributedTrashcanZeroMgr import DistributedTrashcanZeroMgr
 from toontown.uberdog.DistributedMailManager import DistributedMailManager
 from otp.chat import ChatAgent

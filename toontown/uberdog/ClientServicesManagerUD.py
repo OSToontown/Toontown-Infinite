@@ -1,6 +1,5 @@
 import semidbm
 import base64
-from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 from direct.distributed.PyDatagram import *
 from direct.fsm.FSM import FSM
@@ -10,6 +9,7 @@ import json
 from pandac.PandaModules import *
 import time
 import urllib2
+import random
 
 from otp.ai.MagicWordGlobal import *
 from otp.distributed import OtpDoGlobals
@@ -1020,6 +1020,11 @@ class UnloadAvatarFSM(OperationFSM):
 class ClientServicesManagerUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('ClientServicesManagerUD')
 
+    def __init__(self, air):
+        DistributedObjectGlobalUD.__init__(self, air)
+
+        self.authKeys = {}
+
     def announceGenerate(self):
         DistributedObjectGlobalUD.announceGenerate(self)
 
@@ -1095,16 +1100,24 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
 
         sender = self.air.getMsgSender()
 
+        # Check if we are getting an auth-req
+        if cookie == '' and authKey == 'authKey-req':
+            # Create the authKey
+            authKey = random.sample(xrange(0, 10), 5)
+            authKey = int(''.join([str(x) for x in authKey]))
+            # Send the authKey to the client
+            self.authKeys[int(sender)] = str(((authKey ^ 6) << 2) * 2)
+            self.sendUpdateToChannel(sender, 'acceptLogin', [authKey])
+            return
+
         # Time to check this login to see if its authentic
-        digest_maker = hmac.new(self.key)
-        digest_maker.update(cookie)
-        serverKey = digest_maker.hexdigest()
-        if serverKey == authKey:
+        if authKey == self.authKeys.get(int(sender)):
             # This login is authentic!
-            pass
+            del self.authKeys[int(sender)]
         else:
             # This login is not authentic.
             self.killConnection(sender, ' ')
+            return
 
         if sender >> 32:
             self.killConnection(sender, 'Client is already logged in.')
