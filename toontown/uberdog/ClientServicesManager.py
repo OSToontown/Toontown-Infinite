@@ -1,35 +1,49 @@
-from direct.directnotify.DirectNotifyGlobal import directNotify
-from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
-import hmac
 from pandac.PandaModules import *
+
+from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
+
+from toontown.chat.WhisperPopup import WhisperPopup
+from toontown.chat.ChatGlobals import WTSystem
 
 from otp.distributed.PotentialAvatar import PotentialAvatar
 from otp.otpbase import OTPGlobals
-from toontown.chat.ChatGlobals import WTSystem
-from toontown.chat.WhisperPopup import WhisperPopup
+
+
+HMAC_KEY = 'bWlub3Iub3BlbmFsLmZpeC5zdGFydC5vZi5oZWFsam9rZXM='
 
 
 class ClientServicesManager(DistributedObjectGlobal):
     notify = directNotify.newCategory('ClientServicesManager')
 
-    # --- LOGIN LOGIC ---
-    def performLogin(self, doneEvent):
-        self.doneEvent = doneEvent
+    def __init__(self, cr):
+        DistributedObjectGlobal.__init__(self, cr)
 
+        self.loginDoneEvent = None
         self.systemMessageSfx = None
 
-        token = self.cr.playToken or 'dev'
+    # --- LOGIN LOGIC ---
+    def performLogin(self, doneEvent):
+        # This function gets called TWICE.
+        # We need to be able to determine when we are actually using it to login
+        # If the loginDoneEvent is None that means this is our first time calling
+        # The function
+        if self.loginDoneEvent is None:
+            self.loginDoneEvent = doneEvent
+            # Now, we will send a "login" request ;)
+            self.sendUpdate('login', ['', 'authKey-req'])
+            return
 
-        key = 'bWlub3Iub3BlbmFsLmZpeC5zdGFydC5vZi5oZWFsam9rZXM='
-        digest_maker = hmac.new(key)
-        digest_maker.update(token)
-        clientKey = digest_maker.hexdigest()
-
-        self.sendUpdate('login', [token, clientKey])
+        self.sendUpdate('login', [self.cr.playToken or 'dev', doneEvent])
 
     def acceptLogin(self, timestamp):
-        messenger.send(self.doneEvent, [{'mode': 'success', 'timestamp': timestamp}])
+        # Check if the timestamp is our secret authKey
+        if len(str(timestamp)) == 5:
+            authKey = str(((timestamp ^ 6) << 2) * 2)
+            self.performLogin(authKey)
+            return
 
+        messenger.send(self.loginDoneEvent, [{'mode': 'success', 'timestamp': timestamp}])
+        self.loginDoneEvent = None
 
     # --- AVATARS LIST ---
     def requestAvatars(self):
