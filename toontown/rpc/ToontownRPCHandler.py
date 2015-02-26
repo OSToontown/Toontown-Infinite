@@ -21,7 +21,7 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
 
     # --- TESTS ---
 
-    @rpcmethod(accessLevel=COMMUNITY_MANAGER)
+    @rpcmethod(accessLevel=USER)
     def rpc_ping(self, data):
         """
         Summary:
@@ -73,12 +73,13 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
     def rpc_updateObject(self, doId, dclassName, newFields, oldFields=None):
         """
         Summary:
-            Update the field(s) of the object associated with the provided
-            [doId]. If <oldFields> is provided, then this method will fail if
-            the object's current fields don't match.
+            Update the field(s) in the database of the object associated with
+            the provided [doId]. If <oldFields> is provided, then this method
+            will fail if the object's current fields don't match.
 
         Parameters:
-            [int doId] = The ID of the object whose fields are to be updated.
+            [int doId] = The ID of the object whose fields are to be updated in
+                         the database.
             [str dclassName] = The name of the object's DClass.
             [dict newFields] = The new field values.
             <dict oldFields> = The old field values to assert.
@@ -123,8 +124,8 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
     def rpc_setField(self, doId, dclassName, fieldName, args=[]):
         """
         Summary:
-            Set the value of the field named [fieldName] on the suggested
-            object.
+            Set the value of the field named [fieldName] on the object
+            associated with the provided [doId].
 
         Parameters:
             [int doId] = The ID of the object whose field is being modified.
@@ -731,45 +732,3 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
                 be terminated.
         """
         self.air.netMessenger.send('stopInvasion', [shardId])
-
-    # --- NAME APPROVAL ---
-
-    @rpcmethod(accessLevel=MODERATOR)
-    def rpc_approveName(self, avId):
-        """
-        Summary:
-            Approves the pending name of the avatar associated with the
-            provided [avId].
-
-        Parameters:
-            [int avId] = The ID of the avatar whose pending name is to be
-                approved.
-
-        Example response:
-            On success: True
-            On failure: False
-        """
-        newFields = {'WishNameState': 'APPROVED'}
-        oldFields = {'WishNameState': 'PENDING'}
-        return self.rpc_updateObject(
-            avId, 'DistributedToonUD', newFields, oldFields=oldFields)
-
-    @rpcmethod(accessLevel=MODERATOR)
-    def rpc_rejectName(self, avId):
-        """
-        Summary:
-            Rejects the pending name of the avatar associated with the provided
-            [avId].
-
-        Parameters:
-            [int avId] = The ID of the avatar whose pending name is to be
-                rejected.
-
-        Example response:
-            On success: True
-            On failure: False
-        """
-        newFields = {'WishNameState': 'REJECTED'}
-        oldFields = {'WishNameState': 'PENDING'}
-        return self.rpc_updateObject(
-            avId, 'DistributedToonUD', newFields, oldFields=oldFields)
