@@ -1,7 +1,13 @@
 #!/usr/bin/env python2
+import argparse
 import collections
 import compiler
 import re
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--filename', '-f', help='The file to write the content to.')
+args = parser.parse_args()
 
 
 class CategoryParser:
@@ -219,5 +225,5 @@ class MediaWikiGenerator:
 parser = MethodParser('toontown/rpc/ToontownRPCHandler.py')
 parser.parse()
 generator = MediaWikiGenerator(parser.getMethods())
-with open('wiki.txt', 'w') as f:
+with open(args.filename, 'w') as f:
     f.write(generator.generate())
