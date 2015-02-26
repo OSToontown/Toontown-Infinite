@@ -6,7 +6,7 @@ import re
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--filename', '-f', help='The file to write the content to.')
+parser.add_argument('filename', help='The file to write the content to.')
 args = parser.parse_args()
 
 
