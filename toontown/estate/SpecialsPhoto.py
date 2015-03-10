@@ -9,7 +9,7 @@ import random
 class DirectRegion(NodePath):
     notify = DirectNotifyGlobal.directNotify.newCategory('DirectRegion')
 
-    def __init__(self, parent = aspect2d):
+    def __init__(self, parent=aspect2d):
         NodePath.__init__(self)
         self.assign(parent.attachNewNode('DirectRegion'))
 

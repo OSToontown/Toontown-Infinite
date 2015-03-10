@@ -758,6 +758,7 @@ plots0 = ((0,
   -43,
   -90.0,
   STATUARY_TYPE))
+
 plots1 = ((0,
   0,
   0.0,
@@ -834,6 +835,7 @@ plots1 = ((0,
   -82,
   -30.0,
   STATUARY_TYPE))
+
 plots2 = ((0,
   0,
   0.0,
@@ -910,6 +912,7 @@ plots2 = ((0,
   -114,
   -60.0,
   STATUARY_TYPE))
+
 plots3 = ((0,
   0,
   0.0,
@@ -986,6 +989,7 @@ plots3 = ((0,
   27,
   102.0,
   STATUARY_TYPE))
+
 plots4 = ((0,
   0,
   0.0,
@@ -1062,6 +1066,7 @@ plots4 = ((0,
   87,
   -140.0,
   STATUARY_TYPE))
+
 plots5 = ((0,
   0,
   0.0,
@@ -1138,15 +1143,18 @@ plots5 = ((0,
   70,
   213.0,
   STATUARY_TYPE))
+
 estatePlots = (plots0,
  plots1,
  plots2,
  plots3,
  plots4,
  plots5)
+
 BOX_ONE = 1
 BOX_TWO = 2
 BOX_THREE = 3
+
 flowerBoxes0 = ((-62.5,
   -52.5,
   182.0,
@@ -1167,6 +1175,7 @@ flowerBoxes0 = ((-62.5,
   -33,
   0.0,
   BOX_TWO))
+
 flowerBoxes1 = ((85.0,
   -67.0,
   26.0,
@@ -1187,6 +1196,7 @@ flowerBoxes1 = ((85.0,
   -86,
   206.0,
   BOX_TWO))
+
 flowerBoxes2 = ((-62,
   -112,
   350.0,
@@ -1207,6 +1217,7 @@ flowerBoxes2 = ((-62,
   -129,
   169.0,
   BOX_TWO))
+
 flowerBoxes3 = ((72,
   5,
   265.0,
@@ -1227,6 +1238,7 @@ flowerBoxes3 = ((72,
   12,
   86.0,
   BOX_TWO))
+
 flowerBoxes4 = ((35.5,
   70,
   152.0,
@@ -1247,6 +1259,7 @@ flowerBoxes4 = ((35.5,
   86,
   -19.0,
   BOX_TWO))
+
 flowerBoxes5 = ((-26.5,
   37.5,
   318.0,
@@ -1267,6 +1280,7 @@ flowerBoxes5 = ((-26.5,
   31,
   124.0,
   BOX_TWO))
+
 estateBoxes = (flowerBoxes0,
  flowerBoxes1,
  flowerBoxes2,
@@ -1274,13 +1288,33 @@ estateBoxes = (flowerBoxes0,
  flowerBoxes4,
  flowerBoxes5)
 
+
+def getGardenPlots(houseIndex):
+    return estatePlots[houseIndex]
+
+
+def getPlotPos(houseIndex, plotIndex):
+    plotData = estatePlots[houseIndex][plotIndex]
+    return plotData[0], plotData[1], 0
+
+
+def getPlotHeading(houseIndex, plotIndex):
+    plotData = estatePlots[houseIndex][plotIndex]
+    return plotData[2]
+
+
+def getPlotType(houseIndex, plotIndex):
+    plotData = estatePlots[houseIndex][plotIndex]
+    return plotData[3]
+
+
 def whatCanBePlanted(plotIndex, hardPointIndex):
-    retval = INVALID_TYPE
     if plotIndex < len(estatePlots) and plotIndex >= 0:
         if hardPointIndex < len(estatePlots[plotIndex]) and hardPointIndex >= 0:
             if len(estatePlots[plotIndex][hardPointIndex]) >= 4:
-                retval = estatePlots[plotIndex][hardPointIndex][3]
-    return retval
+                return estatePlots[plotIndex][hardPointIndex][3]
+
+    return INVALID_TYPE
 
 
 MAGIC_BEAN_SUBTYPE = 0
@@ -1496,3 +1530,5 @@ TrophyDict = {0: (TTLocalizer.GardenTrophyNameDict[0],),
  1: (TTLocalizer.GardenTrophyNameDict[1],),
  2: (TTLocalizer.GardenTrophyNameDict[2],),
  3: (TTLocalizer.GardenTrophyNameDict[3],)}
+
+EmptyPlot = 0

@@ -1,31 +1,31 @@
-from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
-from toontown.toonbase import ToontownGlobals
-import HouseGlobals
-import time
 
 from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
 from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTargetAI
-from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
 from toontown.fishing import FishingTargetGlobals
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 from toontown.safezone.SZTreasurePlannerAI import SZTreasurePlannerAI
 from toontown.safezone import TreasureGlobals
+from toontown.toonbase import ToontownGlobals
+from toontown.estate import HouseGlobals
+
+import time
 
 
 class DistributedEstateAI(DistributedObjectAI):
-    notify = DirectNotifyGlobal.directNotify.newCategory("DistributedEstateAI")
+    notify = directNotify.newCategory("DistributedEstateAI")
+
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
+
         self.toons = [0, 0, 0, 0, 0, 0]
-        self.items = [[], [], [], [], [], []]
-        self.decorData = []
-        self.estateType = 0 # NOT SURE IF THIS HAS ANY USE BUT THANKS DISNEY
+
+        self.estateType = 0
         self.cloudType = 0
         self.dawnTime = 0
         self.lastEpochTimestamp = 0
         self.rentalTimestamp = 0
-        self.houses = [None] * 6
+        self.houses = [None, None, None, None, None, None]
         
         self.pond = None
         self.spots = []
@@ -37,7 +37,7 @@ class DistributedEstateAI(DistributedObjectAI):
     def generate(self):
         DistributedObjectAI.generate(self)
         
-        self.pond = DistributedFishingPondAI(simbase.air)
+        self.pond = DistributedFishingPondAI(self.air)
         self.pond.setArea(ToontownGlobals.MyEstate)
         self.pond.generateWithRequired(self.zoneId)
             
@@ -47,47 +47,39 @@ class DistributedEstateAI(DistributedObjectAI):
             target.generateWithRequired(self.zoneId)
             self.targets.append(target)
 
+        fishingPos = (
+            (49.1029, -124.805, 0.344704, 90, 0, 0),
+            (46.5222, -134.739, 0.390713, 75, 0, 0),
+            (41.31, -144.559, 0.375978, 45, 0, 0),
+            (46.8254, -113.682, 0.46015, 135, 0, 0)
+        )
 
-        spot = DistributedFishingSpotAI(self.air)
-        spot.setPondDoId(self.pond.getDoId())
-        spot.setPosHpr(49.1029, -124.805, 0.344704, 90, 0, 0)
-        spot.generateWithRequired(self.zoneId)
-        self.spots.append(spot)
-
-        spot = DistributedFishingSpotAI(self.air)
-        spot.setPondDoId(self.pond.getDoId())
-        spot.setPosHpr(46.5222, -134.739, 0.390713, 75, 0, 0)
-        spot.generateWithRequired(self.zoneId)
-        self.spots.append(spot)
-
-        spot = DistributedFishingSpotAI(self.air)
-        spot.setPondDoId(self.pond.getDoId())
-        spot.setPosHpr(41.31, -144.559, 0.375978, 45, 0, 0)
-        spot.generateWithRequired(self.zoneId)
-        self.spots.append(spot)
-
-        spot = DistributedFishingSpotAI(self.air)
-        spot.setPondDoId(self.pond.getDoId())
-        spot.setPosHpr(46.8254, -113.682, 0.46015, 135, 0, 0)
-        spot.generateWithRequired(self.zoneId)
-        self.spots.append(spot)
+        for i in xrange(4):
+            spot = DistributedFishingSpotAI(self.air)
+            spot.setPondDoId(self.pond.getDoId())
+            spot.setPosHpr(*fishingPos[i])
+            spot.generateWithRequired(self.zoneId)
+            self.spots.append(spot)
 
         self.createTreasurePlanner()
 
-
     def destroy(self):
         for house in self.houses:
-            if house:
+            if house is not None:
                 house.requestDelete()
+
         del self.houses[:]
-        if self.pond:
+
+        if self.pond is not None:
             self.pond.requestDelete()
+
             for spot in self.spots:
                 spot.requestDelete()
+
             for target in self.targets:
                 target.requestDelete()
 
-        if self.treasurePlanner:
+        if self.treasurePlanner is not None:
             self.treasurePlanner.stop()
 
         self.requestDelete()
@@ -118,8 +110,7 @@ class DistributedEstateAI(DistributedObjectAI):
         pass
         
     def createTreasurePlanner(self):
-        treasureType, healAmount, spawnPoints, spawnRate, maxTreasures = TreasureGlobals.SafeZoneTreasureSpawns[ToontownGlobals.MyEstate]
-        self.treasurePlanner = SZTreasurePlannerAI(self.zoneId, treasureType, healAmount, spawnPoints, spawnRate, maxTreasures)
+        self.treasurePlanner = SZTreasurePlannerAI(self.zoneId, *TreasureGlobals.SafeZoneTreasureSpawns[ToontownGlobals.MyEstate])
         self.treasurePlanner.start()
 
     def requestServerTime(self):
@@ -145,20 +136,7 @@ class DistributedEstateAI(DistributedObjectAI):
     def placeOnGround(self, todo0):
         pass
 
-    def setDecorData(self, decorData):
-        self.decorData = decorData
-        
-    def d_setDecorData(self, decorData):
-        self.sendUpdate('setDecorData', [decorData])
-        
-    def b_setDecorData(self, decorData):
-        self.setDecorData(decorData)
-        self.d_setDecorData(decorData)
-        
-    def getDecorData(self):
-        return self.decorData
-
-    def setLastEpochTimeStamp(self, last): #how do I do this
+    def setLastEpochTimeStamp(self, last):
         self.lastEpochTimestamp = last
         
     def d_setLastEpochTimeStamp(self, last):
@@ -202,19 +180,6 @@ class DistributedEstateAI(DistributedObjectAI):
         
     def getSlot0ToonId(self):
         return self.toons[0]
-
-    def setSlot0Items(self, items):
-        self.items[0] = items
-
-    def d_setSlot0Items(self, items):
-        self.sendUpdate('setSlot5Items', [items])
-        
-    def b_setSlot0Items(self, items):
-        self.setSlot0Items(items)
-        self.d_setSlot0Items(items)
-        
-    def getSlot0Items(self):
-        return self.items[0]
         
     def setSlot1ToonId(self, id):
         self.toons[1] = id
@@ -228,19 +193,6 @@ class DistributedEstateAI(DistributedObjectAI):
         
     def getSlot1ToonId(self):
         return self.toons[1]
-        
-    def setSlot1Items(self, items):
-        self.items[1] = items
-        
-    def d_setSlot1Items(self, items):
-        self.sendUpdate('setSlot2Items', [items])
-        
-    def b_setSlot1Items(self, items):
-        self.setSlot2Items(items)
-        self.d_setSlot2Items(items)
-        
-    def getSlot1Items(self):
-        return self.items[1]
 
     def setSlot2ToonId(self, id):
         self.toons[2] = id
@@ -255,19 +207,6 @@ class DistributedEstateAI(DistributedObjectAI):
     def getSlot2ToonId(self):
         return self.toons[2]
 
-    def setSlot2Items(self, items):
-        self.items[2] = items
-
-    def d_setSlot2Items(self, items):
-        self.sendUpdate('setSlot2Items', [items])
-        
-    def b_setSlot2Items(self, items):
-        self.setSlot2Items(items)
-        self.d_setSlot2Items(items)
-        
-    def getSlot2Items(self):
-        return self.items[2]
-
     def setSlot3ToonId(self, id):
         self.toons[3] = id
         
@@ -280,19 +219,6 @@ class DistributedEstateAI(DistributedObjectAI):
         
     def getSlot3ToonId(self):
         return self.toons[3]
-
-    def setSlot3Items(self, items):
-        self.items[3] = items
-        
-    def d_setSlot3Items(self, items):
-        self.sendUpdate('setSlot3Items', [items])
-        
-    def b_setSlot3Items(self, items):
-        self.setSlot3Items(items)
-        self.d_setSlot3Items(items)
-        
-    def getSlot3Items(self):
-        return self.items[3]
 
     def setSlot4ToonId(self, id):
         self.toons[4] = id
@@ -307,20 +233,6 @@ class DistributedEstateAI(DistributedObjectAI):
     def getSlot4ToonId(self):
         return self.toons[4]
 
-
-    def setSlot4Items(self, items):
-        self.items[4] = items
-        
-    def d_setSlot4Items(self, items):
-        self.sendUpdate('setSlot4Items', [items])
-        
-    def b_setSlot4Items(self, items):
-        self.setSlot4Items(items)
-        self.d_setSlot4Items(items)
-        
-    def getSlot4Items(self):
-        return self.items[4]
-
     def setSlot5ToonId(self, id):
         self.toons[5] = id
         
@@ -334,19 +246,6 @@ class DistributedEstateAI(DistributedObjectAI):
     def getSlot5ToonId(self):
         return self.toons[5]
 
-    def setSlot5Items(self, items):
-        self.items[5] = items
-        
-    def d_setSlot5Items(self, items):
-        self.sendUpdate('setSlot5Items', [items])
-        
-    def b_setSlot5Items(self, items):
-        self.setSlot5Items(items)
-        self.d_setSlot5Items(items)
-        
-    def getSlot5Items(self):
-        return self.items[5]
-
     def setIdList(self, idList):
         for i in xrange(len(idList)):
             if i >= 6:
@@ -359,12 +258,6 @@ class DistributedEstateAI(DistributedObjectAI):
     def b_setIdList(self, idList):
         self.setIdList(idList)
         self.d_setIdLst(idList)
-        
-    def completeFlowerSale(self, todo0):
-        pass
-
-    def awardedTrophy(self, todo0):
-        pass
 
     def setClouds(self, clouds):
         self.cloudType = clouds
@@ -385,6 +278,18 @@ class DistributedEstateAI(DistributedObjectAI):
     def gameTableOver(self):
         pass
 
+    def placeStarterGarden(self, av):
+        if av is None:
+            return
+
+        for house in self.houses:
+            if house is not None:
+                if house.getAvatarId() == av.doId:
+                    house.placeStarterGarden()
+                    return
+
+        self.notify.warning('Avatar %s tried to place a starter garden when he didnt own a house!' % av.doId)
+
     def updateToons(self):
         self.d_setSlot0ToonId(self.toons[0])
         self.d_setSlot1ToonId(self.toons[1])
@@ -392,12 +297,5 @@ class DistributedEstateAI(DistributedObjectAI):
         self.d_setSlot3ToonId(self.toons[3])
         self.d_setSlot4ToonId(self.toons[4])
         self.d_setSlot5ToonId(self.toons[5])
-        self.sendUpdate('setIdList', [self.toons])
 
-    def updateItems(self):
-        self.d_setSlot0Items(self.items[0])
-        self.d_setSlot1Items(self.items[1])
-        self.d_setSlot2Items(self.items[2])
-        self.d_setSlot3Items(self.items[3])
-        self.d_setSlot4Items(self.items[4])
-        self.d_setSlot5Items(self.items[5])
+        self.sendUpdate('setIdList', [self.toons])

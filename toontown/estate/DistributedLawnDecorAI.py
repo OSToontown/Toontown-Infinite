@@ -1,20 +1,33 @@
-from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedNodeAI import DistributedNodeAI
 
+from toontown.estate import GardenGlobals
+
+
 class DistributedLawnDecorAI(DistributedNodeAI):
-    notify = DirectNotifyGlobal.directNotify.newCategory("DistributedLawnDecorAI")
+    notify = directNotify.newCategory('DistributedLawnDecorAI')
 
-    def setPlot(self, todo0):
-        pass
+    def __init__(self, air, ownerIndex):
+        DistributedNodeAI.__init__(self, air)
 
-    def setHeading(self, todo0):
-        pass
+        self.ownerIndex = ownerIndex
 
-    def setPosition(self, todo0, todo1, todo2):
-        pass
+        self.plotIndex = None
+        self.plotType = None
 
-    def setOwnerIndex(self, todo0):
-        pass
+        self.pos = None
+        self.heading = None
+
+    def getPlot(self):
+        return self.plotIndex
+
+    def getHeading(self):
+        return self.heading
+
+    def getPosition(self):
+        return self.pos
+
+    def getOwnerIndex(self):
+        return self.ownerIndex
 
     def plotEntered(self):
         pass
@@ -31,3 +44,12 @@ class DistributedLawnDecorAI(DistributedNodeAI):
     def interactionDenied(self, todo0):
         pass
 
+    def construct(self, gardenData):
+        self.plotIndex = gardenData.getUint8()
+
+        self.plotType = GardenGlobals.getPlotType(self.ownerIndex, self.plotIndex)
+        self.pos = GardenGlobals.getPlotPos(self.ownerIndex, self.plotIndex)
+        self.heading = GardenGlobals.getPlotHeading(self.ownerIndex, self.plotIndex)
+
+    def pack(self, gardenData):
+        gardenData.addUint8(self.plotIndex)
