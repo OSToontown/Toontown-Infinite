@@ -10,9 +10,6 @@ class DistributedGardenPlotAI(DistributedLawnDecorAI):
 
         self.occupier = GardenGlobals.EmptyPlot
 
-    def plantFlower(self, todo0, todo1):
-        pass
-
     def plantGagTree(self, todo0, todo1):
         pass
 

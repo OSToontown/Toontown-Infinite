@@ -2718,7 +2718,6 @@ dclass DistributedLawnDecor : DistributedNode {
 };
 
 dclass DistributedGardenPlot : DistributedLawnDecor {
-  plantFlower(uint8, uint8) airecv clsend;
   plantGagTree(uint8, uint8) airecv clsend;
   plantStatuary(uint8) airecv clsend;
   plantToonStatuary(uint8, uint16) airecv clsend;
