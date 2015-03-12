@@ -94,6 +94,9 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
             self.geom.flattenMedium()
         elif zoneId == ToontownGlobals.SellbotFactoryExt:
             self.geom = loader.loadModel(self.factoryExteriorModelPath)
+            SellbotTowersFov = loader.loadModel('phase_9/models/cogHQ/SellbotHQTowers')
+            SellbotTowersFov.reparentTo(self.geom)
+            SellbotTowersFov.setPosHpr(-148, -665, -10, 88, 0, 0)
             factoryLinkTunnel = self.geom.find('**/tunnel_group2')
             factoryLinkTunnel.setName('linktunnel_sellhq_11000_DNARoot')
             factoryLinkTunnel.find('**/tunnel_sphere').setName('tunnel_trigger')
