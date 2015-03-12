@@ -49,7 +49,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
         zoneId = zoneId - zoneId % 100
         if zoneId == ToontownGlobals.SellbotHQ:
             self.geom = loader.loadModel(self.cogHQExteriorModelPath)
-            factoryPOV = loader.loadModel('phase_9/models/cogHQ/SellbotFactoryPOV')
+            factoryPOV = loader.loadModel('phase_9/models/cogHQ/SellbotFactoryPov')
             factoryPOV.reparentTo(self.geom)
             factoryPOV.setPosHpr(580.62, -139.52, 15.22, 272.73, 0, 0)
             dgLinkTunnel = self.geom.find('**/Tunnel1')
