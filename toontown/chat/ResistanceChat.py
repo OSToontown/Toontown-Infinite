@@ -10,11 +10,6 @@ if process == 'client':
     from toontown.battle import BattleParticles
 
 
-try:
-    config = base.config
-except:
-    config = simbase.config
-
 EFFECT_RADIUS = 30
 RESISTANCE_TOONUP = 0
 RESISTANCE_RESTOCK = 1
