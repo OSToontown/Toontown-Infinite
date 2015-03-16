@@ -185,7 +185,7 @@ class DatabaseObject:
         dg.addString('')
         dg.addUint16(objectType)
         dg.addUint16(len(values))
-        for field in values.keys():
+        for field in values:
             dg.addString(field)
 
         for value in values.values():

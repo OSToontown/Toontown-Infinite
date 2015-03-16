@@ -46,7 +46,7 @@ class DistributedPartyCatchActivityBase:
         typeProbs = {'fruit': 3,
          'anvil': 1}
         probSum = reduce(lambda x, y: x + y, typeProbs.values())
-        for key in typeProbs.keys():
+        for key in typeProbs:
             typeProbs[key] = float(typeProbs[key]) / probSum
 
         scheduler = ThreePhaseDropScheduler(PartyGlobals.CatchActivityDuration, self.FirstDropDelay, self.DropPeriod, self.MaxDropDuration, self.SlowerDropPeriodMult, self.NormalDropDelay, self.FasterDropDelay, self.FasterDropPeriodMult)

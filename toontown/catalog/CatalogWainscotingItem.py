@@ -129,7 +129,7 @@ def getWainscotingRange(fromIndex, toIndex, *otherRanges):
         tos.append(otherRanges[i + 1])
         i += 2
 
-    for patternIndex in WainscotingTypes.keys():
+    for patternIndex in WainscotingTypes:
         for fromIndex, toIndex in zip(froms, tos):
             if patternIndex >= fromIndex and patternIndex <= toIndex:
                 colors = WainscotingTypes[patternIndex][WSTColor]

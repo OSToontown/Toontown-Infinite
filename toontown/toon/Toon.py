@@ -182,14 +182,14 @@ def loadModels():
     if not Preloaded:
         print 'Preloading avatars...'
 
-        for key in LegDict.keys():
+        for key in LegDict:
             fileRoot = LegDict[key]
 
             Preloaded[fileRoot+'-1000'] = loader.loadModel('phase_3' + fileRoot + '1000')
             Preloaded[fileRoot+'-500'] = loader.loadModel('phase_3' + fileRoot + '500')
             Preloaded[fileRoot+'-250'] = loader.loadModel('phase_3' + fileRoot + '250')
 
-        for key in TorsoDict.keys():
+        for key in TorsoDict:
             fileRoot = TorsoDict[key]
 
             Preloaded[fileRoot+'-1000'] = loader.loadModel('phase_3' + fileRoot + '1000')
@@ -261,7 +261,7 @@ def loadPhaseAnims(phaseStr = 'phase_3', loadFlag = 1):
         animList = Phase12AnimList
     else:
         self.notify.error('Unknown phase string %s' % phaseStr)
-    for key in LegDict.keys():
+    for key in LegDict:
         for anim in animList:
             if loadFlag:
                 pass
@@ -269,7 +269,7 @@ def loadPhaseAnims(phaseStr = 'phase_3', loadFlag = 1):
                 if base.localAvatar.style.legs == key:
                     base.localAvatar.unloadAnims([anim[0]], 'legs', None)
 
-    for key in TorsoDict.keys():
+    for key in TorsoDict:
         for anim in animList:
             if loadFlag:
                 pass
@@ -277,7 +277,7 @@ def loadPhaseAnims(phaseStr = 'phase_3', loadFlag = 1):
                 if base.localAvatar.style.torso == key:
                     base.localAvatar.unloadAnims([anim[0]], 'torso', None)
 
-    for key in HeadDict.keys():
+    for key in HeadDict:
         if key.find('d') >= 0:
             for anim in animList:
                 if loadFlag:
@@ -307,19 +307,19 @@ def compileGlobalAnimList():
      'phase_12']
     for animList in phaseList:
         phaseStr = phaseStrList[phaseList.index(animList)]
-        for key in LegDict.keys():
+        for key in LegDict:
             LegsAnimDict.setdefault(key, {})
             for anim in animList:
                 file = phaseStr + LegDict[key] + anim[1]
                 LegsAnimDict[key][anim[0]] = file
 
-        for key in TorsoDict.keys():
+        for key in TorsoDict:
             TorsoAnimDict.setdefault(key, {})
             for anim in animList:
                 file = phaseStr + TorsoDict[key] + anim[1]
                 TorsoAnimDict[key][anim[0]] = file
 
-        for key in HeadDict.keys():
+        for key in HeadDict:
             if key.find('d') >= 0:
                 HeadAnimDict.setdefault(key, {})
                 for anim in animList:

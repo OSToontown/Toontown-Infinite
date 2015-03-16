@@ -8,7 +8,7 @@ class FlowerBase:
     def __init__(self, species, variety):
         self.species = species
         self.variety = variety
-        if self.species not in GardenGlobals.PlantAttributes.keys():
+        if self.species not in GardenGlobals.PlantAttributes:
             print 'remove me when everyone is updated'
             self.species = 56
             species = 56

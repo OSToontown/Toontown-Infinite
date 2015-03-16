@@ -531,7 +531,7 @@ def quests(command, arg0=0, arg1=0):
     elif command == 'add':
         if arg0:
             if canCarry:
-                if arg0 in Quests.QuestDict.keys():
+                if arg0 in Quests.QuestDict:
                     return 'Added QuestID %s'%(arg0)
                 else:
                     return 'Invalid QuestID %s'%(arg0)
@@ -587,7 +587,7 @@ def quests(command, arg0=0, arg1=0):
 
                 invoker.b_setQuests(questList)
                 return 'Set quest slot %s progress to %s'%(arg0, arg1)
-            elif arg0 in Quests.QuestDict.keys():
+            elif arg0 in Quests.QuestDict:
                 if arg0 in currentQuestIds:
                     questList = []
 

@@ -396,7 +396,7 @@ class CogThief(DirectObject):
 
     def seeFriends(self):
         self.clearVisibleList()
-        for cogIndex in self.game.cogInfo.keys():
+        for cogIndex in self.game.cogInfo:
             if cogIndex == self.cogIndex:
                 continue
             if self.sameGoal(cogIndex):

@@ -1798,7 +1798,7 @@ def getRandomGirlBottomAndColor(type):
         typeStr = 'gsh'
     else:
         typeStr = 'gsk'
-    for bottom in BottomStyles.keys():
+    for bottom in BottomStyles:
         if bottom.find(typeStr) >= 0:
             bottoms.append(bottom)
 
@@ -1865,7 +1865,7 @@ def getTops(gender, tailorId = MAKE_A_TOON):
 
 def getAllTops(gender):
     tops = []
-    for style in ShirtStyles.keys():
+    for style in ShirtStyles:
         if gender == 'm':
             if style[0] == 'g' or style[:3] == 'c_g':
                 continue
@@ -1895,7 +1895,7 @@ def getBottoms(gender, tailorId = MAKE_A_TOON):
 
 def getAllBottoms(gender, output = 'both'):
     bottoms = []
-    for style in BottomStyles.keys():
+    for style in BottomStyles:
         if gender == 'm':
             if style[0] == 'g' or style[:3] == 'c_g' or style[:4] == 'vd_g' or style[:4] == 'sd_g' or style[:4] == 'j4_g' or style[:4] == 'pj_g' or style[:4] == 'wh_g' or style[:4] == 'sa_g' or style[:4] == 'sc_g' or style[:5] == 'sil_g' or style[:4] == 'hw_g':
                 continue

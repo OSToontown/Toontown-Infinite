@@ -3461,12 +3461,12 @@ def findFinalRewardId(questId):
     return (finalRewardId, remainingSteps)
 
 
-for questId in QuestDict.keys():
+for questId in QuestDict:
     findFinalRewardId(questId)
 
 def getStartingQuests(tier = None):
     startingQuests = []
-    for questId in QuestDict.keys():
+    for questId in QuestDict:
         if isStartingQuest(questId):
             if tier is None:
                 startingQuests.append(questId)
@@ -4913,7 +4913,7 @@ def checkReward(questId, forked = 0):
 
 def assertAllQuestsValid():
     print 'checking quests...'
-    for questId in QuestDict.keys():
+    for questId in QuestDict:
         try:
             quest = getQuest(questId)
         except AssertionError, e:
@@ -4921,7 +4921,7 @@ def assertAllQuestsValid():
             print err
             raise
 
-    for questId in QuestDict.keys():
+    for questId in QuestDict:
         quest = QuestDict[questId]
         tier, start, questDesc, fromNpc, toNpc, reward, nextQuest, dialog = quest
         if start:

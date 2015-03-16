@@ -568,7 +568,7 @@ class FriendsListPanel(DirectFrame, StateData.StateData):
         if self.panelType == FLPAll or self.panelType == FLPOnline:
             if base.wantPets and base.localAvatar.hasPet():
                 petFriends.insert(0, (base.localAvatar.getPetId(), 0))
-        for friendPair in self.friends.keys():
+        for friendPair in self.friends:
             friendButton = self.friends[friendPair]
             self.scrollList.removeItem(friendButton, refresh=0)
             friendButton.destroy()

@@ -1084,10 +1084,7 @@ class FireworkShow(NodePath):
 
     @classmethod
     def isValidShowType(cls, showType = -1):
-        if showType in cls.showData.keys():
-            return True
-        else:
-            return False
+        return showType in cls.showData
 
     def __init__(self, showType = ToontownGlobals.NEWYEARS_FIREWORKS):
         NodePath.__init__(self, 'FireworkShow')

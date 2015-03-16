@@ -539,7 +539,7 @@ class NameShop(StateData.StateData):
             name = name.strip()
             return TextEncoder.upper(npcName) == TextEncoder.upper(name)
 
-        for npcId in NPCToons.NPCToonDict.keys():
+        for npcId in NPCToons.NPCToonDict:
             npcName = NPCToons.NPCToonDict[npcId][1]
             if match(npcName):
                 self.notify.info('name matches NPC name "%s"' % npcName)

@@ -1469,7 +1469,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                                         deadSuits.append(target)
 
         self.exitedToons = []
-        for suitKey in trapDict.keys():
+        for suitKey in trapDict:
             attackList = trapDict[suitKey]
             attack = attackList[0]
             target = self.findSuit(attack[TOON_TGT_COL])

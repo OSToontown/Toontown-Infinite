@@ -17,7 +17,7 @@ class CatalogItemListGUI:
             self.items[category].append(item)
 
     def generatePages(self):
-        for category in self.items.keys():
+        for category in self.items:
             pageNum = 1
             currPage = CatalogItemPage(self.catalogGui, category, pageNum)
             for (x, item) in enumerate(self.items[category]):

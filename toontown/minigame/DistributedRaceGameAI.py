@@ -121,7 +121,7 @@ class DistributedRaceGameAI(DistributedMinigameAI):
 
     def waitClientsChoicesTimeout(self, task):
         self.notify.debug('waitClientsChoicesTimeout: did not hear from all clients')
-        for avId in self.avatarChoices.keys():
+        for avId in self.avatarChoices:
             if self.avatarChoices[avId] == -1:
                 self.avatarChoices[avId] = 0
 

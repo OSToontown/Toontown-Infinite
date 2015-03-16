@@ -164,7 +164,7 @@ class CogdoFlyingCameraManager:
                     if np not in nodesInBetween:
                         nodesInBetween[np] = np.getParent()
 
-        for np in nodesInBetween.keys():
+        for np in nodesInBetween:
             if np in self._betweenCamAndToon:
                 del self._betweenCamAndToon[np]
             else:

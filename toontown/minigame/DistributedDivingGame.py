@@ -151,7 +151,7 @@ class DistributedDivingGame(DistributedMinigame):
         self.environModel.removeNode()
         del self.environModel
         self.removeChildGameFSM(self.gameFSM)
-        for avId in self.toonSDs.keys():
+        for avId in self.toonSDs:
             toonSD = self.toonSDs[avId]
             toonSD.unload()
 
@@ -291,7 +291,7 @@ class DistributedDivingGame(DistributedMinigame):
         self.boatTilt.finish()
         self.mapModel.hide()
         DistributedSmoothNode.activateSmoothing(1, 0)
-        for avId in self.toonSDs.keys():
+        for avId in self.toonSDs:
             self.toonSDs[avId].exit()
 
         base.camLens.setFar(ToontownGlobals.DefaultCameraFar)

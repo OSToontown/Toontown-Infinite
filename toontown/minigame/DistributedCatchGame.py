@@ -134,7 +134,7 @@ class DistributedCatchGame(DistributedMinigame):
         self.introMovie.finish()
         del self.introMovie
         del self.__textGen
-        for avId in self.toonSDs.keys():
+        for avId in self.toonSDs:
             toonSD = self.toonSDs[avId]
             toonSD.unload()
 
@@ -208,7 +208,7 @@ class DistributedCatchGame(DistributedMinigame):
         typeProbs = {'fruit': 3,
          'anvil': 1}
         probSum = reduce(lambda x, y: x + y, typeProbs.values())
-        for key in typeProbs.keys():
+        for key in typeProbs:
             typeProbs[key] = float(typeProbs[key]) / probSum
 
         scheduler = DropScheduler(CatchGameGlobals.GameDuration, self.FirstDropDelay, self.DropPeriod, self.MaxDropDuration, self.FasterDropDelay, self.FasterDropPeriodMult)
@@ -392,7 +392,7 @@ class DistributedCatchGame(DistributedMinigame):
         self.notify.debug('offstage')
         DistributedSmoothNode.activateSmoothing(1, 0)
         self.introMovie.finish()
-        for avId in self.toonSDs.keys():
+        for avId in self.toonSDs:
             self.toonSDs[avId].exit()
 
         self.hidePosts()

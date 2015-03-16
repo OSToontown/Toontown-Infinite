@@ -232,7 +232,7 @@ class DistributedMinigameAI(DistributedObjectAI.DistributedObjectAI):
             self.setGameAbort()
 
         self.__barrier = ToonBarrier('waitClientsReady', self.uniqueName('waitClientsReady'), self.avIdList, READY_TIMEOUT, allAvatarsReady, handleTimeout)
-        for avId in self.stateDict.keys():
+        for avId in self.stateDict:
             if self.stateDict[avId] == READY:
                 self.__barrier.clear(avId)
 
@@ -275,7 +275,7 @@ class DistributedMinigameAI(DistributedObjectAI.DistributedObjectAI):
             self.frameworkFSM.request('frameworkCleanup')
 
         self.__barrier = ToonBarrier('waitClientsExit', self.uniqueName('waitClientsExit'), self.avIdList, EXIT_TIMEOUT, allAvatarsExited, handleTimeout)
-        for avId in self.stateDict.keys():
+        for avId in self.stateDict:
             if self.stateDict[avId] == EXITED:
                 self.__barrier.clear(avId)
 

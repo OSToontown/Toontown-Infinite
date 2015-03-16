@@ -251,7 +251,7 @@ class DistributedPartyManagerAI(DistributedObjectAI):
 
     def updateToPublicPartyCountUdToAllAi(self, partyCount, partyId):
         # Update the number of guests at a party
-        if partyId in self.pubPartyInfo.keys():
+        if partyId in self.pubPartyInfo:
             self.pubPartyInfo[partyId]['numGuests'] = partyCount
 
     def getPublicParties(self):

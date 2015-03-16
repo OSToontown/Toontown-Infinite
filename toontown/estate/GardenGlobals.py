@@ -456,8 +456,8 @@ Recipes = {0: {'beans': 'RRR',
 
 def getRecipeKey(beans, special):
     testDict = {'beans': beans,
-     'special': special}
-    for key in Recipes.keys():
+                'special': special}
+    for key in Recipes:
         recipe = Recipes[key]
         if testDict == recipe:
             return key
@@ -466,7 +466,7 @@ def getRecipeKey(beans, special):
 
 
 def getRecipeKeyUsingSpecial(special):
-    for key in Recipes.keys():
+    for key in Recipes:
         recipe = Recipes[key]
         if recipe['special'] == special:
             return key
@@ -552,7 +552,7 @@ def getNumberOfFlowerSpecies():
 
 def getFlowerVarieties(species):
     retval = ()
-    if species in PlantAttributes.keys():
+    if species in PlantAttributes:
         attrib = PlantAttributes[species]
         if attrib['plantType'] == FLOWER_TYPE:
             retval = attrib['varieties']
@@ -561,7 +561,7 @@ def getFlowerVarieties(species):
 
 def getFlowerSpecies():
     retVal = []
-    for key in PlantAttributes.keys():
+    for key in PlantAttributes:
         attrib = PlantAttributes[key]
         if attrib['plantType'] == FLOWER_TYPE:
             retVal.append(key)
@@ -577,7 +577,7 @@ def getRandomFlower():
 
 def getFlowerVarietyName(species, variety):
     retVal = TTLocalizer.FlowerUnknown
-    if species in PlantAttributes.keys():
+    if species in PlantAttributes:
         attrib = PlantAttributes[species]
         if variety < len(attrib['varieties']):
             funnySpeciesNameList = TTLocalizer.FlowerFunnyNames.get(species)
@@ -592,7 +592,7 @@ def getFlowerVarietyName(species, variety):
 
 
 def getSpeciesVarietyGivenRecipe(recipeKey):
-    for species in PlantAttributes.keys():
+    for species in PlantAttributes:
         attrib = PlantAttributes[species]
         if attrib['plantType'] == GAG_TREE_TYPE:
             continue
@@ -625,7 +625,7 @@ def validateRecipes(notify):
     uniqueBeans = []
     numBoxes = getNumberOfShovelBoxes()
     uniqueSpecials = []
-    for key in Recipes.keys():
+    for key in Recipes:
         recipe = Recipes[key]
         beans = recipe['beans']
         if len(beans) > numBoxes:
@@ -655,7 +655,7 @@ def validatePlantAttributes(notify):
     for i in xrange(getNumberOfShovelBoxes() + 1):
         flowerRecipeDistribution.append([])
 
-    for key in PlantAttributes.keys():
+    for key in PlantAttributes:
         plant = PlantAttributes[key]
         notify.debug('now validating %s' % plant['name'])
         if plant['plantType'] in (GAG_TREE_TYPE, FLOWER_TYPE):
@@ -1474,7 +1474,7 @@ def getPlantItWithString(special):
     return retval
 
 
-for specialKey in Specials.keys():
+for specialKey in Specials:
     recipeKey = getRecipeKeyUsingSpecial(specialKey)
     if not recipeKey == -1:
         Specials[specialKey]['description'] = getPlantItWithString(specialKey)

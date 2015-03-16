@@ -134,7 +134,7 @@ class DistributedPairingGameAI(DistributedMinigameAI):
 
     def isCardFaceUp(self, deckOrderIndex):
         retval = False
-        for key in self.faceUpDict.keys():
+        for key in self.faceUpDict:
             if deckOrderIndex in self.faceUpDict[key]:
                 retval = True
                 break
@@ -160,7 +160,7 @@ class DistributedPairingGameAI(DistributedMinigameAI):
 
     def handleMatch(self, cardA, cardB):
         self.notify.debug('we got a match %d %d' % (cardA, cardB))
-        for key in self.faceUpDict.keys():
+        for key in self.faceUpDict:
             if cardA in self.faceUpDict[key]:
                 self.faceUpDict[key].remove(cardA)
             if cardB in self.faceUpDict[key]:
@@ -171,7 +171,7 @@ class DistributedPairingGameAI(DistributedMinigameAI):
 
     def turnDownCard(self, cardA):
         self.notify.debug('turning down card %d' % cardA)
-        for key in self.faceUpDict.keys():
+        for key in self.faceUpDict:
             if cardA in self.faceUpDict[key]:
                 self.faceUpDict[key].remove(cardA)
 

@@ -54,7 +54,7 @@ def preloadToonHeads():
     global PreloadHeads
     if not PreloadHeads:
         print 'Preloading Toon heads...'
-        for key in HeadDict.keys():
+        for key in HeadDict:
             fileRoot = HeadDict[key]
 
             PreloadHeads['phase_3' + fileRoot + '1000'] = loader.loadModel('phase_3' + fileRoot + '1000')

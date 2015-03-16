@@ -48,7 +48,7 @@ class DistributedVineGameAI(DistributedMinigameAI):
         self.numTreasures = VineGameGlobals.NumVines - 1
         self.numTreasuresTaken = 0
         self.takenTable = [0] * self.numTreasures
-        for avId in self.scoreDict.keys():
+        for avId in self.scoreDict:
             self.scoreDict[avId] = 0
             self.finishedBonus[avId] = 0
             self.finishedTimeLeft[avId] = -1

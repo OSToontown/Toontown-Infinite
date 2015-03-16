@@ -215,7 +215,7 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
         self.stopDropTask()
         del self.activityFSM
         del self.__textGen
-        for avId in self.toonSDs.keys():
+        for avId in self.toonSDs:
             if avId in self.toonSDs:
                 toonSD = self.toonSDs[avId]
                 toonSD.unload()

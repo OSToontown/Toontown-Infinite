@@ -83,7 +83,7 @@ class DistributedPartyDanceActivityBase(DistributedPartyActivity):
             self.danceFloor.removeNode()
             self.danceFloor = None
         self.__destroyOrthoWalk()
-        for toonId in self.dancingToonFSMs.keys():
+        for toonId in self.dancingToonFSMs:
             self.dancingToonFSMs[toonId].destroy()
             del self.dancingToonFSMs[toonId]
 

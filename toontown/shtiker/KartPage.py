@@ -622,11 +622,11 @@ class ItemSelector(DirectFrame):
         return
 
     def destroy(self):
-        for key in self.buttonDict.keys():
+        for key in self.buttonDict:
             self.buttonDict[key].destroy()
             del self.buttonDict[key]
 
-        for key in self.itemViewers.keys():
+        for key in self.itemViewers:
             self.itemViewers[key].destroy()
             del self.itemViewers[key]
 
@@ -697,7 +697,7 @@ class ItemSelector(DirectFrame):
         self.__changeItemCategory(self.state)
 
     def resetAccessoryIcons(self):
-        for key in self.buttonDict.keys():
+        for key in self.buttonDict:
             self.buttonDict[key].setProp('state', DGG.NORMAL)
 
         self.itemViewers['main'].show()

@@ -1738,7 +1738,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def countToonJurors(self):
         self.numToonJurorsSeated = 0
-        for key in self.chairs.keys():
+        for key in self.chairs:
             chair = self.chairs[key]
             if chair.state == 'ToonJuror' or chair.state == None and chair.newState == 'ToonJuror':
                 self.numToonJurorsSeated += 1

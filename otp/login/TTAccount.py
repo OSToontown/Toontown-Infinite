@@ -117,7 +117,7 @@ class TTAccount:
          'l2': 'addr2',
          'l3': 'addr3'}
         dict = self.accountData.dict
-        for fieldName in dict.keys():
+        for fieldName in dict:
             if fieldName in fieldNameMap:
                 dict[fieldNameMap[fieldName]] = dict[fieldName]
                 del dict[fieldName]
@@ -154,7 +154,7 @@ class TTAccount:
 
     def talk(self, operation, data = {}):
         self.notify.debug('TTAccount.talk()')
-        for key in data.keys():
+        for key in data:
             data[key] = str(data[key])
 
         if operation in ('play', 'get', 'cancel', 'authenticateParentPassword', 'authenticateDelete', 'authenticateParentPasswordNewStyle', 'authenticateDeleteNewStyle'):
@@ -224,7 +224,7 @@ class TTAccount:
          'userid': 'userid'}
         ignoredFields = ('ccType',)
         outBoundFields = {}
-        for fieldName in data.keys():
+        for fieldName in data:
             if fieldName not in serverFields:
                 if fieldName not in ignoredFields:
                     self.notify.error('unknown data field: %s' % fieldName)

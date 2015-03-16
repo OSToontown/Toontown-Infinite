@@ -145,7 +145,7 @@ class DistributedCogThiefGame(DistributedMinigame):
             barrel.removeNode()
 
         del self.barrels
-        for avId in self.toonSDs.keys():
+        for avId in self.toonSDs:
             toonSD = self.toonSDs[avId]
             toonSD.unload()
 
@@ -204,7 +204,7 @@ class DistributedCogThiefGame(DistributedMinigame):
         for barrel in self.barrels:
             barrel.hide()
 
-        for avId in self.toonSDs.keys():
+        for avId in self.toonSDs:
             self.toonSDs[avId].exit()
 
         for avId in self.avIdList:

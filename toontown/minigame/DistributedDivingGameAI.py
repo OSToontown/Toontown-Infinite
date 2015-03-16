@@ -262,7 +262,7 @@ class DistributedDivingGameAI(DistributedMinigameAI):
     def setGameReady(self):
         self.notify.debug('setGameReady')
         self.sendUpdate('setTrolleyZone', [self.trolleyZone])
-        for avId in self.scoreDict.keys():
+        for avId in self.scoreDict:
             self.scoreDict[avId] = 0
 
         self.treasureHolders = [0] * self.numPlayers
@@ -280,7 +280,7 @@ class DistributedDivingGameAI(DistributedMinigameAI):
         DistributedMinigameAI.setGameStart(self, timestamp)
         self.gameFSM.request('swimming')
         self.scoreTracking = {}
-        for avId in self.scoreDict.keys():
+        for avId in self.scoreDict:
             self.scoreTracking[avId] = [0,
              0,
              0,
@@ -315,7 +315,7 @@ class DistributedDivingGameAI(DistributedMinigameAI):
         timestamp = globalClockDelta.getFrameNetworkTime()
         newSpot = int(random.random() * 30)
         self.scoreTracking[avId][4] += 1
-        for someAvId in self.scoreDict.keys():
+        for someAvId in self.scoreDict:
             if someAvId == avId:
                 self.scoreDict[avId] += 10 * (self.REWARDMOD * 0.25)
             self.scoreDict[someAvId] += 10 * (self.REWARDMOD * 0.75 / float(len(self.scoreDict.keys())))
@@ -338,7 +338,7 @@ class DistributedDivingGameAI(DistributedMinigameAI):
         DistributedMinigameAI.gameOver(self)
         trackingString = 'MiniGame Stats : Diving Game'
         trackingString += '\nDistrict:%s' % self.getSafezoneId()
-        for avId in self.scoreTracking.keys():
+        for avId in self.scoreTracking:
             trackingString = trackingString + '\navId:%s fishHits:%s crabHits:%s treasureCatches:%s treasureDrops:%s treasureRecoveries:%s Score: %s' % (avId,
              self.scoreTracking[avId][0],
              self.scoreTracking[avId][1],
@@ -366,7 +366,7 @@ class DistributedDivingGameAI(DistributedMinigameAI):
 
     def timerExpired(self, task):
         self.notify.debug('timer expired')
-        for avId in self.scoreDict.keys():
+        for avId in self.scoreDict:
             if self.scoreDict[avId] < 5:
                 self.scoreDict[avId] = 5
 

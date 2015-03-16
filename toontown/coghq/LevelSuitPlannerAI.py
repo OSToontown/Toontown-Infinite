@@ -22,7 +22,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
         self.__genSuitInfos(self.level.getCogLevel(), self.level.getCogTrack())
         self.battleMgr = LevelBattleManagerAI.LevelBattleManagerAI(self.air, self.level, battleCtor, battleExpAggreg)
         self.battleCellId2suits = {}
-        for id in self.battleCellSpecs.keys():
+        for id in self.battleCellSpecs:
             self.battleCellId2suits[id] = []
 
     def destroy(self):

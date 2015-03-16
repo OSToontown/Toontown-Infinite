@@ -48,7 +48,7 @@ class FireworksGui(DirectFrame):
         self.hilightColor = VBase4(1, 1, 1, 1)
         self.bgColor = VBase4(0.8, 0.8, 0.8, 1)
         self.colorButtons = []
-        for i in Fireworks.colors.keys():
+        for i in Fireworks.colors:
             color = Fireworks.colors[i]
             height = 0.07
             paddedHeight = 0.1

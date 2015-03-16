@@ -1410,8 +1410,7 @@ class OTPClientRepository(ClientRepositoryBase):
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
     def _removeAllOV(self):
-        ownerDoIds = self.doId2ownerView.keys()
-        for doId in ownerDoIds:
+        for doId in self.doId2ownerView:
             self.disableDoId(doId, ownerView=True)
 
     @report(types=['args', 'deltaStamp'], dConfigParam='teleport')
@@ -1668,7 +1667,7 @@ class OTPClientRepository(ClientRepositoryBase):
 
     def getStartingDistrict(self):
         district = None
-        if len(self.activeDistrictMap.keys()) == 0:
+        if len(self.activeDistrictMap) == 0:
             self.notify.info('no shards')
             return
 

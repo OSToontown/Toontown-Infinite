@@ -80,7 +80,7 @@ class KeyCodes(DirectObject):
         return
 
     def __enableControls(self):
-        for key in self._keyMap.keys():
+        for key in self._keyMap:
             self.__acceptKeyDown(key)
             self.__acceptKeyUp(key)
 

@@ -94,7 +94,7 @@ class DistributedTargetGameAI(DistributedMinigameAI):
 
     def setGameStart(self, timestamp):
         self.notify.debug('setGameStart')
-        for avId in self.scoreDict.keys():
+        for avId in self.scoreDict:
             self.scoreDict[avId] = 0
 
         DistributedMinigameAI.setGameStart(self, timestamp)
@@ -173,7 +173,7 @@ class DistributedTargetGameAI(DistributedMinigameAI):
          0,
          0]
         scoreIndex = 0
-        for avId in self.scoreDict.keys():
+        for avId in self.scoreDict:
             scoreList[scoreIndex] = self.scoreDict[avId]
             avList[scoreIndex] = avId
             scoreIndex += 1
@@ -207,7 +207,7 @@ class DistributedTargetGameAI(DistributedMinigameAI):
             return
         avId = self.air.getAvatarIdFromSender()
         self.barrierScore.clear(avId)
-        for avId in self.stateDict.keys():
+        for avId in self.stateDict:
             if self.stateDict[avId] == EXITED:
                 self.barrierScore.clear(avId)
 
