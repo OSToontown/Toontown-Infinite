@@ -41,7 +41,7 @@ class GardenManagerAI:
 
         plotCount = gardenData.getUint8()
         for _ in xrange(plotCount):
-            plot = DistributedGardenPlotAI(self.air, self.house.housePos)
+            plot = DistributedGardenPlotAI(self.air, self, self.house.housePos)
             plot.construct(gardenData)
             plot.generateWithRequired(self.house.zoneId)
 

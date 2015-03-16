@@ -5,21 +5,21 @@ from toontown.estate import GardenGlobals
 class DistributedGardenPlotAI(DistributedLawnDecorAI):
     notify = directNotify.newCategory('DistributedGardenPlotAI')
 
-    def __init__(self, air, ownerIndex):
-        DistributedLawnDecorAI.__init__(self, air, ownerIndex)
+    def __init__(self, air, gardenManager, ownerIndex):
+        DistributedLawnDecorAI.__init__(self, air, gardenManager, ownerIndex)
 
         self.occupier = GardenGlobals.EmptyPlot
 
-    def plantGagTree(self, todo0, todo1):
+    def plantGagTree(self, gagTrack, gagLevel):
         pass
 
-    def plantStatuary(self, todo0):
+    def plantStatuary(self, species):
         pass
 
-    def plantToonStatuary(self, todo0, todo1):
+    def plantToonStatuary(self, species, dnaCode):
         pass
 
-    def plantNothing(self, todo0):
+    def plantNothing(self, burntBeans):
         pass
 
     def construct(self, gardenData):

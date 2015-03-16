@@ -6,9 +6,10 @@ from toontown.estate import GardenGlobals
 class DistributedLawnDecorAI(DistributedNodeAI):
     notify = directNotify.newCategory('DistributedLawnDecorAI')
 
-    def __init__(self, air, ownerIndex):
+    def __init__(self, air, gardenManager, ownerIndex):
         DistributedNodeAI.__init__(self, air)
 
+        self.gardenManager = gardenManager
         self.ownerIndex = ownerIndex
 
         self.plotIndex = None
