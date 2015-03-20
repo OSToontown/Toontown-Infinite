@@ -21,7 +21,7 @@ class DLHood(ToonHood):
       ToontownGlobals.SPOOKY_PROPS: ['phase_8/dna/halloween_props_storage_DL.pdna']}
 
     def enter(self, requestStatus):
-        ToonHood.enter(self)
+        ToonHood.enter(self, requestStatus)
 
         base.camLens.setNearFar(ToontownGlobals.DreamlandCameraNear, ToontownGlobals.DreamlandCameraFar)
 
