@@ -3144,7 +3144,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         type = SuitDNA.getSuitType(suitName)
         level, type, track = sp.pickLevelTypeAndTrack(None, type, track)
         building.suitTakeOver(track, level, None)
-        self.notify.warning('cogTakeOver %s %s %d %d' % (track,
+        self.notify.debug('cogTakeOver %s %s %d %d' % (track,
          level,
          building.block,
          self.zoneId))
