@@ -1,4 +1,3 @@
-from direct.controls import ControlManager
 from direct.controls.GhostWalker import GhostWalker
 from direct.controls.GravityWalker import GravityWalker
 from direct.controls.ObserverWalker import ObserverWalker
@@ -17,6 +16,7 @@ import random
 
 import DistributedAvatar
 from otp.ai.MagicWordGlobal import *
+from otp.avatar import ToontownControlManager
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLocalizer
 from toontown.chat.ChatGlobals import *
@@ -45,10 +45,11 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         base.pushCTrav(self.cTrav)
         self.cTrav.setRespectPrevTransform(1)
         self.avatarControlsEnabled = 0
-        self.controlManager = ControlManager.ControlManager(True, passMessagesThrough)
+        self.controlManager = ToontownControlManager.ToontownControlManager(True)
         self.initializeCollisions()
         self.initializeSmartCamera()
         self.cameraPositions = []
+        self.cameraWork = None
         self.animMultiplier = 1.0
         self.runTimeout = 2.5
         self.customMessages = []
@@ -79,6 +80,7 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         self.accept('avatarMoving', self.clearPageUpDown)
         self.showNametag2d()
         self.setPickable(0)
+        self.neverSleep = False
 
     def useSwimControls(self):
         self.controlManager.use('swim', self)
@@ -614,7 +616,9 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
             camera.setPos(savePos)
             camera.setHpr(saveHpr)
             taskMgr.remove('posCamera')
-            camera.lerpPosHpr(x, y, z, h, p, r, time, task='posCamera')
+            #camera.lerpPosHpr(x, y, z, h, p, r, time, task='posCamera') This was deprecated in Panda3D
+            cameraWork = camera.posHprInterval(2, Point3(x, y, z), Point3(h, p, r))
+            cameraWork.start()
 
     def getClampedAvatarHeight(self):
         return max(self.getHeight(), 3.0)
@@ -940,24 +944,24 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         return self.animMultiplier
 
     def enableRun(self):
-        self.accept('arrow_up', self.startRunWatch)
-        self.accept('arrow_up-up', self.stopRunWatch)
-        self.accept('control-arrow_up', self.startRunWatch)
-        self.accept('control-arrow_up-up', self.stopRunWatch)
-        self.accept('alt-arrow_up', self.startRunWatch)
-        self.accept('alt-arrow_up-up', self.stopRunWatch)
-        self.accept('shift-arrow_up', self.startRunWatch)
-        self.accept('shift-arrow_up-up', self.stopRunWatch)
+        self.accept(base.MOVE_UP, self.startRunWatch)
+        self.accept(base.MOVE_UP + '-up', self.stopRunWatch)
+        self.accept('control-'+ base.MOVE_UP, self.startRunWatch)
+        self.accept('control-'+ base.MOVE_UP + '-up', self.stopRunWatch)
+        self.accept('alt-'+ base.MOVE_UP, self.startRunWatch)
+        self.accept('alt-'+ base.MOVE_UP + '-up', self.stopRunWatch)
+        self.accept('shift-' + base.MOVE_UP, self.startRunWatch)
+        self.accept('shift-' + base.MOVE_UP + '-up', self.stopRunWatch)
 
     def disableRun(self):
-        self.ignore('arrow_up')
-        self.ignore('arrow_up-up')
-        self.ignore('control-arrow_up')
-        self.ignore('control-arrow_up-up')
-        self.ignore('alt-arrow_up')
-        self.ignore('alt-arrow_up-up')
-        self.ignore('shift-arrow_up')
-        self.ignore('shift-arrow_up-up')
+        self.ignore(base.MOVE_UP)
+        self.ignore(base.MOVE_UP + '-up')
+        self.ignore('control-'+ base.MOVE_UP)
+        self.ignore('control-' + base.MOVE_UP + '-up')
+        self.ignore('alt-' + base.MOVE_UP)
+        self.ignore('alt-' + base.MOVE_UP + '-up')
+        self.ignore('shift-' + base.MOVE_UP)
+        self.ignore('shift-' + base.MOVE_UP + '-up')
 
     def startRunWatch(self):
 
@@ -984,7 +988,15 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         self.soundRun.stop()
         self.soundWalk.stop()
 
+    def disableSleeping(self):
+        self.neverSleep = True
+
+    def enableSleeping(self):
+        self.neverSleep = False
+
     def wakeUp(self):
+        if self.neverSleep:
+            return
         if self.sleepCallback != None:
             taskMgr.remove(self.uniqueName('sleepwatch'))
             self.startSleepWatch(self.sleepCallback)
@@ -994,6 +1006,8 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         return
 
     def gotoSleep(self):
+        if self.neverSleep:
+            return
         if not self.sleepFlag:
             self.b_setAnimState('Sleep', self.animMultiplier)
             self.sleepFlag = 1
@@ -1256,9 +1270,9 @@ def gravity(value):
     if value < 0:
         return 'Invalid gravity value!'
     if value == 0:
-        base.localAvatar.controlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 2.0)
+        base.localAvatar.ToontownControlManager.currentControls.setGravity(ToontownGlobals.GravityValue * 2.0)
     else:
-        base.localAvatar.controlManager.currentControls.setGravity(value)
+        base.localAvatar.ToontownControlManager.currentControls.setGravity(value)
 
 @magicWord(category=CATEGORY_COMMUNITY_MANAGER, types=[float, float, float])
 def xyz(x, y, z):
@@ -1273,3 +1287,12 @@ def hpr(h, p, r):
     Modifies the rotation of the invoker.
     """
     base.localAvatar.setHpr(h, p, r)
+
+@magicWord(category=CATEGORY_MODERATOR)
+def keepalive():
+    self = spellbook.getInvoker()
+    now = globalClock.getFrameTime()
+    self.lastMoved = globalClock.getFrameTime()
+    self.sleepTimeout = base.config.GetInt('sleep-timeout', 86400)
+    if now - self.lastMoved > self.sleepTimeout:
+        return "Keepalive is active."
