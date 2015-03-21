@@ -243,7 +243,22 @@ class ToonBase(OTPBase.OTPBase):
 
         # Free black/white Toons:
         self.wantYinYang = config.GetBool('want-yin-yang', False)
+        
+        self.wantWASD = settings.get('want-WASD', False)
 
+        self.MOVE_UP = 'arrow_up'   
+        self.MOVE_DOWN = 'arrow_down'
+        self.MOVE_LEFT = 'arrow_left'      
+        self.MOVE_RIGHT = 'arrow_right'
+        self.JUMP = 'control'
+        
+        if self.wantWASD:
+            self.MOVE_UP = 'w'
+            self.MOVE_DOWN = 's'
+            self.MOVE_LEFT = 'a'
+            self.MOVE_RIGHT = 'd'
+            self.JUMP = 'shift'
+        
     def openMainWindow(self, *args, **kw):
         result = OTPBase.OTPBase.openMainWindow(self, *args, **kw)
         self.setCursorAndIcon()
