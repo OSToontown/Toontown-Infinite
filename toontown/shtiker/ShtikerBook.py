@@ -25,6 +25,8 @@ class ShtikerBook(DirectFrame, StateData.StateData):
         self.pageTabFrame.hide()
         self.currPageIndex = None
         self.pageBeforeNews = None
+        self.tempLeft = None
+        self.tempRight = None
         self.entered = 0
         self.safeMode = 0
         self.__obscured = 0
@@ -72,6 +74,8 @@ class ShtikerBook(DirectFrame, StateData.StateData):
         self.__setButtonVisibility()
         self.show()
         self.showPageArrows()
+        self.tempLeft = 'arrow_left'
+        self.tempRight = 'arrow_right'
         if not self.safeMode:
             self.accept('shtiker-page-done', self.__pageDone)
             self.accept(ToontownGlobals.StickerBookHotkey, self.__close)
@@ -112,8 +116,8 @@ class ShtikerBook(DirectFrame, StateData.StateData):
         self.ignore('shtiker-page-done')
         self.ignore(ToontownGlobals.StickerBookHotkey)
         self.ignore(ToontownGlobals.OptionsPageHotkey)
-        self.ignore('arrow_right')
-        self.ignore('arrow_left')
+        self.ignore(self.tempRight)
+        self.ignore(self.tempLeft)
         if base.config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: SHTICKERBOOK: Close')
 
@@ -158,6 +162,8 @@ class ShtikerBook(DirectFrame, StateData.StateData):
         del self.openSound
         del self.closeSound
         del self.pageSound
+        del self.tempLeft
+        del self.tempRight
 
     def addPage(self, page, pageName = 'Page'):
         if pageName not in self.pageOrder:
@@ -418,14 +424,14 @@ class ShtikerBook(DirectFrame, StateData.StateData):
 
     def __checkForNewsPage(self):
         from toontown.shtiker import NewsPage
-        self.ignore('arrow_left')
-        self.ignore('arrow_right')
+        self.ignore(self.tempLeft)
+        self.ignore(self.tempRight)
         if isinstance(self.pages[self.currPageIndex], NewsPage.NewsPage):
-            self.ignore('arrow_left')
-            self.ignore('arrow_right')
+            self.ignore(self.tempLeft)
+            self.ignore(self.tempRight)
         else:
-            self.accept('arrow_right', self.__pageChange, [1])
-            self.accept('arrow_left', self.__pageChange, [-1])
+            self.accept(self.tempRight, self.__pageChange, [1])
+            self.accept(self.tempLeft, self.__pageChange, [-1])   
 
     def goToNewsPage(self, page):
         messenger.send('wakeup')
@@ -455,3 +461,4 @@ class ShtikerBook(DirectFrame, StateData.StateData):
     def enableAllPageTabs(self):
         for button in self.pageTabs:
             button['state'] = DGG.NORMAL
+        
