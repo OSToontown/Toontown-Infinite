@@ -8957,8 +8957,8 @@ LawbotBossTaunts = ['%s, I find you in contempt of court!',
 LawbotBossAreaAttackTaunt = "You're all in contempt of court!"
 WitnessToonName = 'Bumpy Bumblebehr'
 WitnessToonPrepareBattleTwo = "Oh no! They're putting only Cogs on the jury!\x07Quick, use the cannons and shoot some Toon jurors into the jury chairs.\x07We need %d to get a balanced scale."
-WitnessToonNoJuror = 'Oh oh, no Toon jurors. This will be a tough trial.'
-WitnessToonOneJuror = 'Cool! There is 1 Toon in the jury!'
+WitnessToonNoJuror = 'Uh oh, no Toon jurors. This will be a tough trial.'
+WitnessToonOneJuror = 'Yikes! There is 1 Toon in the jury!'
 WitnessToonSomeJurors = 'Cool! There are %d Toons in the jury!'
 WitnessToonAllJurors = 'Awesome! All the jurors are Toons!'
 WitnessToonPrepareBattleThree = 'Hurry, touch the witness stand to get evidence.\x07Press the Delete key to throw the evidence at the lawyers, or at the defense pan.'
@@ -9815,7 +9815,7 @@ YangGoodbye = 'Okay, then. See you later!'
 buffIdStrings = {
   0: ('Your movement speed will be slightly increased for the next %d %s.',
       'Reward: Increased movement speed'),
-  1: ('Your gag accuracy will be slight increased for the next %d %s.',
+  1: ('Your gag accuracy will be slightly increased for the next %d %s.',
       'Reward: Increased gag accuracy')
 }
 
