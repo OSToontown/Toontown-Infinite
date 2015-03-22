@@ -59,6 +59,9 @@ loadPrcFileData('Settings: sfxVol', 'audio-master-sfx-volume %s' % settings['sfx
 loadPrcFileData('Settings: loadDisplay', 'load-display %s' % settings['loadDisplay'])
 loadPrcFileData('Settings: toonChatSounds', 'toon-chat-sounds %s' % settings['toonChatSounds'])
 
+keymapFilename = ConfigVariableString(
+    'keymap-filename', 'keymap.json').getValue()
+__builtin__.keymap = Settings(keymapFilename)    
 
 import os
 
