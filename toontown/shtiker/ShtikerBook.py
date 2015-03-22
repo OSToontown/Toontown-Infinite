@@ -80,6 +80,8 @@ class ShtikerBook(DirectFrame, StateData.StateData):
             self.accept('shtiker-page-done', self.__pageDone)
             self.accept(ToontownGlobals.StickerBookHotkey, self.__close)
             self.accept(ToontownGlobals.OptionsPageHotkey, self.__close)
+            self.accept('disable-hotkeys', self.__disableHotkeys)
+            self.accept('enable-hotkeys', self.__enableHotkeys)
             self.pageTabFrame.show()
         self.pages[self.currPageIndex].enter()
         if hasattr(localAvatar, 'newsButtonMgr') and localAvatar.newsButtonMgr:
@@ -118,6 +120,8 @@ class ShtikerBook(DirectFrame, StateData.StateData):
         self.ignore(ToontownGlobals.OptionsPageHotkey)
         self.ignore(self.tempRight)
         self.ignore(self.tempLeft)
+        self.ignore('disable-hotkeys')
+        self.ignore('enable-hotkeys')
         if base.config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: SHTICKERBOOK: Close')
 
@@ -461,4 +465,12 @@ class ShtikerBook(DirectFrame, StateData.StateData):
     def enableAllPageTabs(self):
         for button in self.pageTabs:
             button['state'] = DGG.NORMAL
+            
+    def __disableHotkeys(self):
+        self.ignore(ToontownGlobals.StickerBookHotkey)
+        self.ignore(ToontownGlobals.OptionsPageHotkey)
+        
+    def __enableHotkeys(self):
+        self.accept(ToontownGlobals.StickerBookHotkey, self.__close)
+        self.accept(ToontownGlobals.OptionsPageHotkey, self.__close)
         
