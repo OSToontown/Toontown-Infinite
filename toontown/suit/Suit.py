@@ -182,13 +182,18 @@ SuitParts = ['phase_3.5/models/char/suitA-mod',
 
 Preloaded = {}
 
+SuitModels = ['phase_3.5/models/char/suitA-mod',
+            'phase_3.5/models/char/suitB-mod',
+            'phase_3.5/models/char/suitC-mod']
+
 def loadModels():
     global Preloaded
     if not Preloaded:
         print 'Preloading suits...'
         for filepath in SuitParts:
             Preloaded[filepath] = loader.loadModel(filepath)
-            Preloaded[filepath].flattenMedium()
+            if filepath not in SuitModels:
+                Preloaded[filepath].flattenMedium()
 
 def loadTutorialSuit():
     loader.loadModel('phase_3.5/models/char/suitC-mod')
