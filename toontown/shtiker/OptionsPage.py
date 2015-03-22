@@ -9,6 +9,7 @@ import ShtikerPage
 from otp.speedchat import SCColorScheme
 from otp.speedchat import SCStaticTextTerminal
 from otp.speedchat import SpeedChat
+from toontown.shticker import ControlRemapDialog
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TTDialog
 
@@ -1213,5 +1214,4 @@ class MoreOptionsTabPage(DirectFrame):
             self.WASD_toggleButton['text'] = 'Off'
     
     def __openKeyRemapDialog(self):
-        import ControlRemapDialog
         self.controlDialog = ControlRemapDialog.ControlRemap()
