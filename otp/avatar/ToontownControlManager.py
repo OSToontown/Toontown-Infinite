@@ -6,7 +6,7 @@ from direct.showbase.InputStateGlobal import inputState
 
 class ToontownControlManager(ControlManager.ControlManager):
     # Instead of checking config.prc, get wantWASD from ToonBase
-    wantWASD = base.wantWASD
+    wantWASD = base.wantCustomControls
 
     def __init__(self, enable=True, passMessagesThrough=False):
         self.passMessagesThrough = passMessagesThrough
@@ -43,9 +43,9 @@ class ToontownControlManager(ControlManager.ControlManager):
                 inputState.watch('turnLeft', 'force-turnLeft', 'force-turnLeft-stop'),
                 inputState.watch('turnRight', 'mouse-look_right', 'mouse-look_right-done'),
                 inputState.watch('turnRight', 'force-turnRight', 'force-turnRight-stop'),
-                inputState.watchWithModifiers('forward', 'w', inputSource=inputState.WASD),
-                inputState.watchWithModifiers('reverse', 's', inputSource=inputState.WASD),
-                inputState.watchWithModifiers('jump', 'shift')
+                inputState.watchWithModifiers('forward', keymap.get('MOVE_UP', base.MOVE_UP), inputSource=inputState.WASD),
+                inputState.watchWithModifiers('reverse', keymap.get('MOVE_DOWN', base.MOVE_DOWN), inputSource=inputState.WASD),
+                inputState.watchWithModifiers('jump', keymap.get('JUMP', base.JUMP))
             ))
 
             self.setWASDTurn(True)
@@ -70,6 +70,45 @@ class ToontownControlManager(ControlManager.ControlManager):
         if self.currentControls:
             self.currentControls.enableAvatarControls()
 
+    def setWASDTurn(self, turn):
+        # This probably needs to be cleaned up, I don't think Toontown uses slide anywhere
+        self.__WASDTurn = turn
+
+        if not self.isEnabled:
+            return
+        
+        turnLeftWASDSet = inputState.isSet("turnLeft", inputSource=inputState.WASD)
+        turnRightWASDSet = inputState.isSet("turnRight", inputSource=inputState.WASD)
+        slideLeftWASDSet = inputState.isSet("slideLeft", inputSource=inputState.WASD)
+        slideRightWASDSet = inputState.isSet("slideRight", inputSource=inputState.WASD)
+
+        for token in self.WASDTurnTokens:
+            token.release()
+
+        if turn:
+            self.WASDTurnTokens = (
+                inputState.watchWithModifiers("turnLeft", keymap.get('MOVE_LEFT', base.MOVE_LEFT), inputSource=inputState.WASD),
+                inputState.watchWithModifiers("turnRight", keymap.get('MOVE_RIGHT', base.MOVE_RIGHT), inputSource=inputState.WASD),
+                )
+
+            inputState.set("turnLeft", slideLeftWASDSet, inputSource=inputState.WASD)
+            inputState.set("turnRight", slideRightWASDSet, inputSource=inputState.WASD)
+
+            inputState.set("slideLeft", False, inputSource=inputState.WASD)
+            inputState.set("slideRight", False, inputSource=inputState.WASD)
+
+        else:
+            self.WASDTurnTokens = (
+                inputState.watchWithModifiers("slideLeft", keymap.get('MOVE_LEFT', base.MOVE_LEFT), inputSource=inputState.WASD),
+                inputState.watchWithModifiers("slideRight", keymap.get('MOVE_RIGHT', base.MOVE_RIGHT), inputSource=inputState.WASD),
+                )
+
+            inputState.set("slideLeft", turnLeftWASDSet, inputSource=inputState.WASD)
+            inputState.set("slideRight", turnRightWASDSet, inputSource=inputState.WASD)
+                
+            inputState.set("turnLeft", False, inputSource=inputState.WASD)
+            inputState.set("turnRight", False, inputSource=inputState.WASD)            
+
     def disable(self):
         self.isEnabled = 0
 
@@ -90,17 +129,15 @@ class ToontownControlManager(ControlManager.ControlManager):
 
         if self.passMessagesThrough:
             if self.wantWASD:
-                print ':(ToontownControlManager) WASD support was enabled.'
-                self.istWASD.append(inputState.watchWithModifiers('forward', 'w',
-                                                                  inputSource=inputState.WASD))
-                self.istWASD.append(inputState.watchWithModifiers('reverse', 's',
-                                                                  inputSource=inputState.WASD))
-                self.istWASD.append(inputState.watchWithModifiers('turnLeft', 'a',
-                                                                  inputSource=inputState.WASD))
-                self.istWASD.append(inputState.watchWithModifiers('turnRight', 'd',
-                                                                  inputSource=inputState.WASD))
+                self.istWASD.append(inputState.watchWithModifiers(
+                  'forward', keymap.get('MOVE_UP', base.MOVE_UP), inputSource=inputState.WASD))
+                self.istWASD.append(inputState.watchWithModifiers(
+                  'reverse', keymap.get('MOVE_DOWN', base.MOVE_DOWN), inputSource=inputState.WASD))
+                self.istWASD.append(inputState.watchWithModifiers(
+                  'turnLeft', keymap.get('MOVE_LEFT', base.MOVE_LEFT), inputSource=inputState.WASD))
+                self.istWASD.append(inputState.watchWithModifiers(
+                  'turnRight', keymap.get('MOVE_RIGHT', base.MOVE_RIGHT), inputSource=inputState.WASD))
             else:
-                print ':(ToontownControlManager) WASD support was disabled.'
                 self.istNormal.append(
                     inputState.watchWithModifiers(
                         'forward',
@@ -135,7 +172,6 @@ class ToontownControlManager(ControlManager.ControlManager):
                 inputState.force('turnRight', 0, 'ToontownControlManager.disableWASD'),
                 inputState.force('slideRight', 0, 'ToontownControlManager.disableWASD')
             ]
-            print 'disableWASD()'
 
     def enableWASD(self):
         # Enables WASD after chat is closed.
@@ -145,11 +181,10 @@ class ToontownControlManager(ControlManager.ControlManager):
                 for token in self.forceTokens:
                     token.release()
                 self.forceTokens = []
-                print 'enableWASD'
 
     def reload(self):
         # Called to reload the ControlManager ingame
         # Reload wantWASD
-        self.wantWASD = base.wantWASD
+        self.wantWASD = base.wantCustomControls
         self.disable()
         self.enable()
