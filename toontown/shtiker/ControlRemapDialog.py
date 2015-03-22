@@ -335,6 +335,7 @@ class ControlRemap:
         keymap['ACTION_BUTTON'] = self.controlsToBeSaved[self.ACTION_BUTTON]
         keymap['OPTIONS_PAGE_HOTKEY'] = self.controlsToBeSaved[self.OPTIONS_PAGE_HOTKEY]
         keymap['CHAT_HOTKEY'] = self.controlsToBeSaved[self.CHAT_HOTKEY]
+        settings['keymap'] = keymap
         base.reloadControls()
         base.localAvatar.controlManager.reload()
         base.localAvatar.chatMgr.reloadWASD()
