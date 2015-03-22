@@ -1154,6 +1154,23 @@ class MoreOptionsTabPage(DirectFrame):
                 0.0,
                 buttonbase_ycoord),
             command=self.__doToggleWASD)
+        self.keymapDialogButton = DirectButton(
+            parent=self,
+            relief=None,
+            image=(
+                guiButton.find('**/QuitBtn_UP'),
+                guiButton.find('**/QuitBtn_DN'),
+                guiButton.find('**/QuitBtn_RLVR')),
+            image_scale=button_image_scale,
+            text='Configure Keymap',
+            text_scale=options_text_scale * 0.9,
+            text_pos=button_textpos,
+            pos=(
+                buttonbase_xcoord * 2,
+                0.0,
+                buttonbase_ycoord),
+            command=self.__openKeyRemapDialog)
+        self.keymapDialogButton.setScale(0.9)
         gui.removeNode()
         guiButton.removeNode()
 
@@ -1171,35 +1188,30 @@ class MoreOptionsTabPage(DirectFrame):
         del self.WASD_Label
         self.WASD_toggleButton.destroy()
         del self.WASD_toggleButton
+        self.keymapDialogButton.destroy()
+        del self.keymapDialogButton
 
     def __doToggleWASD(self):
         messenger.send('wakeup')
-        if base.wantWASD:
-            base.wantWASD = False
-            base.MOVE_UP = 'arrow_up'
-            base.MOVE_DOWN = 'arrow_down'
-            base.MOVE_LEFT = 'arrow_left'
-            base.MOVE_RIGHT = 'arrow_right'
-            base.JUMP = 'control'
-            settings['want-WASD'] = False
-            base.localAvatar.controlManager.reload()
-            base.localAvatar.chatMgr.reloadWASD()
+        if base.wantCustomControls:
+            base.wantCustomControls = False
+            settings['want-Custom-Controls'] = False
         else:
-            base.wantWASD = True
-            base.MOVE_UP = 'w'
-            base.MOVE_DOWN = 's'
-            base.MOVE_LEFT = 'a'
-            base.MOVE_RIGHT = 'd'
-            base.JUMP = 'shift'
-            settings['want-WASD'] = True
-            base.localAvatar.controlManager.reload()
-            base.localAvatar.chatMgr.reloadWASD()
+            base.wantCustomControls = True
+            settings['want-Custom-Controls'] = True
+        base.reloadControls()
+        base.localAvatar.controlManager.reload()
+        base.localAvatar.chatMgr.reloadWASD()
         self.settingsChanged = 1
         self.__setWASDButton()
 
     def __setWASDButton(self):
-        self.WASD_Label['text'] = 'WASD Support:'
-        if base.wantWASD:
+        self.WASD_Label['text'] = 'Use Custom Keymap:'
+        if base.wantCustomControls:
             self.WASD_toggleButton['text'] = 'On'
         else:
             self.WASD_toggleButton['text'] = 'Off'
+    
+    def __openKeyRemapDialog(self):
+        import ControlRemapDialog
+        self.controlDialog = ControlRemapDialog.ControlRemap()
