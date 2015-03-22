@@ -29,7 +29,7 @@ class ToontownControlManager(ControlManager.ControlManager):
             return
 
         self.isEnabled = 1
-
+        keymap = settings.get('keymap', {})
         # Keep track of what we do on the inputState so we can undo it later on
         ist = self.inputStateTokens
         ist.extend((
@@ -76,6 +76,8 @@ class ToontownControlManager(ControlManager.ControlManager):
 
         if not self.isEnabled:
             return
+        
+        keymap = settings.get('keymap', {})
         
         turnLeftWASDSet = inputState.isSet("turnLeft", inputSource=inputState.WASD)
         turnRightWASDSet = inputState.isSet("turnRight", inputSource=inputState.WASD)
@@ -127,6 +129,7 @@ class ToontownControlManager(ControlManager.ControlManager):
         if self.currentControls:
             self.currentControls.disableAvatarControls()
 
+        keymap = settings.get('keymap', {})
         if self.passMessagesThrough:
             if self.wantWASD:
                 self.istWASD.append(inputState.watchWithModifiers(

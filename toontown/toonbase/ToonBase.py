@@ -253,6 +253,7 @@ class ToonBase(OTPBase.OTPBase):
         self.JUMP = 'control'
         self.ACTION_BUTTON = 'delete'
         
+        keymap = settings.get('keymap', {})
         if self.wantCustomControls:
             self.MOVE_UP = keymap.get('MOVE_UP', self.MOVE_UP)
             self.MOVE_DOWN = keymap.get('MOVE_DOWN', self.MOVE_DOWN)
@@ -578,6 +579,7 @@ class ToonBase(OTPBase.OTPBase):
         base.win.requestProperties(wp)
 
     def reloadControls(self):
+        keymap = settings.get('keymap', {})
         self.CHAT_HOTKEY = keymap.get('CHAT_HOTKEY', 't')
         if self.wantCustomControls:
             self.MOVE_UP = keymap.get('MOVE_UP', self.MOVE_UP)

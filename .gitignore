@@ -12,7 +12,6 @@
 .DS_Store
 
 # Game-specific files and directories:
-keymap.json
 preferences.json
 logs/
 screenshots/

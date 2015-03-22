@@ -326,6 +326,7 @@ class ControlRemap:
             self.enterCancel()
         
     def enterSave(self):
+        keymap = settings.get('keymap', {})
         keymap['MOVE_UP'] = self.controlsToBeSaved[self.UP]
         keymap['MOVE_LEFT'] = self.controlsToBeSaved[self.LEFT]
         keymap['MOVE_DOWN'] = self.controlsToBeSaved[self.DOWN]        
