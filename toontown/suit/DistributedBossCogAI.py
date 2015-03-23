@@ -556,7 +556,7 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
             damage *= self.getDamageMultiplier()
             self.damageToon(toon, damage)
             currState = self.getCurrentOrNextState()
-            if self.attackCode != ToontownGlobals.BossCogDizzyNow and self.attackCode != ToontownGlobals != ToontownGlobals.BossCogAreaAttack:
+            if self.attackCode != ToontownGlobals.BossCogDizzyNow and self.attackCode != ToontownGlobals.BossCogAreaAttack:
                 if attackCode == ToontownGlobals.BossCogElectricFence and (currState == 'RollToBattleTwo' or currState == 'BattleThree'):
                     if bpy < 0 and abs(bpx / bpy) > 0.5:
                         if bpx < 0:
