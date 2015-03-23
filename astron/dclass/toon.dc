@@ -2932,13 +2932,13 @@ dclass DistributedPicnicBasket : DistributedObject {
 };
 
 dclass DistributedPicnicTable : DistributedNode {
-  fillSlot(uint32 avId, uint8 index, int16/10 x, int16/10 y, int16/10 z, int16/10 h, int16/10 p, int16/10 r, int16 timestamp, uint32 parentDoId) broadcast;
+  fillSlot(uint32 avId, uint8 index, int16 timestamp, uint32 parentDoId) broadcast;
   emptySlot(uint32 avId, uint8 index, int16 timestamp) broadcast;
   requestTableState() airecv clsend;
   setTableState(uint32 tableStateList[], uint8 isplaying) broadcast ram;
   setGameZone(uint32 zoneId, uint8 gamestate) broadcast;
   setIsPlaying(uint8 isPlaying) broadcast ram;
-  requestJoin(uint8 todo0, int16/10 todo1, int16/10 todo2, int16/10 todo3, int16/10 todo4, int16/10 todo5, int16/10 todo6) airecv clsend;
+  requestJoin(uint8 todo0) airecv clsend;
   rejectJoin() broadcast;
   requestObserve() airecv clsend;
   leaveObserve() airecv clsend;
@@ -2950,6 +2950,7 @@ dclass DistributedPicnicTable : DistributedNode {
   allowObserve() broadcast;
   allowPick() broadcast;
   setZone(uint32 zoneId) broadcast;
+  setPosHpr(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) required broadcast ram;
 };
 
 dclass DistributedBossbotBoss : DistributedBossCog {

@@ -25,7 +25,7 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
         NodePath.__init__(self, 'DistributedPicnicTable')
         DistributedNode.DistributedNode.__init__(self, cr)
         self.reparentTo(render)
-        self.picnicTable = loader.loadModel('phase_6/models/golf/game_table.bam')
+        self.picnicTable = loader.loadModel('phase_6/models/golf/game_table')
         self.picnicTable.reparentTo(self)
         self.picnicTableSphereNodes = []
         self.numSeats = 6
@@ -106,6 +106,7 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
         dist = Vec3(self.endPos - self.getPos()).length()
         wheelAngle = dist / (0.5 * 1.4 * math.pi) * 360
         self.__enableCollisions()
+        print 'client table spawned at %s' % self.getPos()
         return
 
     def handleSleep(self, task = None):
@@ -349,13 +350,7 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
 
     def joinButtonPushed(self):
         toon = base.localAvatar
-        self.sendUpdate('requestJoin', [self.requestSeat,
-         toon.getX(),
-         toon.getY(),
-         toon.getZ(),
-         toon.getH(),
-         toon.getP(),
-         toon.getR()])
+        self.sendUpdate('requestJoin', [self.requestSeat])
         self.requestSeat = None
         self.fsm.request('sitting')
         return
@@ -401,7 +396,7 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
                     self.gameMenu = None
         return
 
-    def fillSlot(self, avId, index, x, y, z, h, p, r, timestamp, parentDoId):
+    def fillSlot(self, avId, index, timestamp, parentDoId):
         self.notify.debug('fill Slot: %d for %d' % (index, avId))
         if avId not in self.haveAnimated:
             self.haveAnimated.append(avId)
