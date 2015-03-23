@@ -34,7 +34,7 @@ want-resistance-restock #t
 want-resistance-dance #t
 
 # Optional:
-want-yin-yang #t
+want-yin-yang #f
 
 # Developer options:
 show-population #t
