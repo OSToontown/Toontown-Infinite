@@ -1,14 +1,13 @@
-from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
-from direct.task.Task import Task
-from direct.interval.IntervalGlobal import *
-from TrolleyConstants import *
+
 from direct.gui.DirectGui import *
+
 from toontown.toonbase import TTLocalizer
+
 from toontown.toonbase import ToontownGlobals
 
-class GameMenu(DirectFrame):
 
+class GameMenu(DirectFrame):
     def __init__(self, picnicFunction, menuType):
         self.picnicFunction = picnicFunction
         DirectFrame.__init__(
@@ -44,28 +43,31 @@ class GameMenu(DirectFrame):
         btn3 = self.selectionButtons.find('**/Btn3')
         self.ChineseCheckers = DirectButton(
             self,
-            image=(btn1.find('**/checkersBtnUp'), btn1.find('**/checkersBtnDn'), btn1.find('**/checkersBtnHi'), btn1.find('**/checkersBtnUp')),
+            image=(btn1.find('**/checkersBtnUp'), btn1.find('**/checkersBtnDn'), btn1.find('**/checkersBtnHi'),
+                   btn1.find('**/checkersBtnUp')),
             scale=0.36,
             relief=0,
             pos=(0, 0, -0.7),
             command=self.checkersSelected)
         self.Checkers = DirectButton(
             self,
-            image=(btn2.find('**/regular_checkersBtnUp'), btn2.find('**/regular_checkersBtnDn'), btn2.find('**/regular_checkersBtnHi'), btn2.find('**/regular_checkersBtnUp')),
+            image=(btn2.find('**/regular_checkersBtnUp'), btn2.find('**/regular_checkersBtnDn'),
+                   btn2.find('**/regular_checkersBtnHi'), btn2.find('**/regular_checkersBtnUp')),
             scale=0.36,
             relief=0,
             pos=(0.8, 0, -0.7),
             command=self.regCheckersSelected)
         self.FindFour = DirectButton(
             self,
-            image=(btn3.find('**/findfourBtnUp'), btn3.find('**/findfourBtnDn'), btn3.find('**/findfourBtnHi'), btn3.find('**/findfourBtnUp')),
+            image=(btn3.find('**/findfourBtnUp'), btn3.find('**/findfourBtnDn'), btn3.find('**/findfourBtnHi'),
+                   btn3.find('**/findfourBtnUp')),
             scale=0.36,
             relief=0,
             pos=(-0.8, 0, -0.7),
             command=self.findFourSelected
         )
 
-        #Text
+        # Text
         self.chineseText = OnscreenText(
             text='Chinese Checkers',
             pos=(0, 0.56, -0.8),

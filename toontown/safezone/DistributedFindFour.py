@@ -16,6 +16,7 @@ from direct.distributed.ClockDelta import *
 from otp.otpbase import OTPGlobals
 from direct.showbase import PythonUtil
 
+
 class DistributedFindFour(DistributedNode.DistributedNode):
 
     def __init__(self, cr):

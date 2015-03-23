@@ -1,18 +1,17 @@
 from direct.distributed.DistributedNodeAI import DistributedNodeAI
 from direct.distributed.ClockDelta import *
-from direct.fsm import ClassicFSM, State
-from direct.fsm import State
-from direct.fsm import StateData
+
 from toontown.safezone import DistributedChineseCheckersAI
 from toontown.safezone import DistributedCheckersAI
 from toontown.safezone import DistributedFindFourAI
+
 '''
 from toontown.dna.DNASpawnerAI import *
 from toontown.dna.DNANode import DNANode
 '''
 
+
 class DistributedPicnicTableAI(DistributedNodeAI):
-    
     def __init__(self, air, zone, name, x, y, z, h, p, r):
         DistributedNodeAI.__init__(self, air)
         self.name = name
@@ -109,7 +108,7 @@ class DistributedPicnicTableAI(DistributedNodeAI):
         self.notify.debug('acceptBoarder %d' % avId)
         if self.findAvatar(avId) != None:
             return None
-        
+
         isEmpty = True
         for xx in self.seats:
             if xx != None:
@@ -126,8 +125,9 @@ class DistributedPicnicTableAI(DistributedNodeAI):
                 self.game.zoneId])
 
         self.seats[seatIndex] = avId
-        self.acceptOnce(self.air.getAvatarExitEvent(avId), self._DistributedPicnicTableAI__handleUnexpectedExit, extraArgs = [
-            avId])
+        self.acceptOnce(self.air.getAvatarExitEvent(avId), self._DistributedPicnicTableAI__handleUnexpectedExit,
+                        extraArgs=[
+                            avId])
         self.timeOfBoarding = globalClock.getRealTime()
         if self.game:
             self.game.informGameOfPlayer()
@@ -159,7 +159,7 @@ class DistributedPicnicTableAI(DistributedNodeAI):
     def pickGame(self, gameNum):
         if self.game:
             return
-            
+
         x = 0
         for x in self.seats:
             if x != None:
@@ -168,27 +168,36 @@ class DistributedPicnicTableAI(DistributedNodeAI):
 
         if gameNum == 1:
             if simbase.config.GetBool('want-chinese', 1):
-                self.game = DistributedChineseCheckersAI.DistributedChineseCheckersAI(self.air, self.doId, 'chinese', self.getX(), self.getY(), self.getZ() + 2.8300000000000001, self.getH(), self.getP(), self.getR())
+                self.game = DistributedChineseCheckersAI.DistributedChineseCheckersAI(self.air, self.doId, 'chinese',
+                                                                                      self.getX(), self.getY(),
+                                                                                      self.getZ() + 2.8300000000000001,
+                                                                                      self.getH(), self.getP(),
+                                                                                      self.getR())
                 self.sendUpdate('setZone', [
                     self.game.zoneId])
 
         elif gameNum == 0:
             if x <= 2:
                 if simbase.config.GetBool('want-checkers', 1):
-                    self.game = DistributedCheckersAI.DistributedCheckersAI(self.air, self.doId, 'checkers', self.getX(), self.getY(), self.getZ() + 2.8300000000000001, self.getH(), self.getP(), self.getR())
+                    self.game = DistributedCheckersAI.DistributedCheckersAI(self.air, self.doId, 'checkers',
+                                                                            self.getX(), self.getY(),
+                                                                            self.getZ() + 2.8300000000000001,
+                                                                            self.getH(), self.getP(), self.getR())
                     self.sendUpdate('setZone', [
                         self.game.zoneId])
 
         elif x <= 2:
             if simbase.config.GetBool('want-findfour', 1):
-                self.game = DistributedFindFourAI.DistributedFindFourAI(self.air, self.doId, 'findFour', self.getX(), self.getY(), self.getZ() + 2.8300000000000001, self.getH(), self.getP(), self.getR())
+                self.game = DistributedFindFourAI.DistributedFindFourAI(self.air, self.doId, 'findFour', self.getX(),
+                                                                        self.getY(), self.getZ() + 2.8300000000000001,
+                                                                        self.getH(), self.getP(), self.getR())
                 self.sendUpdate('setZone', [
                     self.game.zoneId])
 
     def requestZone(self):
         if not self.game:
             return
-            
+
         avId = self.air.getAvatarIdFromSender()
         self.sendUpdateToAvatarId(avId, 'setZone', [
             self.game.zoneId])
@@ -200,7 +209,7 @@ class DistributedPicnicTableAI(DistributedNodeAI):
                 self.game.playersObserving.append(avId)
 
             self.observers.append(avId)
-            self.acceptOnce(self.air.getAvatarExitEvent(avId), self.handleObserverExit, extraArgs = [
+            self.acceptOnce(self.air.getAvatarExitEvent(avId), self.handleObserverExit, extraArgs=[
                 avId])
             if self.game:
                 if self.game.fsm.getCurrentState().getName() == 'playing':
@@ -340,12 +349,14 @@ class DistributedPicnicTableAI(DistributedNodeAI):
 
     def setCheckersZoneId(self, zoneId):
         self.checkersZoneId = zoneId
-        
+
     def setTableIndex(self, index):
         self._tableIndex = index
-        
+
     def getTableIndex(self):
         return self._tableIndex
+
+
 '''
 @dnaSpawn(DNANode, 'game_table_([0-9]+)')
 def spawn(air, zone, element, match):
@@ -357,5 +368,4 @@ def spawn(air, zone, element, match):
             game = DistributedPicnicTableAI(air, zone, index, x, y, z, h, p, r)
             game.generateWithRequired(zone)
             game.start()
-'''            
-        
+'''
