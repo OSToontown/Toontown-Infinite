@@ -1,16 +1,16 @@
-from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedNodeAI import DistributedNodeAI
+
 from direct.distributed.ClockDelta import *
-from direct.fsm import ClassicFSM, State
-from direct.fsm import State
-from direct.fsm import StateData
+
 from toontown.safezone import DistributedChineseCheckersAI
+
 from toontown.safezone import DistributedCheckersAI
 from toontown.safezone import DistributedFindFourAI
 
+
 class DistributedGameTableAI(DistributedNodeAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedGameTableAI')
-    
+
     def __init__(self, air, zone, name, x, y, z, h, p, r):
         DistributedNodeAI.__init__(self, air)
         self.posHpr = (x, y, z, h, p, r)
@@ -27,7 +27,7 @@ class DistributedGameTableAI(DistributedNodeAI):
         self.game = None
         self.gameDoId = None
         self.isAccepting = True
-        
+
     def setPosHpr(self, x, y, z, h, p, r):
         self.posHpr = (x, y, z, h, p, r)
 
@@ -98,7 +98,7 @@ class DistributedGameTableAI(DistributedNodeAI):
         self.notify.debug('acceptBoarder %d' % avId)
         if self.findAvatar(avId) != None:
             return None
-        
+
         isEmpty = True
         for xx in self.seats:
             if xx != None:
@@ -115,13 +115,13 @@ class DistributedGameTableAI(DistributedNodeAI):
 
         self.seats[seatIndex] = avId
         self.acceptOnce(self.air.getAvatarExitEvent(avId), self._DistributedGameTableAI__handleUnexpectedExit,
-          extraArgs = [avId])
+                        extraArgs=[avId])
         self.timeOfBoarding = globalClock.getRealTime()
         if self.game:
             self.game.informGameOfPlayer()
 
-        self.sendUpdate('fillSlot', [avId, seatIndex, 
-          globalClockDelta.localToNetworkTime(self.timeOfBoarding), self.doId])
+        self.sendUpdate('fillSlot', [avId, seatIndex,
+                                     globalClockDelta.localToNetworkTime(self.timeOfBoarding), self.doId])
         self.getTableState()
 
     def requestPickedGame(self, gameNum):
@@ -138,7 +138,7 @@ class DistributedGameTableAI(DistributedNodeAI):
     def pickGame(self, gameNum):
         if self.game:
             return
-            
+
         x = 0
         for x in self.seats:
             if x is not None:
@@ -147,26 +147,38 @@ class DistributedGameTableAI(DistributedNodeAI):
 
         if gameNum == 1:
             if simbase.config.GetBool('want-chinese', 1):
-                self.game = DistributedChineseCheckersAI.DistributedChineseCheckersAI(self.air, self.doId, 'chinese', self.posHpr[0], self.posHpr[1], self.posHpr[2] + 2.8300000000000001, self.posHpr[3], self.posHpr[4], self.posHpr[5])
+                self.game = DistributedChineseCheckersAI.DistributedChineseCheckersAI(self.air, self.doId, 'chinese',
+                                                                                      self.posHpr[0], self.posHpr[1],
+                                                                                      self.posHpr[
+                                                                                          2] + 2.8300000000000001,
+                                                                                      self.posHpr[3], self.posHpr[4],
+                                                                                      self.posHpr[5])
                 self.sendUpdate('setZone', [
                     self.game.zoneId])
 
         elif gameNum == 2:
             if x <= 2:
                 if simbase.config.GetBool('want-checkers', 1):
-                    self.game = DistributedCheckersAI.DistributedCheckersAI(self.air, self.doId, 'checkers', self.posHpr[0], self.posHpr[1], self.posHpr[2] + 2.8300000000000001, self.posHpr[3], self.posHpr[4], self.posHpr[5])
+                    self.game = DistributedCheckersAI.DistributedCheckersAI(self.air, self.doId, 'checkers',
+                                                                            self.posHpr[0], self.posHpr[1],
+                                                                            self.posHpr[2] + 2.8300000000000001,
+                                                                            self.posHpr[3], self.posHpr[4],
+                                                                            self.posHpr[5])
                     self.sendUpdate('setZone', [
                         self.game.zoneId])
 
         elif x <= 2:
             if simbase.config.GetBool('want-findfour', 1):
-                self.game = DistributedFindFourAI.DistributedFindFourAI(self.air, self.doId, 'findFour', self.posHpr[0], self.posHpr[1], self.posHpr[2] + 2.8300000000000001, self.posHpr[3], self.posHpr[4], self.posHpr[5])
+                self.game = DistributedFindFourAI.DistributedFindFourAI(self.air, self.doId, 'findFour', self.posHpr[0],
+                                                                        self.posHpr[1],
+                                                                        self.posHpr[2] + 2.8300000000000001,
+                                                                        self.posHpr[3], self.posHpr[4], self.posHpr[5])
                 self.sendUpdate('setZone', [self.game.zoneId])
 
     def requestZone(self):
         if not self.game:
             return
-            
+
         avId = self.air.getAvatarIdFromSender()
         self.sendUpdateToAvatarId(avId, 'setZone', [self.game.zoneId])
 
@@ -177,7 +189,7 @@ class DistributedGameTableAI(DistributedNodeAI):
                 self.game.playersObserving.append(avId)
 
             self.observers.append(avId)
-            self.acceptOnce(self.air.getAvatarExitEvent(avId), self.handleObserverExit, extraArgs = [
+            self.acceptOnce(self.air.getAvatarExitEvent(avId), self.handleObserverExit, extraArgs=[
                 avId])
             if self.game:
                 if self.game.fsm.getCurrentState().getName() == 'playing':
@@ -313,9 +325,9 @@ class DistributedGameTableAI(DistributedNodeAI):
 
     def setCheckersZoneId(self, zoneId):
         self.checkersZoneId = zoneId
-        
+
     def setTableIndex(self, index):
         self._tableIndex = index
-        
+
     def getTableIndex(self):
         return self._tableIndex

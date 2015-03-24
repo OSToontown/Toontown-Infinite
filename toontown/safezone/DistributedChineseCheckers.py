@@ -1,24 +1,17 @@
-from pandac.PandaModules import *
-from direct.distributed.ClockDelta import *
-from direct.task.Task import Task
 from direct.interval.IntervalGlobal import *
-from TrolleyConstants import *
+
 from direct.gui.DirectGui import *
-from toontown.toonbase import TTLocalizer
 from direct.distributed import DistributedNode
-from direct.distributed.ClockDelta import globalClockDelta
+from direct.distributed.ClockDelta import *
+
+from toontown.toonbase import TTLocalizer
+
 from ChineseCheckersBoard import ChineseCheckersBoard
-from direct.fsm import ClassicFSM, State
-from direct.fsm import StateData
-from toontown.distributed import DelayDelete
 from toontown.toonbase.ToontownTimer import ToontownTimer
 from toontown.toonbase import ToontownGlobals
-from direct.distributed.ClockDelta import *
-from otp.otpbase import OTPGlobals
-from direct.showbase import PythonUtil
+
 
 class DistributedChineseCheckers(DistributedNode.DistributedNode):
-
     def __init__(self, cr):
         NodePath.__init__(self, 'DistributedChineseCheckers')
         DistributedNode.DistributedNode.__init__(self, cr)
@@ -66,85 +59,90 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
         self.clockNode.setScale(0.3)
         self.clockNode.hide()
         self.playerColors = [Vec4(0, 0.9, 0, 1),
-         Vec4(0.9, 0.9, 0, 1),
-         Vec4(0.45, 0, 0.45, 1),
-         Vec4(0.2, 0.4, 0.8, 1),
-         Vec4(1, 0.45, 1, 1),
-         Vec4(0.8, 0, 0, 1)]
+                             Vec4(0.9, 0.9, 0, 1),
+                             Vec4(0.45, 0, 0.45, 1),
+                             Vec4(0.2, 0.4, 0.8, 1),
+                             Vec4(1, 0.45, 1, 1),
+                             Vec4(0.8, 0, 0, 1)]
         self.tintConstant = Vec4(0.25, 0.25, 0.25, 0)
         self.ghostConstant = Vec4(0, 0, 0, 0.5)
         self.startingPositions = [[0,
-          1,
-          2,
-          3,
-          4,
-          5,
-          6,
-          7,
-          8,
-          9],
-         [10,
-          11,
-          12,
-          13,
-          23,
-          24,
-          25,
-          35,
-          36,
-          46],
-         [65,
-          75,
-          76,
-          86,
-          87,
-          88,
-          98,
-          99,
-          100,
-          101],
-         [111,
-          112,
-          113,
-          114,
-          115,
-          116,
-          117,
-          118,
-          119,
-          120],
-         [74,
-          84,
-          85,
-          95,
-          96,
-          97,
-          107,
-          108,
-          109,
-          110],
-         [19,
-          20,
-          21,
-          22,
-          32,
-          33,
-          34,
-          44,
-          45,
-          55]]
+                                   1,
+                                   2,
+                                   3,
+                                   4,
+                                   5,
+                                   6,
+                                   7,
+                                   8,
+                                   9],
+                                  [10,
+                                   11,
+                                   12,
+                                   13,
+                                   23,
+                                   24,
+                                   25,
+                                   35,
+                                   36,
+                                   46],
+                                  [65,
+                                   75,
+                                   76,
+                                   86,
+                                   87,
+                                   88,
+                                   98,
+                                   99,
+                                   100,
+                                   101],
+                                  [111,
+                                   112,
+                                   113,
+                                   114,
+                                   115,
+                                   116,
+                                   117,
+                                   118,
+                                   119,
+                                   120],
+                                  [74,
+                                   84,
+                                   85,
+                                   95,
+                                   96,
+                                   97,
+                                   107,
+                                   108,
+                                   109,
+                                   110],
+                                  [19,
+                                   20,
+                                   21,
+                                   22,
+                                   32,
+                                   33,
+                                   34,
+                                   44,
+                                   45,
+                                   55]]
         self.nonOpposingPositions = []
         self.knockSound = base.loadSfx('phase_5/audio/sfx/GUI_knock_1.ogg')
         self.clickSound = base.loadSfx('phase_3/audio/sfx/GUI_balloon_popup.ogg')
         self.moveSound = base.loadSfx('phase_6/audio/sfx/CC_move.ogg')
         self.accept('stoppedAsleep', self.handleSleep)
         from direct.fsm import ClassicFSM, State
-        self.fsm = ClassicFSM.ClassicFSM('ChineseCheckers', [State.State('waitingToBegin', self.enterWaitingToBegin, self.exitWaitingToBegin, ['playing', 'gameOver']), State.State('playing', self.enterPlaying, self.exitPlaying, ['gameOver']), State.State('gameOver', self.enterGameOver, self.exitGameOver, ['waitingToBegin'])], 'waitingToBegin', 'waitingToBegin')
+
+        self.fsm = ClassicFSM.ClassicFSM('ChineseCheckers', [
+            State.State('waitingToBegin', self.enterWaitingToBegin, self.exitWaitingToBegin, ['playing', 'gameOver']),
+            State.State('playing', self.enterPlaying, self.exitPlaying, ['gameOver']),
+            State.State('gameOver', self.enterGameOver, self.exitGameOver, ['waitingToBegin'])], 'waitingToBegin',
+                                         'waitingToBegin')
         x = self.boardNode.find('**/locators')
         self.locatorList = x.getChildren()
         tempList = []
         for x in range(0, 121):
-            self.locatorList[x].setTag('GamePeiceLocator', '%d' % x)
+            self.locatorList[x].setTag('GamePieceLocator', '%d' % x)
             tempList.append(self.locatorList[x].attachNewNode(CollisionNode('picker%d' % x)))
             tempList[x].node().addSolid(CollisionSphere(0, 0, 0, 0.115))
 
@@ -165,7 +163,7 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
                 self.seatPos = self.table.tableState.index(base.localAvatar.doId)
         self.playerTags.setPos(self.getPos())
 
-    def handleSleep(self, task = None):
+    def handleSleep(self, task=None):
         if self.fsm.getCurrentState().getName() == 'waitingToBegin':
             self.exitButtonPushed()
         if task != None:
@@ -260,6 +258,7 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
             self.moveCameraForGame()
             playerPos = playerNum - 1
             import copy
+
             self.nonOpposingPositions = copy.deepcopy(self.startingPositions)
             if playerPos == 0:
                 self.nonOpposingPositions.pop(0)
@@ -292,8 +291,12 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
                 self.enableTurnScreenText(playersTurn)
                 self.playersTurnBlinker = Sequence()
                 origColor = self.playerColors[playersTurn - 1]
-                self.playersTurnBlinker.append(LerpColorInterval(self.playerTagList[self.playerSeats.index(playersTurn)], 0.4, origColor - self.tintConstant - self.ghostConstant, origColor))
-                self.playersTurnBlinker.append(LerpColorInterval(self.playerTagList[self.playerSeats.index(playersTurn)], 0.4, origColor, origColor - self.tintConstant - self.ghostConstant))
+                self.playersTurnBlinker.append(
+                    LerpColorInterval(self.playerTagList[self.playerSeats.index(playersTurn)], 0.4,
+                                      origColor - self.tintConstant - self.ghostConstant, origColor))
+                self.playersTurnBlinker.append(
+                    LerpColorInterval(self.playerTagList[self.playerSeats.index(playersTurn)], 0.4, origColor,
+                                      origColor - self.tintConstant - self.ghostConstant))
                 self.playersTurnBlinker.loop()
         return
 
@@ -301,19 +304,19 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
         self.playerSeats = playerPos
         for x in range(6):
             pos = self.table.seats[x].getPos(render)
-            renderedPeice = loader.loadModel('phase_6/models/golf/checker_marble')
-            renderedPeice.reparentTo(self.playerTags)
-            renderedPeice.setPos(pos)
-            renderedPeice.setScale(1.5)
+            renderedPiece = loader.loadModel('phase_6/models/golf/checker_marble')
+            renderedPiece.reparentTo(self.playerTags)
+            renderedPiece.setPos(pos)
+            renderedPiece.setScale(1.5)
             if x == 1:
-                renderedPeice.setZ(renderedPeice.getZ() + 3.3)
-                renderedPeice.setScale(1.3)
+                renderedPiece.setZ(renderedPiece.getZ() + 3.3)
+                renderedPiece.setScale(1.3)
             elif x == 4:
-                renderedPeice.setZ(renderedPeice.getZ() + 3.3)
-                renderedPeice.setScale(1.45)
+                renderedPiece.setZ(renderedPiece.getZ() + 3.3)
+                renderedPiece.setScale(1.45)
             else:
-                renderedPeice.setZ(renderedPeice.getZ() + 3.3)
-            renderedPeice.hide()
+                renderedPiece.setZ(renderedPiece.getZ() + 3.3)
+            renderedPiece.hide()
 
         self.playerTagList = self.playerTags.getChildren()
         for x in playerPos:
@@ -358,11 +361,14 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
         elif self.playerNum == 6:
             rotation = -60
         if rotation == 60 or rotation == -60:
-            int = LerpHprInterval(self.boardNode, 2.5, Vec3(rotation, self.boardNode.getP(), self.boardNode.getR()), self.boardNode.getHpr())
+            int = LerpHprInterval(self.boardNode, 2.5, Vec3(rotation, self.boardNode.getP(), self.boardNode.getR()),
+                                  self.boardNode.getHpr())
         elif rotation == 120 or rotation == -120:
-            int = LerpHprInterval(self.boardNode, 3.5, Vec3(rotation, self.boardNode.getP(), self.boardNode.getR()), self.boardNode.getHpr())
+            int = LerpHprInterval(self.boardNode, 3.5, Vec3(rotation, self.boardNode.getP(), self.boardNode.getR()),
+                                  self.boardNode.getHpr())
         else:
-            int = LerpHprInterval(self.boardNode, 4.2, Vec3(rotation, self.boardNode.getP(), self.boardNode.getR()), self.boardNode.getHpr())
+            int = LerpHprInterval(self.boardNode, 4.2, Vec3(rotation, self.boardNode.getP(), self.boardNode.getR()),
+                                  self.boardNode.getHpr())
         int.start()
 
     def enterWaitingToBegin(self):
@@ -416,7 +422,11 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
         self.clockNode.reset()
 
     def enableExitButton(self):
-        self.exitButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersGetUpButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -.23), text_scale=0.8, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.4), scale=0.15, command=lambda self = self: self.exitButtonPushed())
+        self.exitButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersGetUpButton,
+                                       text_fg=(1, 1, 0.65, 1), text_pos=(0, -.23), text_scale=0.8,
+                                       image=(self.upButton, self.downButton, self.rolloverButton),
+                                       image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.4),
+                                       scale=0.15, command=lambda self=self: self.exitButtonPushed())
         return
 
     def enableScreenText(self):
@@ -443,24 +453,33 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
             message = TTLocalizer.ChineseCheckersColorO
             color = Vec4(0.0, 0.0, 0.0, 1.0)
             defaultPos = (-.8, -0.4)
-        self.screenText = OnscreenText(text=message, pos=defaultPos, scale=0.1, fg=color, align=TextNode.ACenter, mayChange=1)
+        self.screenText = OnscreenText(text=message, pos=defaultPos, scale=0.1, fg=color, align=TextNode.ACenter,
+                                       mayChange=1)
 
     def enableStartButton(self):
-        self.startButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersStartButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -.23), text_scale=0.6, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.1), scale=0.15, command=lambda self = self: self.startButtonPushed())
+        self.startButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersStartButton,
+                                        text_fg=(1, 1, 0.65, 1), text_pos=(0, -.23), text_scale=0.6,
+                                        image=(self.upButton, self.downButton, self.rolloverButton),
+                                        image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.1),
+                                        scale=0.15, command=lambda self=self: self.startButtonPushed())
         return
 
     def enableLeaveButton(self):
-        self.leaveButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersQuitButton, text_fg=(1, 1, 0.65, 1), text_pos=(0, -.13), text_scale=0.5, image=(self.upButton, self.downButton, self.rolloverButton), image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.4), scale=0.15, command=lambda self = self: self.exitButtonPushed())
+        self.leaveButton = DirectButton(relief=None, text=TTLocalizer.ChineseCheckersQuitButton,
+                                        text_fg=(1, 1, 0.65, 1), text_pos=(0, -.13), text_scale=0.5,
+                                        image=(self.upButton, self.downButton, self.rolloverButton),
+                                        image_color=(1, 0, 0, 1), image_scale=(20, 1, 11), pos=(0.92, 0, 0.4),
+                                        scale=0.15, command=lambda self=self: self.exitButtonPushed())
         return
 
     def enableTurnScreenText(self, player):
         self.yourTurnBlinker.finish()
         playerOrder = [1,
-         4,
-         2,
-         5,
-         3,
-         6]
+                       4,
+                       2,
+                       5,
+                       3,
+                       6]
         message1 = TTLocalizer.ChineseCheckersIts
         if self.turnText != None:
             self.turnText.destroy()
@@ -485,7 +504,8 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
         elif player == 6:
             message2 = TTLocalizer.ChineseCheckersRedTurn
             color = self.playerColors[5]
-        self.turnText = OnscreenText(text=message1 + message2, pos=(-0.8, -0.5), scale=0.092, fg=color, align=TextNode.ACenter, mayChange=1)
+        self.turnText = OnscreenText(text=message1 + message2, pos=(-0.8, -0.5), scale=0.092, fg=color,
+                                     align=TextNode.ACenter, mayChange=1)
         if player == self.playerNum:
             self.yourTurnBlinker = Sequence()
             self.yourTurnBlinker.append(LerpScaleInterval(self.turnText, 0.6, 1.045, 1))
@@ -515,7 +535,7 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
             if self.myHandler.getNumEntries() > 0:
                 self.myHandler.sortEntries()
                 pickedObj = self.myHandler.getEntry(0).getIntoNodePath()
-                pickedObj = pickedObj.getNetTag('GamePeiceLocator')
+                pickedObj = pickedObj.getNetTag('GamePieceLocator')
                 if pickedObj:
                     self.handleClicked(int(pickedObj))
 
@@ -530,8 +550,10 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
             else:
                 self.isOpposing = False
             self.blinker = Sequence()
-            self.blinker.append(LerpColorInterval(self.locatorList[index], 0.7, self.playerColor - self.tintConstant, self.playerColor))
-            self.blinker.append(LerpColorInterval(self.locatorList[index], 0.7, self.playerColor, self.playerColor - self.tintConstant))
+            self.blinker.append(
+                LerpColorInterval(self.locatorList[index], 0.7, self.playerColor - self.tintConstant, self.playerColor))
+            self.blinker.append(
+                LerpColorInterval(self.locatorList[index], 0.7, self.playerColor, self.playerColor - self.tintConstant))
             self.blinker.loop()
             self.sound.start()
         elif self.board.squareList[index].getState() == self.playerNum:
@@ -541,8 +563,10 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
 
             self.blinker.finish()
             self.blinker = Sequence()
-            self.blinker.append(LerpColorInterval(self.locatorList[index], 0.7, self.playerColor - self.tintConstant, self.playerColor))
-            self.blinker.append(LerpColorInterval(self.locatorList[index], 0.7, self.playerColor, self.playerColor - self.tintConstant))
+            self.blinker.append(
+                LerpColorInterval(self.locatorList[index], 0.7, self.playerColor - self.tintConstant, self.playerColor))
+            self.blinker.append(
+                LerpColorInterval(self.locatorList[index], 0.7, self.playerColor, self.playerColor - self.tintConstant))
             self.blinker.loop()
             self.sound.start()
             self.locatorList[self.moveList[0]].setColor(self.playerColor)
@@ -580,7 +604,8 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
                         self.moveList = []
                         self.isMyTurn = False
                         self.sound.start()
-                elif self.checkLegalMove(self.board.getSquare(self.moveList[len(self.moveList) - 1]), self.board.getSquare(index)) == True:
+                elif self.checkLegalMove(self.board.getSquare(self.moveList[len(self.moveList) - 1]),
+                                         self.board.getSquare(index)) == True:
                     if index not in self.board.squareList[self.moveList[len(self.moveList) - 1]].getAdjacent():
                         for x in self.nonOpposingPositions:
                             if self.existsLegalJumpsFrom(index) == False:
@@ -607,7 +632,9 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
                 pass
             elif self.board.squareList[x].getAdjacent()[self.board.squareList[index].getAdjacent().index(x)] == None:
                 pass
-            elif self.board.getState(self.board.squareList[x].getAdjacent()[self.board.squareList[index].getAdjacent().index(x)]) == 0 and self.board.squareList[x].getAdjacent()[self.board.squareList[index].getAdjacent().index(x)] not in self.moveList:
+            elif self.board.getState(self.board.squareList[x].getAdjacent()[
+                self.board.squareList[index].getAdjacent().index(x)]) == 0 and self.board.squareList[x].getAdjacent()[
+                self.board.squareList[index].getAdjacent().index(x)] not in self.moveList:
                 return True
 
         return False
@@ -621,7 +648,8 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
                     pass
                 elif self.board.squareList[x].getState() == 0:
                     pass
-                elif self.board.squareList[x].getAdjacent()[firstSquare.getAdjacent().index(x)] == secondSquare.getNum():
+                elif self.board.squareList[x].getAdjacent()[
+                    firstSquare.getAdjacent().index(x)] == secondSquare.getNum():
                     return True
 
             return False
@@ -632,7 +660,7 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
 
     def setGameState(self, tableState, moveList):
         if moveList != []:
-            self.animatePeice(tableState, moveList)
+            self.animatePiece(tableState, moveList)
         else:
             self.updateGameState(tableState)
 
@@ -665,21 +693,26 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
         self.mySquares.sort()
         self.checkForWin()
 
-    def animatePeice(self, tableState, moveList):
+    def animatePiece(self, tableState, moveList):
         messenger.send('wakeup')
-        gamePeiceForAnimation = loader.loadModel('phase_6/models/golf/checker_marble')
-        gamePeiceForAnimation.setColor(self.locatorList[moveList[0]].getColor())
-        gamePeiceForAnimation.reparentTo(self.boardNode)
-        gamePeiceForAnimation.setPos(self.locatorList[moveList[0]].getPos())
+        gamePieceForAnimation = loader.loadModel('phase_6/models/golf/checker_marble')
+        gamePieceForAnimation.setColor(self.locatorList[moveList[0]].getColor())
+        gamePieceForAnimation.reparentTo(self.boardNode)
+        gamePieceForAnimation.setPos(self.locatorList[moveList[0]].getPos())
         self.locatorList[moveList[0]].hide()
-        checkersPeiceTrack = Sequence()
+        checkersPieceTrack = Sequence()
         length = len(moveList)
         for x in range(length - 1):
-            checkersPeiceTrack.append(Parallel(SoundInterval(self.moveSound), ProjectileInterval(gamePeiceForAnimation, endPos=self.locatorList[moveList[x + 1]].getPos(), duration=0.5)))
+            checkersPieceTrack.append(Parallel(SoundInterval(self.moveSound), ProjectileInterval(gamePieceForAnimation,
+                                                                                                 endPos=
+                                                                                                 self.locatorList[
+                                                                                                     moveList[
+                                                                                                         x + 1]].getPos(),
+                                                                                                 duration=0.5)))
 
-        checkersPeiceTrack.append(Func(gamePeiceForAnimation.removeNode))
-        checkersPeiceTrack.append(Func(self.updateGameState, tableState))
-        checkersPeiceTrack.start()
+        checkersPieceTrack.append(Func(gamePieceForAnimation.removeNode))
+        checkersPieceTrack.append(Func(self.updateGameState, tableState))
+        checkersPieceTrack.start()
 
     def checkForWin(self):
         if self.playerNum == 1:
@@ -714,6 +747,7 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
             self.playSound.start()
         else:
             import random
+
             move = []
             foundLegal = False
             self.blinker.pause()
