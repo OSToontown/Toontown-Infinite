@@ -1,13 +1,12 @@
 from direct.interval.IntervalGlobal import *
-
 from direct.gui.DirectGui import *
 from direct.distributed import DistributedNode
 from direct.distributed.ClockDelta import *
 
-from toontown.toonbase import TTLocalizer
-
-from toontown.toonbase.ToontownTimer import ToontownTimer
 from otp.otpbase import OTPGlobals
+from toontown.chat.ChatGlobals import *
+from toontown.toonbase import TTLocalizer
+from toontown.toonbase.ToontownTimer import ToontownTimer
 
 
 class DistributedFindFour(DistributedNode.DistributedNode):
@@ -546,7 +545,7 @@ class DistributedFindFour(DistributedNode.DistributedNode):
                          LerpColorInterval(self.locatorList[x], 0.15, Vec4(1, 1, 1, 1), Vec4(0.5, 0.5, 0.5, 0.5))))
 
         whisper = WhisperPopup('This Find Four game has resulted in a Tie!', OTPGlobals.getInterfaceFont(),
-                               WhisperPopup.WTNormal)
+                               WTSystem)
         whisper.manage(base.marginManager)
         self.tieSequence.start()
 
