@@ -9,7 +9,7 @@ import ShtikerPage
 from otp.speedchat import SCColorScheme
 from otp.speedchat import SCStaticTextTerminal
 from otp.speedchat import SpeedChat
-from toontown.shticker import ControlRemapDialog
+from toontown.shtiker import ControlRemapDialog
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TTDialog
 
