@@ -12,7 +12,7 @@ from otp.otpbase import OTPGlobals
 from toontown.distributed import DelayDelete
 from toontown.safezone.ChineseCheckersBoard import ChineseCheckersBoard
 from toontown.safezone.GameMenu import GameMenu
-from toontown.safezone import GameTutorials
+from toontown.safezone.GameTutorials import *
 from toontown.safezone import TrolleyConstants
 from toontown.toonbase.ToontownTimer import ToontownTimer
 from toontown.toonbase import ToontownGlobals
@@ -455,6 +455,12 @@ class DistributedGameTable(DistributedNode.DistributedNode):
 
     def allowToWalk(self):
         base.cr.playGame.getPlace().setState('walk')
+
+    def destroyGameMenu(self):
+        if self.gameMenu:
+            self.gameMenu.removeButtons()
+            self.gameMenu.picnicFunction = None
+            self.gameMenu = None
 
     def moveCamera(self, seatIndex):
         self.oldCameraPos = camera.getPos()
