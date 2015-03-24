@@ -5,7 +5,7 @@ from toontown.classicchars import DistributedChipAI
 from toontown.classicchars import DistributedDaleAI
 from toontown.dna.DNAParser import DNAGroup, DNAVisGroup
 from toontown.safezone.DistributedPicnicBasketAI import DistributedPicnicBasketAI
-from toontown.safezone import DistributedPicnicTableAI
+from toontown.safezone import DistributedGameTableAI
 from toontown.hood import ZoneUtil
 
 
@@ -92,7 +92,7 @@ class OZHoodAI(HoodAI.HoodAI):
                 if 'game_table' in childDnaGroup.getName():
                     pos = childDnaGroup.getPos()
                     hpr = childDnaGroup.getHpr()
-                    gameTable = DistributedPicnicTableAI.DistributedPicnicTableAI(simbase.air, zoneId,
+                    gameTable = DistributedGameTableAI.DistributedGameTableAI(simbase.air, zoneId,
                         nameInfo[2], pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2])    
                     gameTable.generateWithRequired(zoneId)
                     gameTables.append(gameTable)

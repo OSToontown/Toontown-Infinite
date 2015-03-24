@@ -1,5 +1,3 @@
-# File: D (Python 2.4)
-
 from direct.distributed.DistributedNodeAI import DistributedNodeAI
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM, State
