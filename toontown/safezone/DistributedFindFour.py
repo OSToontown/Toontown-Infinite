@@ -4,6 +4,7 @@ from direct.distributed import DistributedNode
 from direct.distributed.ClockDelta import *
 
 from otp.otpbase import OTPGlobals
+from toontown.chat.WhisperPopup import WhisperPopup
 from toontown.chat.ChatGlobals import *
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase.ToontownTimer import ToontownTimer
