@@ -31,8 +31,8 @@ class OZHoodAI(HoodAI.HoodAI):
             if simbase.config.GetBool('want-chip-and-dale', True):
                 self.createClassicChars()
         self.createPicnicTables()
-        # if simbase.config.GetBool('want-game-tables', True):
-        self.createGameTables()
+        if simbase.config.GetBool('want-game-tables', True):
+            self.createGameTables()
 
     def createTimer(self):
         self.timer = DistributedTimerAI(self.air)
