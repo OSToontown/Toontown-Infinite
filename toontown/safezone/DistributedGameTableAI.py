@@ -151,7 +151,7 @@ class DistributedGameTableAI(DistributedNodeAI):
                 self.sendUpdate('setZone', [
                     self.game.zoneId])
 
-        elif gameNum == 0:
+        elif gameNum == 2:
             if x <= 2:
                 if simbase.config.GetBool('want-checkers', 1):
                     self.game = DistributedCheckersAI.DistributedCheckersAI(self.air, self.doId, 'checkers', self.posHpr[0], self.posHpr[1], self.posHpr[2] + 2.8300000000000001, self.posHpr[3], self.posHpr[4], self.posHpr[5])
