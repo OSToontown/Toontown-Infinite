@@ -493,7 +493,7 @@ class DistributedCheckersAI(DistributedNodeAI):
                     elif jump.getState() == 0:
                         return True
 
-                adj.getState() == self.playerNum + 2
+                    adj.getState() == self.playerNum + 2
 
             return False
         elif piece == 'normal':
@@ -518,7 +518,7 @@ class DistributedCheckersAI(DistributedNodeAI):
                     elif jump.getState() == 0:
                         return True
 
-                adj.getState() == self.playerNum + 2
+                    adj.getState() == self.playerNum + 2
 
             return False
 
@@ -547,7 +547,7 @@ class DistributedCheckersAI(DistributedNodeAI):
                     if adj.getState() == 0:
                         return True
 
-                adj.getState() == 0
+                    adj.getState() == 0
 
             return False
 
@@ -566,7 +566,7 @@ class DistributedCheckersAI(DistributedNodeAI):
                     elif jump.getState() == 0:
                         return True
 
-                adj.getState() == self.playerNum + 2
+                    adj.getState() == self.playerNum + 2
 
             return False
         elif piece == 'normal':
@@ -591,7 +591,7 @@ class DistributedCheckersAI(DistributedNodeAI):
                     elif jump.getState() == 0:
                         return True
 
-                adj.getState() == self.playerNum + 2
+                    adj.getState() == self.playerNum + 2
 
             return False
 
@@ -611,7 +611,7 @@ class DistributedCheckersAI(DistributedNodeAI):
                     if self.board.squareList[firstSquare.getAdjacent()[x]].getState() == 0:
                         return True
 
-                self.board.squareList[firstSquare.getAdjacent()[x]].getState() == 0
+                    self.board.squareList[firstSquare.getAdjacent()[x]].getState() == 0
 
             return False
         elif piece == 'normal':
@@ -620,7 +620,7 @@ class DistributedCheckersAI(DistributedNodeAI):
                     if self.board.squareList[firstSquare.getAdjacent()[x]].getState() == 0:
                         return True
 
-                self.board.squareList[firstSquare.getAdjacent()[x]].getState() == 0
+                    self.board.squareList[firstSquare.getAdjacent()[x]].getState() == 0
 
             return False
 
