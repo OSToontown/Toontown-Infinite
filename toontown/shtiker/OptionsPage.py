@@ -1121,7 +1121,7 @@ class MoreOptionsTabPage(DirectFrame):
         textStartHeight = 0.45
         textRowHeight = 0.145
         leftMargin = -0.72
-        buttonbase_xcoord = 0.35
+        buttonbase_xcoord = 0.16
         buttonbase_ycoord = 0.45
         button_image_scale = (0.7, 1, 1)
         button_textpos = (0, -0.02)
@@ -1164,14 +1164,17 @@ class MoreOptionsTabPage(DirectFrame):
                 guiButton.find('**/QuitBtn_RLVR')),
             image_scale=button_image_scale,
             text='Configure Keymap',
-            text_scale=options_text_scale * 0.9,
+            text_scale=(0.03, 0.05, 1),
             text_pos=button_textpos,
             pos=(
-                buttonbase_xcoord * 2,
+                buttonbase_xcoord + 0.44,
                 0.0,
                 buttonbase_ycoord),
             command=self.__openKeyRemapDialog)
-        self.keymapDialogButton.setScale(0.9)
+        self.keymapDialogButton.setScale(
+                1.55,
+                1.0,
+                1.0)
         gui.removeNode()
         guiButton.removeNode()
 
@@ -1207,11 +1210,15 @@ class MoreOptionsTabPage(DirectFrame):
         self.__setWASDButton()
 
     def __setWASDButton(self):
-        self.WASD_Label['text'] = 'Use Custom Keymap:'
         if base.wantCustomControls:
-            self.WASD_toggleButton['text'] = 'On'
+            self.WASD_Label['text'] = 'Custom Keymapping is on.'
+            self.WASD_toggleButton['text'] = TTLocalizer.OptionsPageToggleOff
+            self.keymapDialogButton.show()
         else:
-            self.WASD_toggleButton['text'] = 'Off'
+            self.WASD_Label['text'] = 'Custom Keymapping is off.'
+            self.WASD_toggleButton['text'] = TTLocalizer.OptionsPageToggleOn
+            self.keymapDialogButton.hide()
     
     def __openKeyRemapDialog(self):
-        self.controlDialog = ControlRemapDialog.ControlRemap()
+        if base.wantCustomControls:
+            self.controlDialog = ControlRemapDialog.ControlRemap()
