@@ -118,7 +118,7 @@ backgroundNodePath.setScale(render2d, VBase3(1))
 backgroundNodePath.find('**/fg').hide()
 logo = OnscreenImage(
     image='phase_3/maps/toontown-logo.png',
-    scale=(1 / (4.0/3.0), 1, 1 / (4.0/3.0)),
+    scale=(0.9625 / (4.0/3.0), 1, 0.83 / (4.0/3.0)),
     pos=backgroundNodePath.find('**/fg').getPos())
 logo.setTransparency(TransparencyAttrib.MAlpha)
 logo.setBin('fixed', 20)
