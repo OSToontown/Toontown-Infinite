@@ -134,19 +134,19 @@ class GameMenu(DirectFrame):
         if self.picnicFunction:
             self.picnicFunction(1)
         self.picnicFunction = None
-        return
+        self.removeButtons()
 
     def regCheckersSelected(self):
         if self.picnicFunction:
             self.picnicFunction(2)
         self.picnicFunction = None
-        return
+        self.removeButtons()
 
     def findFourSelected(self):
         if self.picnicFunction:
             self.picnicFunction(3)
         self.picnicFunction = None
-        return
+        self.removeButtons()
 
     def doNothing(self):
         pass
