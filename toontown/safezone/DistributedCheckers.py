@@ -94,7 +94,7 @@ class DistributedCheckers(DistributedNode.DistributedNode):
         x = self.boardNode.find('**/locator*')
         self.locatorList = x.getChildren()
         tempList = []
-        for x in range(0, 32):
+        for x in xrange(0, 32):
             self.locatorList[x].setTag('GamePieceLocator', '%d' % x)
             tempList.append(self.locatorList[x].attachNewNode(CollisionNode('picker%d' % x)))
             tempList[x].node().addSolid(CollisionSphere(0, 0, 0, 0.39))
@@ -425,35 +425,7 @@ class DistributedCheckers(DistributedNode.DistributedNode):
             self.currentMove = index
             lastItem = self.board.squareList[self.moveList[len(self.moveList) - 1]]
             thisItem = self.board.squareList[index]
-            if self.mustJump == True:
-                if lastItem.getNum() == index:
-                    self.blinker.finish()
-                    self.d_requestMove(self.moveList)
-                    self.isMyTurn = False
-                    self.moveList = []
-                    return
-                if self.checkLegalJump(lastItem, thisItem, self.moverType) == True:
-                    col = self.locatorList[index].getColor()
-                    self.locatorList[index].show()
-                    self.sound.start()
-                    if self.existsLegalJumpsFrom(index, self.moverType) == False:
-                        self.moveList.append(index)
-                        self.blinker.finish()
-                        self.d_requestMove(self.moveList)
-                        self.moveList = []
-                        self.isMyTurn = False
-                    else:
-                        self.moveList.append(index)
-                        if self.playerColorString == 'white':
-                            x = self.locatorList[index].getChildren()[1]
-                            x.show()
-                        else:
-                            x = self.locatorList[index].getChildren()[2]
-                            x.show()
-                        if self.moverType == 'king':
-                            x.find('**/checker_k*').show()
-                        self.locatorList[index].setColor(Vec4(0.5, 0.5, 0.5, 0.5))
-            elif self.checkLegalMove(lastItem, thisItem, self.moverType) == True:
+            if self.checkLegalMove(lastItem, thisItem, self.moverType) == True:
                 self.moveList.append(index)
                 col = self.locatorList[index].getColor()
                 self.locatorList[index].show()
@@ -465,7 +437,7 @@ class DistributedCheckers(DistributedNode.DistributedNode):
 
     def existsLegalJumpsFrom(self, index, piece):
         if piece == 'king':
-            for x in range(4):
+            for x in xrange(4):
                 if self.board.squareList[index].getAdjacent()[x] != None and \
                                 self.board.squareList[index].getJumps()[x] != None:
                     adj = self.board.squareList[self.board.squareList[index].getAdjacent()[x]]
@@ -527,7 +499,7 @@ class DistributedCheckers(DistributedNode.DistributedNode):
         else:
             moveForward = [0, 3]
         if piece == 'king':
-            for x in range(4):
+            for x in xrange(4):
                 if firstSquare.getAdjacent()[x] != None:
                     if self.board.squareList[firstSquare.getAdjacent()[
                         x]].getState() == 0 and secondSquare.getNum() in firstSquare.getAdjacent():
@@ -601,7 +573,7 @@ class DistributedCheckers(DistributedNode.DistributedNode):
             self.playerNum = 1
             self.playerColorString = 'white'
             isObserve = True
-        for xx in range(32):
+        for xx in xrange(32):
             for blah in self.locatorList[xx].getChildren():
                 blah.hide()
                 blah1 = blah.find('**/checker_k*')
@@ -651,44 +623,25 @@ class DistributedCheckers(DistributedNode.DistributedNode):
             self.playerNum = None
             self.playerColorString = None
             return
-        self.mustJump = False
         self.hasNormalMoves = False
-        for x in self.myKings:
-            if self.existsLegalJumpsFrom(x, 'king') == True:
-                self.mustJump = True
+
+        for x in self.mySquares:
+            if self.existsLegalMovesFrom(x, 'normal') == True:
+                self.hasNormalMoves = True
                 break
             else:
-                self.mustJump = False
-
-        if self.mustJump == False:
-            for x in self.mySquares:
-                if self.existsLegalJumpsFrom(x, 'normal') == True:
-                    self.mustJump = True
-                    break
-                else:
-                    self.mustJump = False
-
-        if self.mustJump != True:
-            for x in self.mySquares:
-                if self.existsLegalMovesFrom(x, 'normal') == True:
-                    self.hasNormalMoves = True
-                    break
-                else:
-                    self.hasNormalMoves = False
-                if self.hasNormalMoves == False:
-                    for x in self.myKings:
-                        if self.existsLegalMovesFrom(x, 'king') == True:
-                            self.hasNormalMoves = True
-                            break
-                        else:
-                            self.hasNormalMoves = False
-
-        if self.mustJump == False and self.hasNormalMoves == False:
-            pass
+                self.hasNormalMoves = False
+            if self.hasNormalMoves == False:
+                for x in self.myKings:
+                    if self.existsLegalMovesFrom(x, 'king') == True:
+                        self.hasNormalMoves = True
+                        break
+                    else:
+                        self.hasNormalMoves = False
         return
 
     def hideChildren(self, nodeList):
-        for x in range(1, 2):
+        for x in xrange(1, 2):
             nodeList[x].hide()
 
     def animatePiece(self, tableState, moveList, type, playerColor):
@@ -710,7 +663,7 @@ class DistributedCheckers(DistributedNode.DistributedNode):
 
         checkersPieceTrack = Sequence()
         length = len(moveList)
-        for x in range(length - 1):
+        for x in xrange(length - 1):
             checkersPieceTrack.append(Parallel(SoundInterval(self.moveSound), ProjectileInterval(gamePieceForAnimation,
                                                                                                  endPos=
                                                                                                  self.locatorList[
