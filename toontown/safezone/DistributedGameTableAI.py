@@ -127,10 +127,10 @@ class DistributedGameTableAI(DistributedNodeAI):
     def requestPickedGame(self, gameNum):
         avId = self.air.getAvatarIdFromSender()
         if self.hasPicked == False and avId in self.allowPickers:
-            self.hasPicked = True
             numPickers = len(self.allowPickers)
             self.allowPickers = []
             self.pickGame(gameNum)
+            self.hasPicked = True
             if self.game:
                 for x in range(numPickers):
                     self.game.informGameOfPlayer()
