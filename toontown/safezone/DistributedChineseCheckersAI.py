@@ -545,7 +545,7 @@ class DistributedChineseCheckersAI(DistributedNodeAI):
             0,
             0,
             0]
-        for x in range(6):
+        for x in xrange(6):
             id = self.playersGamePos[x]
             if id != None:
                 playerSeatPos[self.parent.seats.index(id)] = x + 1
@@ -602,7 +602,7 @@ class DistributedChineseCheckersAI(DistributedNodeAI):
         elif self.board.squareList[moveList[0]].getState() == 0:
             return False
         
-        for x in range(len(moveList) - 1):
+        for x in xrange(len(moveList) - 1):
             y = self.checkLegalMove(self.board.getSquare(moveList[x]), self.board.getSquare(moveList[x + 1]))
             if y == False:
                 return False

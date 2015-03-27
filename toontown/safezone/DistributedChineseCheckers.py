@@ -141,7 +141,7 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
         x = self.boardNode.find('**/locators')
         self.locatorList = x.getChildren()
         tempList = []
-        for x in range(0, 121):
+        for x in xrange(0, 121):
             self.locatorList[x].setTag('GamePieceLocator', '%d' % x)
             tempList.append(self.locatorList[x].attachNewNode(CollisionNode('picker%d' % x)))
             tempList[x].node().addSolid(CollisionSphere(0, 0, 0, 0.115))
@@ -302,7 +302,7 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
 
     def announceSeatPositions(self, playerPos):
         self.playerSeats = playerPos
-        for x in range(6):
+        for x in xrange(6):
             pos = self.table.seats[x].getPos(render)
             renderedPiece = loader.loadModel('phase_6/models/golf/checker_marble')
             renderedPiece.reparentTo(self.playerTags)
@@ -668,7 +668,7 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
         self.board.setStates(squares)
         self.mySquares = []
         messenger.send('wakeup')
-        for x in range(121):
+        for x in xrange(121):
             self.locatorList[x].clearColor()
             owner = self.board.squareList[x].getState()
             if owner == self.playerNum:
@@ -702,7 +702,7 @@ class DistributedChineseCheckers(DistributedNode.DistributedNode):
         self.locatorList[moveList[0]].hide()
         checkersPieceTrack = Sequence()
         length = len(moveList)
-        for x in range(length - 1):
+        for x in xrange(length - 1):
             checkersPieceTrack.append(Parallel(SoundInterval(self.moveSound), ProjectileInterval(gamePieceForAnimation,
                                                                                                  endPos=
                                                                                                  self.locatorList[
