@@ -136,7 +136,7 @@ scStructure = [
   810],
  [OTPLocalizer.SCMenuStinky,
   {900: 3},
-  {901: 3},
+  901,
   {902: 3},
   {903: 3},
   904,
