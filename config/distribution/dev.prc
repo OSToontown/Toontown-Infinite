@@ -5,11 +5,11 @@ distribution dev
 model-path ../resources
 
 # Server:
-server-version infinite-dev
-min-access-level 600
+server-version dev
+shard-low-pop 25
+shard-mid-pop 50
 accountdb-type developer
-shard-low-pop 50
-shard-mid-pop 100
+min-access-level 600
 
 # RPC:
 want-rpc-server #f
