@@ -18,7 +18,6 @@ if language == 'english':
 else:
     checkLanguage = 1
     _languageModule = 'toontown.toonbase.TTLocalizer_' + language
-print 'from ' + _languageModule + ' import *'
 from toontown.toonbase.TTLocalizerEnglish import *
 if checkLanguage:
     l = {}
