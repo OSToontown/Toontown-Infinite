@@ -16,7 +16,7 @@ class MagicWordManagerAI(DistributedObjectAI):
             return
             
         if not invoker:
-            self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', ['missing invoker'])
+            self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', ['Missing invoker!'])
             return
 
         if invoker.getAdminAccess() < MINIMUM_MAGICWORD_ACCESS:
@@ -30,7 +30,7 @@ class MagicWordManagerAI(DistributedObjectAI):
 
         target = self.air.doId2do.get(targetId)
         if not target:
-            self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', ['missing target'])
+            self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', ['Missing target!'])
             return
 
         response = spellbook.process(invoker, target, word)
@@ -55,7 +55,7 @@ def help(wordName=None):
             if spellbook.words.get(key).access <= accessLevel:
                 if wname in key:
                     return 'Did you mean %s' % (spellbook.words.get(key).name)
-        return 'I have no clue what %s is refering to' % (wordName)
+        return 'I have no clue what %s is referring to' % (wordName)
     return word.doc
             
 @magicWord(category=CATEGORY_COMMUNITY_MANAGER, types=[])
@@ -63,13 +63,13 @@ def words():
     accessLevel = spellbook.getInvoker().getAdminAccess()
     wordString = None
     for key in spellbook.words:
-       word = spellbook.words.get(key)
-       if word.access <= accessLevel:
-           if wordString is None:
-               wordString = key
-           else:
-               wordString += ", ";
-               wordString += key;
+        word = spellbook.words.get(key)
+        if word.access <= accessLevel:
+            if wordString is None:
+                wordString = key
+            else:
+                wordString += ", ";
+                wordString += key;
     if wordString is None:
         return "You are chopped liver"
     else:
