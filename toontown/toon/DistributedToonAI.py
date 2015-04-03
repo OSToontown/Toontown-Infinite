@@ -5083,9 +5083,22 @@ def track(command, track, value=None):
     return 'Invalid command.'
 
 @magicWord(category=CATEGORY_ADMINISTRATOR, types=[str, str])
-def suit(command, suitName):
+def suit(command, suitName=None):
     invoker = spellbook.getInvoker()
+    target = spellbook.getTarget()
     command = command.lower()
+    if command == 'despawn':
+        if isinstance(target, DistributedSuitAI):
+            target.flyAwayNow()
+            return "Successfully despawned suit!"
+        else:
+            return "The target is not a Cog!"
+    if command == 'info':
+        if isinstance(target, DistributedSuitAI):
+            department = SuitDNA.getSuitDeptFullname(target.dna.name)
+            return ("\nType: %s\nHP: %s/%s" % (department, target.currHP, target.maxHP))
+        else:
+            return "The target is not a Cog!"
     if suitName not in SuitDNA.suitHeadTypes:
         return 'Invalid suit name: ' + suitName
     suitFullName = SuitBattleGlobals.SuitAttributes[suitName]['name']
