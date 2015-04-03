@@ -140,7 +140,7 @@ scStructure = [
   {902: 3},
   {903: 3},
   904,
-  {905: 3},
+  905,
   907],
  [OTPLocalizer.SCMenuPlaces,
   [OTPLocalizer.SCMenuPlacesPlayground,
