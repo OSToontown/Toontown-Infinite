@@ -12,6 +12,7 @@ from DistributedPhoneAI import DistributedPhoneAI
 from DistributedClosetAI import DistributedClosetAI
 from DistributedTrunkAI import DistributedTrunkAI
 from otp.ai.MagicWordGlobal import *
+from toontown.toon.DistributedToonAI import DistributedToonAI
 
 class FurnitureError(Exception):
     def __init__(self, code):
@@ -503,7 +504,8 @@ def findCloset():
         target = spellbook.getInvoker()
     if not target:
         return "Strange.. who are we talking about?"
-
+    if not isinstance(target, DistributedToonAI):
+        return "The target is not a Toon!"
     if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
         return "no houses in the state"
 
@@ -528,6 +530,8 @@ def recoverCloset():
         target = spellbook.getInvoker()
     if not target:
         return "Strange.. who are we talking about?"
+    if not isinstance(target, DistributedToonAI):
+        return "The target is not a Toon!"
 
     if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
         return "no houses in the state"
@@ -552,6 +556,8 @@ def fillAttic():
         target = spellbook.getInvoker()
     if not target:
         return "Strange.. who are we talking about?"
+    if not isinstance(target, DistributedToonAI):
+        return "The target is not a Toon!"
 
     if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
         return "no houses in the state"
@@ -575,6 +581,8 @@ def emptyHouse():
         target = spellbook.getInvoker()
     if not target:
         return "Strange.. who are we talking about?"
+    if not isinstance(target, DistributedToonAI):
+        return "The target is not a Toon!"
 
     if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
         return "no houses in the state"
