@@ -5111,13 +5111,13 @@ def suit(command, suitName=None):
             target.flyAwayNow()
             return "Successfully despawned suit!"
         else:
-            return "The target is not a Cog!"
+            return 'This spell may only target Cogs!'
     if command == 'info':
         if isinstance(target, DistributedSuitAI):
             department = SuitDNA.getSuitDeptFullname(target.dna.name)
             return ("\nType: %s\nHP: %s/%s" % (department, target.currHP, target.maxHP))
         else:
-            return "The target is not a Cog!"
+            return 'This spell may only target Cogs!'
     if suitName not in SuitDNA.suitHeadTypes:
         return 'Invalid suit name: ' + suitName
     suitFullName = SuitBattleGlobals.SuitAttributes[suitName]['name']
