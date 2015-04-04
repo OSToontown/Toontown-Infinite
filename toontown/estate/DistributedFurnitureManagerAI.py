@@ -505,7 +505,7 @@ def findCloset():
     if not target:
         return "Strange.. who are we talking about?"
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
         return "no houses in the state"
 
@@ -531,7 +531,7 @@ def recoverCloset():
     if not target:
         return "Strange.. who are we talking about?"
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
 
     if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
         return "no houses in the state"
@@ -557,7 +557,7 @@ def fillAttic():
     if not target:
         return "Strange.. who are we talking about?"
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
 
     if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
         return "no houses in the state"
@@ -582,7 +582,7 @@ def emptyHouse():
     if not target:
         return "Strange.. who are we talking about?"
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
 
     if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
         return "no houses in the state"

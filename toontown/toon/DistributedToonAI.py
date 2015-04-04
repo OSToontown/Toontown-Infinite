@@ -4539,7 +4539,7 @@ def money(money):
     """
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     maxMoney = 10000
     if not 0 <= money <= maxMoney:
         return 'Money value must be in xrange (0-%d).' % maxMoney
@@ -4554,7 +4554,7 @@ def bank(command, value):
     command = command.lower()
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     if command == 'transfer':
         if value == 0:
             return 'Invalid bank transfer.'
@@ -4591,7 +4591,7 @@ def fishingRod(rod):
         return 'Rod value must be in xrange (0-4).'
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     target.b_setFishingRod(rod)
     return "Set %s's fishing rod to %d!" % (target.getName(), rod)
 
@@ -4604,7 +4604,7 @@ def maxFishTank(maxFishTank):
         return 'Max fish tank value must be in xrange (20-99).'
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     target.b_setMaxFishTank(maxFishTank)
     return "Set %s's max fish tank value to %d!" % (target.getName(), maxFishTank)
 
@@ -4615,7 +4615,7 @@ def name(name=''):
     """
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     _name = target.getName()
     target.b_setName(name)
     if name:
@@ -4684,7 +4684,7 @@ def gmIcon(accessLevel=None):
     invoker = spellbook.getInvoker()
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     invokerAccess = spellbook.getInvokerAccess()
     if invokerAccess != CATEGORY_SYSTEM_ADMINISTRATOR.defaultAccess:
         if accessLevel is not None:
@@ -4741,7 +4741,7 @@ def badName():
     """
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     _name = target.getName()
     colorString = TTLocalizer.NumToColor[target.dna.headColor]
     animalType = TTLocalizer.AnimalToSpecies[target.dna.getAnimal()]
@@ -5029,7 +5029,7 @@ def trophyScore(value):
         return 'Invalid trophy score: ' + str(value)
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     simbase.air.trophyMgr.updateTrophyScore(target.doId, value)
     return "%s's trophy score has been set to: %d" % (target.getName(), value)
 
@@ -5040,7 +5040,7 @@ def givePies(pieType, numPies=0):
     """
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     if pieType == -1:
         target.b_setNumPies(0)
         return "Removed %s's pies." % target.getName()
@@ -5167,7 +5167,7 @@ def nametagStyle(nametagStyle):
         return 'Invalid access level!'
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     target.b_setNametagStyle(nametagStyle)
     return 'Nametag style set to: %s.' % TTLocalizer.NametagFontNames[nametagStyle]
 

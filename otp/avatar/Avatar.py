@@ -662,5 +662,5 @@ def target():
     """
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToon):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     return 'Target: %s-%d [%d]' % (target.getName(), target.doId, target.getAdminAccess())

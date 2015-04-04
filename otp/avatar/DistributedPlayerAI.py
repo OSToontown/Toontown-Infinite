@@ -242,7 +242,7 @@ def accessLevel(accessLevel, storage='PERSISTENT', showGM=1):
         return 'Invalid access level!'
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     invoker = spellbook.getInvoker()
     if invoker == target:
         return "You can't set your own access level!"

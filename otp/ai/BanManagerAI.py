@@ -123,7 +123,7 @@ def kick(reason='No reason specified'):
     """
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     if target == spellbook.getInvoker():
         return "You can't kick yourself!"
     datagram = PyDatagram()
@@ -143,7 +143,7 @@ def ban(reason, duration):
     """
     target = spellbook.getTarget()
     if not isinstance(target, DistributedToonAI):
-        return "The target is not a Toon!"
+        return 'This spell may only target Toons!'
     if target == spellbook.getInvoker():
         return "You can't ban yourself!"
     if reason not in ('hacking', 'language', 'other'):
