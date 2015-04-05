@@ -31,7 +31,6 @@ class DistributedFactory(DistributedLevel.DistributedLevel, FactoryBase.FactoryB
         self.joiningReserves = []
         self.suitsInitialized = 0
         self.goonClipPlanes = {}
-        base.localAvatar.physControls.setCollisionRayHeight(10.0)
 
     def createEntityCreator(self):
         return FactoryEntityCreator.FactoryEntityCreator(level=self)
@@ -53,7 +52,6 @@ class DistributedFactory(DistributedLevel.DistributedLevel, FactoryBase.FactoryB
         self.ignore('SOSPanelEnter')
         if __dev__:
             bboard.removeIfEqual(EditorGlobals.EditTargetPostName, self)
-        base.localAvatar.physControls.setCollisionRayHeight(CollisionHandlerRayStart)
 
     def setFactoryId(self, id):
         FactoryBase.FactoryBase.setFactoryId(self, id)
