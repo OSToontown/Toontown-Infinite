@@ -120,7 +120,7 @@ def chooseLureCloseShot(lures, openDuration, openName, attackDuration):
             hasTrainTrackTrap = True
 
     if hasTrainTrackTrap:
-        shotChoices = [avatarBehindHighRightShot]
+        shotChoices = [avatarLureTrainTrackShot]
         av = lures[0]['toon']
     else:
         shotChoices = [allGroupLowShot]
@@ -772,6 +772,10 @@ def avatarBehindHighShot(avatar, duration):
 
 def avatarBehindHighRightShot(avatar, duration):
     return heldRelativeShot(avatar, 4, -7, 5 + avatar.getHeight(), 30, -35, 0, duration, 'avatarBehindHighShot')
+
+
+def avatarLureTrainTrackShot(avatar, duration):
+    return heldRelativeShot(avatar, 0, -7.5, 1 + avatar.getHeight(), 0, 0, 0, duration, 'avatarLureTrainTrackShot')
 
 
 def avatarBehindThreeQuarterRightShot(avatar, duration):
