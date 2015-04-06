@@ -49,8 +49,8 @@ class ToontownLoadingScreen:
         self.__expectedCount = 0
         self.__count = 0
         self.gui = loader.loadModel('phase_3/models/gui/progress-background.bam')
-        self.title = DirectLabel(guiId='ToontownLoadingScreenTitle', parent=base.a2dpBottomCenter, relief=None, pos=(0, 0,0.25), text='', textMayChange=1, text_scale=0.08, text_fg=(1, 1, 1, 1), text_align=TextNode.ACenter, text_font=ToontownGlobals.getSignFont())
-        self.waitBar = DirectWaitBar(guiId='ToontownLoadingScreenWaitBar', parent=self.gui, frameSize=(base.a2dLeft, base.a2dRight, 0, 0.32), pos=(0, 0, 0), text='', frameColor=(1, 1, 1, 0.5), barColor=(1, 0, 0, 0.75))
+        self.title = DirectLabel(guiId='ToontownLoadingScreenTitle', parent=self.gui, relief=None, pos=(0, 0, 0.24), text='', textMayChange=1, text_scale=0.1, text_fg=(1, 1, 2, 0.85), text_shadow=(0, 0, 0, 5), text_align=TextNode.ACenter, text_font=ToontownGlobals.getSignFont())
+        self.waitBar = DirectWaitBar(guiId='ToontownLoadingScreenWaitBar', parent=self.gui, frameSize=(base.a2dLeft+(base.a2dRight/4.95), base.a2dRight-(base.a2dRight/4.95), 0, -0.10), pos=(0, 0, 0.20), text='', frameColor=(1, 1, 1, 0.75), barColor=(1.0, 0, 0, 0.8))
         self.waitBar.setTransparency(TransparencyAttrib.MAlpha)
         logoScale = 0.5625  # Scale for our locked aspect ratio (2:1).
         self.logo = OnscreenImage(
@@ -78,16 +78,16 @@ class ToontownLoadingScreen:
         self.__count = 0
         self.__expectedCount = range
         if gui:
-            self.title.reparentTo(base.a2dpBottomCenter, LOADING_SCREEN_SORT_INDEX)
+            self.title.setPos(0, 0, 0.26)
             self.gui.setPos(0, -0.1, 0)
             self.gui.reparentTo(aspect2d, LOADING_SCREEN_SORT_INDEX)
             self.gui.setTexture(self.background, 1)
             if loadingScreenTex == self.defaultTex:
-                self.logo.reparentTo(base.a2dpTopCenter, LOADING_SCREEN_SORT_INDEX)
+               self.logo.reparentTo(base.a2dpTopCenter, LOADING_SCREEN_SORT_INDEX)
         else:
-            self.title.reparentTo(base.a2dpBottomCenter, LOADING_SCREEN_SORT_INDEX)
             self.gui.reparentTo(hidden)
             self.logo.reparentTo(hidden)
+        self.title.reparentTo(base.a2dpBottomCenter, LOADING_SCREEN_SORT_INDEX)
         self.waitBar.reparentTo(base.a2dpBottomCenter, LOADING_SCREEN_SORT_INDEX)
         self.waitBar.update(self.__count)
 
