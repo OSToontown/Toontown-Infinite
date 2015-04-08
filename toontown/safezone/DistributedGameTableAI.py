@@ -281,6 +281,7 @@ class DistributedGameTableAI(DistributedNodeAI):
             self.game.requestDelete()
             self.game = None
             self.gameDoId = None
+            self.hasPicked = False
 
     def informGameOfPlayerExit(self, avId):
         self.game.handlePlayerExit(avId)
