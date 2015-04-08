@@ -2,6 +2,7 @@ from direct.interval.IntervalGlobal import *
 from direct.gui.DirectGui import *
 from direct.distributed import DistributedNode
 from direct.distributed.ClockDelta import *
+from random import *
 
 from otp.otpbase import OTPGlobals
 from toontown.chat.WhisperPopup import WhisperPopup
@@ -255,7 +256,7 @@ class DistributedFindFour(DistributedNode.DistributedNode):
             int = LerpPosHprInterval(camera, 2, position, Vec3(0, -38, 0), camera.getPos(), camera.getHpr())
         else:
             position = self.table.seats[4].getPos()
-            position = position + Vec3(0, -8, 12.8)
+            position = position + Vec3(0, 10, 9.4)
             if camera.getH() < 0:
                 int = LerpPosHprInterval(camera, 2, position, Vec3(-180, -20, 0), camera.getPos(), camera.getHpr())
             else:
@@ -589,8 +590,6 @@ class DistributedFindFour(DistributedNode.DistributedNode):
             else:
                 hasfound = False
                 while hasfound == False:
-                    from random import *
-
                     x = randint(0, 6)
                     if self.board[0][x] == 0:
                         self.d_requestMove(x)
