@@ -141,31 +141,8 @@ class DistributedNPCTailor(DistributedNPCToonBase):
                 self.setChatAbsolute(TTLocalizer.STOREOWNER_BROWSING, CFSpeech | CFTimeout)
             if self.isLocalToon:
                 taskMgr.doMethodLater(3.0, self.popupPurchaseGUI, self.uniqueName('popupPurchaseGUI'))
-                print '-----------Starting tailor interaction-----------'
-                print 'avid: %s, gender: %s' % (self.av.doId, self.av.style.gender)
-                print 'current top = %s,%s,%s,%s and  bot = %s,%s,' % (self.av.style.topTex,
-                 self.av.style.topTexColor,
-                 self.av.style.sleeveTex,
-                 self.av.style.sleeveTexColor,
-                 self.av.style.botTex,
-                 self.av.style.botTexColor)
-                print 'topsList = %s' % self.av.getClothesTopsList()
-                print 'bottomsList = %s' % self.av.getClothesBottomsList()
-                print '-------------------------------------------------'
         elif mode == NPCToons.PURCHASE_MOVIE_COMPLETE:
             self.setChatAbsolute(TTLocalizer.STOREOWNER_GOODBYE, CFSpeech | CFTimeout)
-            if self.av and self.isLocalToon:
-                print '-----------ending tailor interaction-----------'
-                print 'avid: %s, gender: %s' % (self.av.doId, self.av.style.gender)
-                print 'current top = %s,%s,%s,%s and  bot = %s,%s,' % (self.av.style.topTex,
-                 self.av.style.topTexColor,
-                 self.av.style.sleeveTex,
-                 self.av.style.sleeveTexColor,
-                 self.av.style.botTex,
-                 self.av.style.botTexColor)
-                print 'topsList = %s' % self.av.getClothesTopsList()
-                print 'bottomsList = %s' % self.av.getClothesBottomsList()
-                print '-------------------------------------------------'
             self.resetTailor()
         elif mode == NPCToons.PURCHASE_MOVIE_NO_MONEY:
             self.notify.warning('PURCHASE_MOVIE_NO_MONEY should not be called')
