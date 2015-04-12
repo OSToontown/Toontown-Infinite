@@ -11,7 +11,7 @@ from toontown.fishing import FishingTargetGlobals
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 from toontown.safezone.SZTreasurePlannerAI import SZTreasurePlannerAI
 from toontown.safezone import TreasureGlobals
-
+from toontown.toon import NPCToons
 
 class DistributedEstateAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedEstateAI")
@@ -47,7 +47,10 @@ class DistributedEstateAI(DistributedObjectAI):
             target.generateWithRequired(self.zoneId)
             self.targets.append(target)
 
-
+        if simbase.config.GetBool('want-estate-fisherman', False):
+            fisherman = NPCToons.createNPC(self.air, 2012,
+                                NPCToons.NPCToonDict[2012], self.zoneId)
+        
         spot = DistributedFishingSpotAI(self.air)
         spot.setPondDoId(self.pond.getDoId())
         spot.setPosHpr(49.1029, -124.805, 0.344704, 90, 0, 0)

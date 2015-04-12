@@ -117,6 +117,7 @@ want-mat-all-tailors #t
 want-long-pattern-game #f
 want-talkative-tyler #f
 want-yin-yang #f
+want-estate-fisherman #t
 
 # Developer options:
 want-dev #f
