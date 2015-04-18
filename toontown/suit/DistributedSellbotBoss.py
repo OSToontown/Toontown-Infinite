@@ -267,7 +267,7 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def makeIntroductionMovie(self, delayDeletes):
         track = Parallel()
         camera.reparentTo(render)
-        self.titleSeq = Sequence(Func(self.titleText.show), Wait(2), LerpColorScaleInterval(self.titleText, 1, VBase4(1, 1, 1, 0)))
+        self.titleSeq = Sequence(Func(self.titleText.show), Wait(5), LerpColorScaleInterval(self.titleText, 1, VBase4(1, 1, 1, 0)))
         track.append(Parallel(self.titleSeq, camera.posHprInterval(1.75, Point3(0, 25, 30), Point3(-10, -13, 0), blendType='easeInOut')))
         localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov)
         dooberTrack = Parallel()
