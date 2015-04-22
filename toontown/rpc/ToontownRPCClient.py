@@ -1,6 +1,10 @@
 import json
+import time
+import os
+import base64
 
 from panda3d.core import URLSpec, HTTPClient, StringStream, DocumentSpec
+from Crypto.Cipher import AES
 
 
 class ProtocolError(Exception):
@@ -58,7 +62,23 @@ class ToontownRPCMethod:
         if (len(args) > 0) and (len(kwargs) > 0):
             raise ProtocolError('Cannot use both positional and keyword arguments.')
 
-        self.send(args if len(args) > 0 else kwargs)
+        token = self.generateToken(700)
+        if kwargs:
+            kwargs['token'] = token
+            self.send(kwargs)
+        else:
+            self.send((token,) + args)
+
+    @staticmethod
+    def generateToken(accessLevel):
+        data = json.dumps({'timestamp': int(time.mktime(time.gmtime())),
+                           'accesslevel': accessLevel})
+        iv = os.urandom(AES.block_size)
+        webRpcSecret = config.GetString('web-rpc-secret', '6163636f756e7473')
+        cipher = AES.new(webRpcSecret, mode=AES.MODE_CBC, IV=iv)
+        data += '\x00' * (16 - (len(data) % AES.block_size))
+        token = cipher.encrypt(data)
+        return base64.b64encode(iv + token)
 
     def send(self, params):
         if not self.client.url.hasServer():
