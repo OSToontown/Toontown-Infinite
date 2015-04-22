@@ -27,8 +27,7 @@ class ToontownRPCDispatcher:
         # from the params:
         token = None
         if isinstance(request.params, dict):
-            token = request.params.get('token')
-            del request.params['token']
+            token = request.params.pop('token', None)
         elif len(request.params) > 0:
             token = request.params[0]
             params = request.params[1:]
