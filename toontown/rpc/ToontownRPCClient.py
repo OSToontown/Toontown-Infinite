@@ -134,5 +134,4 @@ class ToontownRPCMethod:
             return
 
         if self.callback:
-            self.extraArgs.append(response['result'])
-            self.callback(*self.extraArgs)
+            self.callback(response['result'], *self.extraArgs)
