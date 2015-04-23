@@ -54,10 +54,12 @@ class ToontownRPCMethod:
         self.stream = StringStream()
         self.callback = None
         self.errback = None
+        self.extraArgs = None
 
     def __call__(self, *args, **kwargs):
         self.callback = kwargs.pop('_callback', None)
         self.errback = kwargs.pop('_errback', None)
+        self.extraArgs = kwargs.pop('_extraArgs', [])
 
         if (len(args) > 0) and (len(kwargs) > 0):
             raise ProtocolError('Cannot use both positional and keyword arguments.')
@@ -83,7 +85,7 @@ class ToontownRPCMethod:
     def send(self, params):
         if not self.client.url.hasServer():
             if self.errback is not None:
-                self.errback()
+                self.errback(*self.extraArgs)
             return
 
         self.channel = self.client.http.makeChannel(False)
@@ -106,13 +108,13 @@ class ToontownRPCMethod:
         if not self.channel.isValid():
             self.notify.warning('Failed to make HTTP request.')
             if self.errback is not None:
-                self.errback()
+                self.errback(*self.extraArgs)
             return
 
         if not self.channel.isDownloadComplete():
             self.notify.warning('Received an incomplete response.')
             if self.errback is not None:
-                self.errback()
+                self.errback(*self.extraArgs)
             return
 
         data = self.stream.getData()
@@ -121,15 +123,16 @@ class ToontownRPCMethod:
         except ValueError:
             self.notify.warning('Received an invalid response.')
             if self.errback is not None:
-                self.errback()
+                self.errback(*self.extraArgs)
             return
 
         error = response.get('error')
         if error is not None:
             self.notify.warning('Resulted in error: ' + repr(error))
             if self.errback is not None:
-                self.errback()
+                self.errback(*self.extraArgs)
             return
 
         if self.callback:
-            self.callback(response['result'])
+            self.extraArgs.append(response['result'])
+            self.callback(*self.extraArgs)
