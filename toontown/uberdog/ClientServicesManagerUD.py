@@ -3,12 +3,9 @@ import base64
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 from direct.distributed.PyDatagram import *
 from direct.fsm.FSM import FSM
-import hashlib
-import hmac
 import json
 from pandac.PandaModules import *
 import time
-import urllib2
 import random
 
 from otp.ai.MagicWordGlobal import *
@@ -16,6 +13,12 @@ from otp.distributed import OtpDoGlobals
 from toontown.makeatoon.NameGenerator import NameGenerator
 from toontown.toon.ToonDNA import ToonDNA
 from toontown.toonbase import TTLocalizer
+
+
+# Some constants for the operations we perform
+NAME_APPROVED = 0
+NAME_SUBMITTED = 1
+NAME_SUBMISSION_ERROR = 2
 
 
 # Import from PyCrypto only if we are using a database that requires it. This
@@ -32,44 +35,6 @@ accountServerEndpoint = simbase.config.GetString(
     'account-server-endpoint', 'https://toontowninfinite.com/api/')
 accountServerSecret = simbase.config.GetString(
     'account-server-secret', '6163636f756e7473')
-
-
-http = HTTPClient()
-http.setVerifySsl(0)
-
-
-def executeHttpRequest(url, **extras):
-    timestamp = str(int(time.time()))
-    signature = hmac.new(accountServerSecret, timestamp, hashlib.sha256)
-    request = urllib2.Request(accountServerEndpoint + url)
-    request.add_header('User-Agent', 'TTI-CSM')
-    request.add_header('X-CSM-Timestamp', timestamp)
-    request.add_header('X-CSM-Signature', signature.hexdigest())
-    for k, v in extras.items():
-        request.add_header('X-CSM-' + k, v)
-    try:
-        return urllib2.urlopen(request).read()
-    except:
-        return None
-
-
-blacklist = executeHttpRequest('names/blacklist.json')
-if blacklist:
-    blacklist = json.loads(blacklist)
-
-
-def judgeName(name):
-    if not name:
-        return False
-    if blacklist:
-        for namePart in name.split(' '):
-            namePart = namePart.lower()
-            if len(namePart) < 1:
-                return False
-            for banned in blacklist.get(namePart[0], []):
-                if banned in namePart:
-                    return False
-    return True
 
 
 # --- ACCOUNT DATABASES ---
@@ -89,14 +54,11 @@ class AccountDB:
             'account-bridge-filename', 'account-bridge')
         self.dbm = semidbm.open(filename, 'c')
 
-    def addNameRequest(self, avId, name):
-        return 'Success'
+    def submitNameRequest(self, avId, name, callback, errback):
+        callback(NAME_APPROVED)
 
-    def getNameStatus(self, avId):
-        return 'APPROVED'
-
-    def removeNameRequest(self, avId):
-        return 'Success'
+    def isNameApprovable(self, name, callback, errback):
+        callback(True)
 
     def lookup(self, username, callback):
         pass  # Inheritors should override this.
@@ -179,14 +141,12 @@ class LocalAccountDB(AccountDB):
 class RemoteAccountDB(AccountDB):
     notify = directNotify.newCategory('RemoteAccountDB')
 
-    def addNameRequest(self, avId, name):
-        return executeHttpRequest('names/append', ID=str(avId), Name=name)
+    def submitNameRequest(self, avId, name, callback, errback):
+        self.csm.air.webRpc.submitName(config.GetString('distribution'), avId, name,
+                                       _callback=callback, _errback=errback)
 
-    def getNameStatus(self, avId):
-        return executeHttpRequest('names/status/?Id=' + str(avId))
-
-    def removeNameRequest(self, avId):
-        return executeHttpRequest('names/remove', ID=str(avId))
+    def isNameApprovable(self, name, callback, errback):
+        self.csm.air.webRpc.isNameApprovable(name, _callback=callback, _errback=errback)
 
     def lookup(self, token, callback):
         # First, base64 decode the token:
@@ -462,6 +422,7 @@ class LoginAccountFSM(OperationFSM):
         self.csm.sendUpdateToChannel(self.target, 'acceptLogin', [int(time.time())])
         self.demand('Off')
 
+
 class CreateAvatarFSM(OperationFSM):
     notify = directNotify.newCategory('CreateAvatarFSM')
 
@@ -622,20 +583,7 @@ class GetAvatarsFSM(AvatarOperationFSM):
             if wishNameState == 'OPEN':
                 nameState = 1
             elif wishNameState == 'PENDING':
-                actualNameState = self.csm.accountDB.getNameStatus(avId)
-                self.csm.air.dbInterface.updateObject(
-                    self.csm.air.dbId,
-                    avId,
-                    self.csm.air.dclassesByName['DistributedToonUD'],
-                    {'WishNameState': [actualNameState]}
-                )
-                if actualNameState == 'PENDING':
-                    nameState = 2
-                if actualNameState == 'APPROVED':
-                    nameState = 3
-                    name = fields['WishName'][0]
-                elif actualNameState == 'REJECTED':
-                    nameState = 4
+                nameState = 2
             elif wishNameState == 'APPROVED':
                 nameState = 3
             elif wishNameState == 'REJECTED':
@@ -690,7 +638,6 @@ class DeleteAvatarFSM(GetAvatarsFSM):
             {'ACCOUNT_AV_SET': self.account['ACCOUNT_AV_SET'],
              'ACCOUNT_AV_SET_DEL': self.account['ACCOUNT_AV_SET_DEL']},
             self.__handleDelete)
-        self.csm.accountDB.removeNameRequest(self.avId)
 
     def __handleDelete(self, fields):
         if fields:
@@ -735,33 +682,65 @@ class SetNameTypedFSM(AvatarOperationFSM):
 
         self.demand('JudgeName')
 
-    def enterJudgeName(self):
-        # Let's see if the name is valid:
-        status = judgeName(self.name)
+    def judgeNameCallback(self, status):
+        if status == NAME_SUBMISSION_ERROR:
+            self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, False])
+            self.demand('Off')
+            return
 
-        if self.avId and status:
-            resp = self.csm.accountDB.addNameRequest(self.avId, self.name)
-            if resp != 'Success':
-                status = False
-            else:
-                self.csm.air.dbInterface.updateObject(
-                    self.csm.air.dbId,
-                    self.avId,
-                    self.csm.air.dclassesByName['DistributedToonUD'],
-                    {'WishNameState': ('PENDING',),
-                     'WishName': (self.name,)})
+        resp = True
 
-        if self.avId:
-            self.csm.air.writeServerEvent('avatarWishname', self.avId, self.name)
+        if status == NAME_SUBMITTED:
+            self.csm.air.dbInterface.updateObject(
+                self.csm.air.dbId,
+                self.avId,
+                self.csm.air.dclassesByName['DistributedToonUD'],
+                {'WishNameState': ('PENDING',),
+                 'WishName': (self.name,)})
+        elif status == NAME_APPROVED:
+            self.csm.air.dbInterface.updateObject(
+                self.csm.air.dbId,
+                self.avId,
+                self.csm.air.dclassesByName['DistributedToonUD'],
+                {'WishNameState': ('APPROVED',),
+                 'WishName': (self.name,),
+                 'setName': (self.name,)})
+        else:
+            self.notify.warning('Received unknown name status %s for avId %s' % (status, self.avId))
+            self.demand('Kill', 'Invalid name status' % status)
+            return
 
+        self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, resp])
+        self.demand('Off')
+
+    def judgeNameError(self):
+        self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, False])
+        self.demand('Off')
+
+    def isNameApprovableCallback(self, status):
         self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, status])
         self.demand('Off')
+
+    def isNameApprovableError(self):
+        self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, False])
+        self.demand('Off')
+
+    def enterJudgeName(self):
+        if self.avId:
+            self.csm.accountDB.submitNameRequest(self.avId, self.name, self.judgeNameCallback, self.judgeNameError)
+            self.csm.air.writeServerEvent('avatarWishname', self.avId, self.name)
+            return
+
+        # Looks like they are just checking if the name hasn't already been denied
+        self.csm.accountDB.isNameApprovable(self.name, self.isNameApprovableCallback, self.isNameApprovableError)
+
 
 class SetNamePatternFSM(AvatarOperationFSM):
     notify = directNotify.newCategory('SetNamePatternFSM')
     POST_ACCOUNT_STATE = 'RetrieveAvatar'
 
     def enterStart(self, avId, pattern):
+        print avId
         self.avId = avId
         self.pattern = pattern
 
@@ -797,7 +776,7 @@ class SetNamePatternFSM(AvatarOperationFSM):
                 part = part.lower()
             parts.append(part)
 
-        parts[2] += parts.pop(3) # Merge 2&3 (the last name) as there should be no space.
+        parts[2] += parts.pop(3)  # Merge 2&3 (the last name) as there should be no space.
         while '' in parts:
             parts.remove('')
         name = ' '.join(parts)
@@ -846,11 +825,9 @@ class AcknowledgeNameFSM(AvatarOperationFSM):
             wishNameState = ''
             name = wishName
             wishName = ''
-            self.csm.accountDB.removeNameRequest(self.avId)
         elif wishNameState == 'REJECTED':
             wishNameState = 'OPEN'
             wishName = ''
-            self.csm.accountDB.removeNameRequest(self.avId)
         else:
             self.demand('Kill', "Tried to acknowledge name on an avatar in %s state!" % wishNameState)
             return
