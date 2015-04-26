@@ -1,5 +1,4 @@
 from direct.directnotify import DirectNotifyGlobal
-from toontown.uberdog.ClientServicesManagerUD import executeHttpRequest
 import datetime
 from direct.fsm.FSM import FSM
 from direct.distributed.PyDatagram import PyDatagram
@@ -9,7 +8,6 @@ from direct.showbase.DirectObject import DirectObject
 
 
 class BanFSM(FSM):
-
     def __init__(self, air, avId, comment, duration):
         FSM.__init__(self, 'banFSM-%s' % avId)
         self.air = air
@@ -23,8 +21,10 @@ class BanFSM(FSM):
         self.avName = None
 
     def performBan(self, bannedUntil):
-        executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
-                           Reason=self.comment)
+        # TODO: Use the webRpc to ban users
+        # executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
+        #                   Reason=self.comment)
+        pass
 
     def ejectPlayer(self):
         av = self.air.doId2do.get(self.avId)

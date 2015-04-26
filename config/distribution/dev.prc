@@ -15,6 +15,9 @@ min-access-level 600
 want-rpc-server #f
 rpc-server-endpoint http://localhost:8080/
 
+want-web-rpc #f
+web-rpc-endpoint http://localhost:8000/rpc/
+
 # DClass files (in reverse order):
 dc-file astron/dclass/toon.dc
 dc-file astron/dclass/otp.dc
