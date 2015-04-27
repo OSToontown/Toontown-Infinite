@@ -57,7 +57,7 @@ class AccountDB:
     def submitNameRequest(self, avId, name, callback, errback):
         callback(NAME_APPROVED)
 
-    def isNameApprovable(self, name, callback, errback):
+    def isNameAcceptable(self, name, callback, errback):
         callback(True)
 
     def lookup(self, username, callback):
@@ -142,11 +142,11 @@ class RemoteAccountDB(AccountDB):
     notify = directNotify.newCategory('RemoteAccountDB')
 
     def submitNameRequest(self, avId, name, callback, errback):
-        self.csm.air.webRpc.submitName(config.GetString('distribution'), avId, name,
-                                       _callback=callback, _errback=errback)
+        self.csm.air.webRpc.submitNameRequest(config.GetString('distribution'), avId, name,
+                                              _callback=callback, _errback=errback)
 
-    def isNameApprovable(self, name, callback, errback):
-        self.csm.air.webRpc.isNameApprovable(name, _callback=callback, _errback=errback)
+    def isNameAcceptable(self, name, callback, errback):
+        self.csm.air.webRpc.isNameAcceptable(name, _callback=callback, _errback=errback)
 
     def lookup(self, token, callback):
         # First, base64 decode the token:
@@ -717,11 +717,11 @@ class SetNameTypedFSM(AvatarOperationFSM):
         self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, False])
         self.demand('Off')
 
-    def isNameApprovableCallback(self, status):
+    def isNameAcceptableCallback(self, status):
         self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, status])
         self.demand('Off')
 
-    def isNameApprovableError(self):
+    def isNameAcceptableError(self):
         self.csm.sendUpdateToAccountId(self.target, 'setNameTypedResp', [self.avId, False])
         self.demand('Off')
 
@@ -732,7 +732,7 @@ class SetNameTypedFSM(AvatarOperationFSM):
             return
 
         # Looks like they are just checking if the name hasn't already been denied
-        self.csm.accountDB.isNameApprovable(self.name, self.isNameApprovableCallback, self.isNameApprovableError)
+        self.csm.accountDB.isNameAcceptable(self.name, self.isNameAcceptableCallback, self.isNameAcceptableError)
 
 
 class SetNamePatternFSM(AvatarOperationFSM):

@@ -736,14 +736,13 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
     # --- WEB ---
 
     @rpcmethod(accessLevel=MODERATOR)
-    def rpc_approveName(self, avId, approved):
+    def rpc_approveName(self, avId):
         """
         Summary:
-            Approve the name of [avId] with the value of [approved]
+            Approve [avId]'s name.
 
         Parameters:
             [int avId] = The ID of the avatar.
-            [bool approved] = Whether the name was approved or not.
 
         Example response:
             On success: True
@@ -753,22 +752,42 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
         if dclassName != 'DistributedToon':
             return False
 
-        if approved:
-            self.air.dbInterface.updateObject(
-                self.air.dbId,
-                avId,
-                self.air.dclassesByName['DistributedToonUD'],
-                {'WishNameState': ('APPROVED',),
-                 'setName': (fields['WishName'][0],)})
-            self.rpc_setField(avId, 'DistributedToonUD', 'setName', [fields['WishName'][0]])
-            self.rpc_messageAvatar(avId, 'Your name has been approved by the Toon Council!')
-        else:
-            self.air.dbInterface.updateObject(
-                self.air.dbId,
-                avId,
-                self.air.dclassesByName['DistributedToonUD'],
-                {'WishNameState': ('REJECTED',)})
-            self.rpc_messageAvatar(avId, 'The Toon Council has rejected your name. \
-                                          Please go back to the Pick-A-Toon screen and choose a new one.')
+        self.air.dbInterface.updateObject(
+            self.air.dbId,
+            avId,
+            self.air.dclassesByName['DistributedToonUD'],
+            {'WishNameState': ('APPROVED',),
+             'setName': (fields['WishName'][0],)})
+        self.rpc_setField(avId, 'DistributedToonUD', 'setName', [fields['WishName'][0]])
+
+        self.rpc_messageAvatar(avId, 'Your name has been approved by the Toon Council!')
+
+        return True
+
+    @rpcmethod(accessLevel=MODERATOR)
+    def rpc_denyName(self, avId):
+        """
+        Summary:
+            Deny [avId]'s name.
+
+        Parameters:
+            [int avId] = The ID of the avatar.
+
+        Example response:
+            On success: True
+            On failure: False
+        """
+        dclassName, fields = self.rpc_queryObject(avId)
+        if dclassName != 'DistributedToon':
+            return False
+
+        self.air.dbInterface.updateObject(
+            self.air.dbId,
+            avId,
+            self.air.dclassesByName['DistributedToonUD'],
+            {'WishNameState': ('REJECTED',)})
+
+        self.rpc_messageAvatar(avId, 'The Toon Council has rejected your name. \
+                                      Please go back to the Pick-A-Toon screen and choose a new one.')
 
         return True
