@@ -35,9 +35,10 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
         if avId in self.trophyScores:
             trophyScore = self.trophyScores[avId] - numFloors
             self.updateTrophyScore(avId, trophyScore)
-            if avId in self.air.doId2do:
+            av = self.air.doId2do.get(avId)
+            if av is not None:
                 # Let the avatar know the building was taken over.
-                self.air.doId2do[avId].d_setSystemMessage(0, RemoveTrophy)
+                av.d_setSystemMessage(0, RemoveTrophy)
 
     def updateTrophyScore(self, avId, trophyScore):
         av = self.air.doId2do.get(avId)
