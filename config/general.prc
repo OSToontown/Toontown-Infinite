@@ -72,7 +72,6 @@ want-golf-zone #t
 # Safe zone settings:
 want-treasure-planners #t
 want-suit-planners #t
-want-butterflies #f
 
 # Classic characters:
 want-classic-chars #f
@@ -117,6 +116,7 @@ want-mat-all-tailors #t
 want-long-pattern-game #f
 want-talkative-tyler #f
 want-yin-yang #f
+want-butterflies #f
 
 # Developer options:
 want-dev #f
