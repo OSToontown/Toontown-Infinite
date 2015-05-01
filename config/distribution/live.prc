@@ -1,9 +1,6 @@
 # Distribution:
 distribution live
 
-# Optional:
-want-butterflies #t
-
 # Server:
 server-version SERVER_VERSION
 shard-low-pop 100
