@@ -45,7 +45,7 @@ from toontown.quest import Quests
 from toontown.racing import RaceGlobals
 from toontown.shtiker import CogPageGlobals
 from toontown.suit import SuitDNA
-from toontown.suit.DistributedSuitAI import DistributedSuitAI
+from toontown.suit import DistributedSuitAI
 from toontown.toon import NPCToons
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownAccessAI
@@ -4538,7 +4538,7 @@ def money(money):
     Modifies the target's current money value.
     """
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToonAI):
+    if not isinstance(target, DistributedToonAI.DistributedToonAI):
         return 'This spell may only target Toons!'
     maxMoney = 10000
     if not 0 <= money <= maxMoney:
@@ -4553,7 +4553,7 @@ def bank(command, value):
     """
     command = command.lower()
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToonAI):
+    if not isinstance(target, DistributedToonAI.DistributedToonAI):
         return 'This spell may only target Toons!'
     if command == 'transfer':
         if value == 0:
@@ -4590,7 +4590,7 @@ def fishingRod(rod):
     if not 0 <= rod <= 4:
         return 'Rod value must be in xrange (0-4).'
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToonAI):
+    if not isinstance(target, DistributedToonAI.DistributedToonAI):
         return 'This spell may only target Toons!'
     target.b_setFishingRod(rod)
     return "Set %s's fishing rod to %d!" % (target.getName(), rod)
@@ -4603,7 +4603,7 @@ def maxFishTank(maxFishTank):
     if not 20 <= maxFishTank <= 99:
         return 'Max fish tank value must be in xrange (20-99).'
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToonAI):
+    if not isinstance(target, DistributedToonAI.DistributedToonAI):
         return 'This spell may only target Toons!'
     target.b_setMaxFishTank(maxFishTank)
     return "Set %s's max fish tank value to %d!" % (target.getName(), maxFishTank)
@@ -4614,7 +4614,7 @@ def name(name=''):
     Modify the target's name.
     """
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToonAI):
+    if not isinstance(target, DistributedToonAI.DistributedToonAI):
         return 'This spell may only target Toons!'
     _name = target.getName()
     target.b_setName(name)
@@ -4683,7 +4683,7 @@ def gmIcon(accessLevel=None):
     """
     invoker = spellbook.getInvoker()
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToonAI):
+    if not isinstance(target, DistributedToonAI.DistributedToonAI):
         return 'This spell may only target Toons!'
     invokerAccess = spellbook.getInvokerAccess()
     if invokerAccess != CATEGORY_SYSTEM_ADMINISTRATOR.defaultAccess:
@@ -4740,7 +4740,7 @@ def badName():
     Revoke the target's name.
     """
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToonAI):
+    if not isinstance(target, DistributedToonAI.DistributedToonAI):
         return 'This spell may only target Toons!'
     _name = target.getName()
     colorString = TTLocalizer.NumToColor[target.dna.headColor]
@@ -5028,7 +5028,7 @@ def trophyScore(value):
     if value < 0:
         return 'Invalid trophy score: ' + str(value)
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToonAI):
+    if not isinstance(target, DistributedToonAI.DistributedToonAI):
         return 'This spell may only target Toons!'
     simbase.air.trophyMgr.updateTrophyScore(target.doId, value)
     return "%s's trophy score has been set to: %d" % (target.getName(), value)
@@ -5039,7 +5039,7 @@ def givePies(pieType, numPies=0):
     Give the target (numPies) of (pieType) pies.
     """
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToonAI):
+    if not isinstance(target, DistributedToonAI.DistributedToonAI):
         return 'This spell may only target Toons!'
     if pieType == -1:
         target.b_setNumPies(0)
@@ -5166,7 +5166,7 @@ def nametagStyle(nametagStyle):
     if nametagStyle != 0 and nametagStyle != 10 and currentAccess == CATEGORY_MODERATOR.defaultAccess:
         return 'Invalid access level!'
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToonAI):
+    if not isinstance(target, DistributedToonAI.DistributedToonAI):
         return 'This spell may only target Toons!'
     target.b_setNametagStyle(nametagStyle)
     return 'Nametag style set to: %s.' % TTLocalizer.NametagFontNames[nametagStyle]

@@ -5,7 +5,6 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import *
 from otp.ai.MagicWordGlobal import *
 from direct.showbase.DirectObject import DirectObject
-from toontown.toon.DistributedToonAI import DistributedToonAI
 
 class BanFSM(FSM):
     def __init__(self, air, avId, comment, duration):
@@ -122,7 +121,7 @@ def kick(reason='No reason specified'):
     Kick the target from the game server.
     """
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToonAI):
+    if not isinstance(target, DistributedToonAI.DistributedToonAI):
         return 'This spell may only target Toons!'
     if target == spellbook.getInvoker():
         return "You can't kick yourself!"
@@ -142,7 +141,7 @@ def ban(reason, duration):
     Ban the target from the game server.
     """
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToonAI):
+    if not isinstance(target, DistributedToonAI.DistributedToonAI):
         return 'This spell may only target Toons!'
     if target == spellbook.getInvoker():
         return "You can't ban yourself!"
