@@ -9,7 +9,7 @@ from Avatar import Avatar
 from otp.ai.MagicWordGlobal import *
 from otp.otpbase import OTPGlobals
 from toontown.battle.BattleProps import globalPropPool
-from toontown.toon.DistributedToon import DistributedToon
+
 
 class DistributedAvatar(DistributedActor, Avatar):
     HpTextGenerator = TextNode('HpTextGenerator')
@@ -262,8 +262,6 @@ def warp():
     """
     invoker = spellbook.getInvoker()
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToon):
-        return 'This spell may only target Toons!'
     if invoker.doId == target.doId:
         return "You can't warp yourself!"
     target.setPosHpr(invoker.getPos(), invoker.getHpr())
@@ -275,8 +273,6 @@ def loop(anim):
     animate the target using animation [anim] on the entire actor.
     """
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToon):
-        return 'This spell may only target Toons!'
     target.loop(anim)
 
 
@@ -287,8 +283,6 @@ def pose(anim, frame, part=None):
     or optional [part] of the actor.
     """
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToon):
-        return 'This spell may only target Toons!'
     target.pose(anim, frame, partName=part)
 
 
@@ -300,8 +294,6 @@ def pingpong(anim, start=None, end=None, part=None):
     actor, or optional <part> of the actor.
     """
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToon):
-        return 'This spell may only target Toons!'
     target.pingpong(anim, partName=part, fromFrame=start, toFrame=end)
 
 @magicWord(category=CATEGORY_COMMUNITY_MANAGER, types=[str])
@@ -310,8 +302,6 @@ def rightHand(prop=None):
     parents the optional <prop> to the target's right hand node.
     """
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToon):
-        return 'This spell may only target Toons!'
     rightHand = target.find('**/rightHand')
     if prop is None:
         for child in rightHand.getChildren():
@@ -328,8 +318,6 @@ def leftHand(prop=None):
     parents the optional <prop> to the target's left hand node.
     """
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToon):
-        return 'This spell may only target Toons!'
     leftHand = target.find('**/leftHand')
     if prop is None:
         for child in leftHand.getChildren():
