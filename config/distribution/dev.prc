@@ -40,4 +40,3 @@ want-resistance-dance #t
 show-population #t
 force-skip-tutorial #t
 want-instant-parties #t
-want-butterflies #t
