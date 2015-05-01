@@ -101,6 +101,9 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
     def getConfrontPosHpr(self):
         return (self.confrontPos, self.confrontHpr)
 
+    def getAdminAccess(self):
+        return 100
+
     def flyAwayNow(self):
         self.b_setPathState(2)
         self.stopPathNow()
