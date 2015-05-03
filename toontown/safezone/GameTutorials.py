@@ -376,7 +376,7 @@ class FindFourTutorial(DirectFrame, FSM.FSM):
         self.title['text'] = (TTLocalizer.ChineseTutorialTitle2,)
         self['text'] = TTLocalizer.FindFourPage3
         self['text_pos'] = (0.0, 0.32)
-        self['text_wordwrap'] = 19
+        self['text_wordwrap'] = 12.5
         self['text_scale'] = 0.07
         self.bNext['state'] = DGG.DISABLED
         self.bNext.hide()
