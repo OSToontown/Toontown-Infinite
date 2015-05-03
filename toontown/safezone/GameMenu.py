@@ -1,12 +1,15 @@
 from direct.distributed.ClockDelta import *
+
 from direct.gui.DirectGui import *
+
 from toontown.toonbase import TTLocalizer
+
 from toontown.toonbase import ToontownGlobals
 
 
 class GameMenu(DirectFrame):
-    def __init__(self, gameTable, menuType):
-        self.table = gameTable
+    def __init__(self, picnicFunction, menuType):
+        self.picnicFunction = picnicFunction
         DirectFrame.__init__(
             self,
             pos=(0.0, 0.0, 0.85),
@@ -128,20 +131,20 @@ class GameMenu(DirectFrame):
         DirectFrame.destroy(self)
 
     def checkersSelected(self):
-        if self.table:
-            self.table.tutorialFunction(1)
+        if self.picnicFunction:
+            self.picnicFunction(1)
         self.picnicFunction = None
         self.removeButtons()
 
     def regCheckersSelected(self):
-        if self.table:
-            self.table.tutorialFunction(2)
+        if self.picnicFunction:
+            self.picnicFunction(2)
         self.picnicFunction = None
         self.removeButtons()
 
     def findFourSelected(self):
-        if self.table:
-            self.table.tutorialFunction(3)
+        if self.picnicFunction:
+            self.picnicFunction(3)
         self.picnicFunction = None
         self.removeButtons()
 
