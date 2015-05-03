@@ -299,6 +299,20 @@ class FindFourTutorial(DirectFrame, FSM.FSM):
                                  text_font=ToontownGlobals.getSignFont())
         images = loader.loadModel('phase_6/models/golf/findfour_game')
         images.setTransparency(1)
+        filepath = 'phase_6/maps/findfour_board.jpg'
+        tex = loader.loadTexture(filepath)
+        tex.setBorderColor(Vec4(0,0,0,0))
+        tex.setWrapU(Texture.WMBorderColor)
+        tex.setWrapV(Texture.WMBorderColor)
+        cm = CardMaker(filepath + ' card')
+        cm.setFrame(-tex.getOrigFileXSize(), tex.getOrigFileXSize(), -tex.getOrigFileYSize(), tex.getOrigFileYSize())
+        self.image = NodePath(cm.generate())
+        self.image.setTexture(tex)
+        self.image.setPos(0.43, -0.1, 0.0)
+        self.image.setScale(self.image.getScale()/ 1100)
+        self.image.flattenLight()
+        self.image.reparentTo(aspect2d)
+        self.image.hide()
         buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
         gui = loader.loadModel('phase_3.5/models/gui/friendslist_gui')
         self.bNext = DirectButton(self, image=(gui.find('**/Horiz_Arrow_UP'),
@@ -329,15 +343,17 @@ class FindFourTutorial(DirectFrame, FSM.FSM):
         self.cleanup()
 
     def enterPage1(self, *args):
+        self.image.hide()
         self.bNext.show()
         self.title['text'] = (TTLocalizer.ChineseTutorialTitle1,)
-        self['text'] = TTLocalizer.CheckersPage1
+        self['text'] = TTLocalizer.FindFourPage1
         self['text_pos'] = (0.0, 0.23)
         self['text_wordwrap'] = 13.5
-        self['text_scale'] = 0.06
+        self['text_scale'] = 0.07
         self.bPrev['state'] = DGG.DISABLED
         self.bPrev.hide()
         self.bNext['state'] = DGG.NORMAL
+        self.image.show()
 
     def exitPage1(self, *args):
         self.bPrev['state'] = DGG.NORMAL
@@ -346,10 +362,10 @@ class FindFourTutorial(DirectFrame, FSM.FSM):
         self.bPrev.show()
         self.bNext.show()
         self.title['text'] = (TTLocalizer.ChineseTutorialTitle2,)
-        self['text'] = TTLocalizer.CheckersPage2
+        self['text'] = TTLocalizer.FindFourPage2
         self['text_pos'] = (0.0, 0.28)
         self['text_wordwrap'] = 12.5
-        self['text_scale'] = 0.06
+        self['text_scale'] = 0.07
         self.bNext['state'] = DGG.NORMAL
 
     def exitPage2(self, *args):
@@ -358,10 +374,10 @@ class FindFourTutorial(DirectFrame, FSM.FSM):
     def enterPage3(self, *args):
         self.bPrev.show()
         self.title['text'] = (TTLocalizer.ChineseTutorialTitle2,)
-        self['text'] = TTLocalizer.CheckersPage3 + '\n\n' + TTLocalizer.CheckersPage4
+        self['text'] = TTLocalizer.FindFourPage3
         self['text_pos'] = (0.0, 0.32)
         self['text_wordwrap'] = 19
-        self['text_scale'] = 0.05
+        self['text_scale'] = 0.07
         self.bNext['state'] = DGG.DISABLED
         self.bNext.hide()
         self.bQuit.show()
@@ -373,6 +389,8 @@ class FindFourTutorial(DirectFrame, FSM.FSM):
         self.bNext.destroy()
         self.bPrev.destroy()
         self.bQuit.destroy()
+        self.image.hide()
+        del self.image
         DirectFrame.destroy(self)
 
     def exitQuit(self, *args):
