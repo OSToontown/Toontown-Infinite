@@ -288,7 +288,7 @@ class DistributedGameTable(DistributedNode.DistributedNode):
                 image_scale=(20, 1, 11),
                 pos=(0, 0, 0.8),
                 scale=0.15,
-                command=lambda self=self: self.joinButtonPushed())
+                command=self.joinButtonPushed)
         if self.isPlaying == True:
             self.observeButton = DirectButton(
                 relief=None,
@@ -301,7 +301,7 @@ class DistributedGameTable(DistributedNode.DistributedNode):
                 image_scale=(20, 1, 11),
                 pos=(0, 0, 0.6),
                 scale=0.15,
-                command=lambda self=self: self.observeButtonPushed())
+                command=self.observeButtonPushed)
         self.exitButton = DirectButton(
             relief=None,
             text=TTLocalizer.PicnicTableCancelButton,
@@ -313,7 +313,7 @@ class DistributedGameTable(DistributedNode.DistributedNode):
             image_scale=(20, 1, 11),
             pos=(1, 0, 0.6),
             scale=0.15,
-            command=lambda self=self: self.cancelButtonPushed())
+            command=self.cancelButtonPushed)
         self.tutorialButton = DirectButton(
             relief=None,
             text=TTLocalizer.PicnicTableTutorial,
@@ -325,13 +325,13 @@ class DistributedGameTable(DistributedNode.DistributedNode):
             image_scale=(20, 1, 11),
             pos=(-1, 0, 0.6),
             scale=0.15,
-            command=lambda self=self: self.tutorialButtonPushed())
+            command=self.tutorialButtonPushed)
         base.cr.playGame.getPlace().setState('stopped')
         return
 
     def tutorialButtonPushed(self):
         self.disableChoiceButtons()
-        self.gameMenu = GameMenu(self.tutorialFunction, 1)
+        self.gameMenu = GameMenu(self, 1)
         self.tutorialButton.destroy()
         self.tutorialButton = None
         return
@@ -555,8 +555,7 @@ class DistributedGameTable(DistributedNode.DistributedNode):
             image_scale=(20, 1, 11),
             pos=(0.92, 0, 0.4),
             scale=0.15,
-            command=lambda self=self: self.stopObserveButtonPushed())
-        return
+            command=self.stopObserveButtonPushed)
 
     def stopObserveButtonPushed(self):
         self.sendUpdate('leaveObserve', [])
