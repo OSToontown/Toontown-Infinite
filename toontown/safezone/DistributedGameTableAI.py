@@ -130,8 +130,8 @@ class DistributedGameTableAI(DistributedNodeAI):
             numPickers = len(self.allowPickers)
             self.allowPickers = []
             self.pickGame(gameNum)
-            self.hasPicked = True
             if self.game:
+                self.hasPicked = True
                 for x in xrange(numPickers):
                     self.game.informGameOfPlayer()
 
