@@ -108,16 +108,19 @@ class DistributedGameTable(DistributedNode.DistributedNode):
         wheelAngle = dist / (0.5 * 1.4 * math.pi) * 360
         self.__enableCollisions()
         return
+    
+    def destroyGameMenu(self):
+        if self.gameMenu:
+            self.gameMenu.removeButtons()
+            self.gameMenu.picnicFunction = None
+            self.gameMenu = None
 
     def handleSleep(self, task=None):
         if self.fsm.getCurrentState().getName() == 'chooseMode':
             self.cancelButtonPushed()
         elif self.fsm.getCurrentState().getName() == 'sitting':
             self.sendUpdate('requestExit', [])
-        if self.gameMenu != None:
-            self.gameMenu.removeButtons()
-            self.gameMenu.picnicFunction = None
-            self.gameMenu = None
+        self.destroyGameMenu()
         if task != None:
             task.done
         return
@@ -240,7 +243,7 @@ class DistributedGameTable(DistributedNode.DistributedNode):
                 whisper = WhisperPopup(TTLocalizer.RegularCheckersYouWon, OTPGlobals.getInterfaceFont(),
                                        WTSystem)
             elif winString == 'Find Four':
-                whisper = WhisperPopup('You won a game of Find Four!', OTPGlobals.getInterfaceFont(),
+                whisper = WhisperPopup(TTLocalizer.FindFourYouWon, OTPGlobals.getInterfaceFont(),
                                        WTSystem)
         elif avId in self.cr.doId2do:
             stateString = self.fsm.getCurrentState().getName()
@@ -254,7 +257,7 @@ class DistributedGameTable(DistributedNode.DistributedNode):
                 whisper = WhisperPopup(av.getName() + TTLocalizer.RegularCheckersGameOf + TTLocalizer.RegularCheckers,
                                        OTPGlobals.getInterfaceFont(), WTSystem)
             elif winString == 'Find Four':
-                whisper = WhisperPopup(av.getName() + ' has won a game of' + ' Find Four!',
+                whisper = WhisperPopup(av.getName() + TTLocalizer.FindFourGameOf + TTLocalizer.FindFour,
                                        OTPGlobals.getInterfaceFont(), WTSystem)
         if avId in self.cr.doId2do:
             toon = self.cr.doId2do[avId]
@@ -337,14 +340,15 @@ class DistributedGameTable(DistributedNode.DistributedNode):
         return
 
     def tutorialFunction(self, tutVal):
-        if tutVal == 1:
+        if tutVal == 0:
+            self.cancelButtonPushed()
+        elif tutVal == 1:
             self.tutorial = ChineseTutorial(self.tutorialDone)
         elif tutVal == 2:
             self.tutorial = CheckersTutorial(self.tutorialDone)
         elif tutVal == 3:
             self.tutorial = FindFourTutorial(self.tutorialDone)
-        self.gameMenu.picnicFunction = None
-        self.gameMenu = None
+        self.destroyGameMenu()
         return
 
     def tutorialDone(self):
@@ -381,12 +385,15 @@ class DistributedGameTable(DistributedNode.DistributedNode):
             self.tutorialButton.destroy()
 
     def pickFunction(self, gameNum):
+        if gameNum == 0:
+            self.handleSleep()
         if gameNum == 1:
             self.sendUpdate('requestPickedGame', [gameNum])
         elif gameNum == 2:
             self.sendUpdate('requestPickedGame', [gameNum])
         elif gameNum == 3:
             self.sendUpdate('requestPickedGame', [gameNum])
+        self.destroyGameMenu()
 
     def allowPick(self):
         self.gameMenu = GameMenu(self.pickFunction, 2)
@@ -395,10 +402,7 @@ class DistributedGameTable(DistributedNode.DistributedNode):
         if self.fsm.getCurrentState().getName() == 'sitting' or self.fsm.getCurrentState().getName() == 'observing':
             if self.tutorial == None:
                 self.gameZone = base.cr.addInterest(base.localAvatar.defaultShard, zoneId, 'gameBoard')
-                if self.gameMenu != None:
-                    self.gameMenu.removeButtons()
-                    self.gameMenu.picnicFunction = None
-                    self.gameMenu = None
+                self.destroyGameMenu()
         return
 
     def fillSlot(self, avId, index, timestamp, parentDoId):
@@ -464,12 +468,6 @@ class DistributedGameTable(DistributedNode.DistributedNode):
 
     def allowToWalk(self):
         base.cr.playGame.getPlace().setState('walk')
-
-    def destroyGameMenu(self):
-        if self.gameMenu:
-            self.gameMenu.removeButtons()
-            self.gameMenu.picnicFunction = None
-            self.gameMenu = None
 
     def moveCamera(self, seatIndex):
         self.oldCameraPos = camera.getPos()

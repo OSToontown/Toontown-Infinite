@@ -10,6 +10,10 @@ from toontown.toonbase import ToontownGlobals
 class GameMenu(DirectFrame):
     def __init__(self, picnicFunction, menuType):
         self.picnicFunction = picnicFunction
+        self.buttonModel = loader.loadModel('phase_3.5/models/gui/inventory_gui')
+        self.upButton = self.buttonModel.find('**//InventoryButtonUp')
+        self.downButton = self.buttonModel.find('**/InventoryButtonDown')
+        self.rolloverButton = self.buttonModel.find('**/InventoryButtonRollover')
         DirectFrame.__init__(
             self,
             pos=(0.0, 0.0, 0.85),
@@ -66,6 +70,18 @@ class GameMenu(DirectFrame):
             pos=(-0.8, 0, -0.7),
             command=self.findFourSelected
         )
+        self.exitButton = DirectButton(
+            relief=None,
+            text=TTLocalizer.PicnicTableCancelButton,
+            text_fg=(1, 1, 0.65, 1),
+            text_pos=(0, -.23),
+            text_scale=0.8,
+            image=(self.upButton, self.downButton, self.rolloverButton),
+            image_color=(1, 0, 0, 1),
+            image_scale=(20, 1, 11),
+            pos=(0, 0, -0.5),
+            scale=0.15,
+            command=self.cancelSelected)
 
         # Text
         self.chineseText = OnscreenText(
@@ -128,25 +144,32 @@ class GameMenu(DirectFrame):
         self.chineseText.destroy()
         self.checkersText.destroy()
         self.findFourText.destroy()
+        self.exitButton.destroy()
         DirectFrame.destroy(self)
 
     def checkersSelected(self):
         if self.picnicFunction:
             self.picnicFunction(1)
         self.picnicFunction = None
-        self.removeButtons()
+        return
 
     def regCheckersSelected(self):
         if self.picnicFunction:
             self.picnicFunction(2)
         self.picnicFunction = None
-        self.removeButtons()
+        return
 
     def findFourSelected(self):
         if self.picnicFunction:
             self.picnicFunction(3)
         self.picnicFunction = None
-        self.removeButtons()
+        return
+    
+    def cancelSelected(self):
+        if self.picnicFunction:
+            self.picnicFunction(0)
+        self.picnicFunction = None
+        return
 
     def doNothing(self):
         pass
