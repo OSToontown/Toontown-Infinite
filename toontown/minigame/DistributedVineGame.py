@@ -431,7 +431,7 @@ class DistributedVineGame(DistributedMinigame):
     def sanityCheck(self):
         if not self.isInPlayState():
             return
-        for avId in self.toonInfo:
+        for avId in self.toonInfo.keys():
             myVineIndex = self.toonInfo[avId][0]
             foundVines = []
             foundVineIndex = -1
@@ -672,7 +672,7 @@ class DistributedVineGame(DistributedMinigame):
                 camera.setX(minX)
 
     def __updateOtherToonsClimbing(self):
-        for avId in self.toonInfo:
+        for avId in self.toonInfo.keys():
             if avId == self.localAvId:
                 continue
             toonInfo = self.toonInfo[avId]

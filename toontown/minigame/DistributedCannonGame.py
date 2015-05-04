@@ -191,7 +191,7 @@ class DistributedCannonGame(DistributedMinigame):
         del self.downButton
         del self.leftButton
         del self.rightButton
-        for avId in self.toonHeadDict:
+        for avId in self.toonHeadDict.keys():
             head = self.toonHeadDict[avId]
             head.stopBlink()
             head.stopLookAroundNow()

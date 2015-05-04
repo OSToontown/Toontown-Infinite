@@ -126,7 +126,7 @@ class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
          Point3(0, 0, 0),
          Point3(0, 0, 0)]
         divisor = 0
-        for avId in self.avatarEndingPositions:
+        for avId in self.avatarEndingPositions.keys():
             divisor += 1
             oneClientEndingPositions = self.avatarEndingPositions[avId]
             avIndex = self.avIdList.index(avId)
@@ -239,7 +239,7 @@ class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
 
     def waitClientsChoicesTimeout(self, task):
         self.notify.debug('waitClientsChoicesTimeout: did not hear from all clients')
-        for avId in self.avatarChoices:
+        for avId in self.avatarChoices.keys():
             if self.avatarChoices[avId] == (-1, 0):
                 self.avatarChoices[avId] = (0, 0)
 
@@ -270,7 +270,7 @@ class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
         return (retForce, retDir)
 
     def allAvatarsChosen(self):
-        for avId in self.avatarChoices:
+        for avId in self.avatarChoices.keys():
             choice = self.avatarChoices[avId]
             if choice[0] == -1 and not self.stateDict[avId] == DistributedMinigameAI.EXITED:
                 return False

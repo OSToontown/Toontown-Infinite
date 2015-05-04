@@ -47,7 +47,7 @@ class DistributedTwoDGameAI(DistributedMinigameAI):
         self.numEnemies = ToonBlitzGlobals.NumEnemies
         self.numTreasuresTaken = 0
         self.numEnemiesKilled = 0
-        for avId in self.scoreDict:
+        for avId in self.scoreDict.keys():
             self.scoreDict[avId] = 0
             self.finishedBonusDict[avId] = 0
             self.finishedTimeLeftDict[avId] = -1
@@ -221,7 +221,7 @@ class DistributedTwoDGameAI(DistributedMinigameAI):
             self.notify.warning('suspicious: ' + str(avId) + ' ' + msg)
             self.air.writeServerEvent('suspicious: ', avId, msg)
             return
-        if avId not in self.scoreDict:
+        if avId not in self.scoreDict.keys():
             self.notify.warning('Avatar %s not in list.' % avId)
             self.air.writeServerEvent('suspicious: ', avId, 'TwoDGameAI.toonVictory toon not in list.')
             return
@@ -241,7 +241,7 @@ class DistributedTwoDGameAI(DistributedMinigameAI):
         return
 
     def toonFellDown(self, avId, timestamp):
-        if avId not in self.scoreDict:
+        if avId not in self.scoreDict.keys():
             self.notify.warning('Avatar %s not in list.' % avId)
             self.air.writeServerEvent('warning', avId, 'TwoDGameAI.toonFellDown toon not in list.')
             return
@@ -249,7 +249,7 @@ class DistributedTwoDGameAI(DistributedMinigameAI):
         self.scoreDict[avId] += ToonBlitzGlobals.ScoreLossPerFallDown[self.getSafezoneId()]
 
     def toonHitByEnemy(self, avId, timestamp):
-        if avId not in self.scoreDict:
+        if avId not in self.scoreDict.keys():
             self.notify.warning('Avatar %s not in list.' % avId)
             self.air.writeServerEvent('warning', avId, 'TwoDGameAI.toonHitByEnemy toon not in list.')
             return
@@ -257,7 +257,7 @@ class DistributedTwoDGameAI(DistributedMinigameAI):
         self.scoreDict[avId] += ToonBlitzGlobals.ScoreLossPerEnemyCollision[self.getSafezoneId()]
 
     def toonSquished(self, avId, timestamp):
-        if avId not in self.scoreDict:
+        if avId not in self.scoreDict.keys():
             self.notify.warning('Avatar %s not in list.' % avId)
             self.air.writeServerEvent('warning', avId, 'TwoDGameAI.toonSquished toon not in list.')
             return

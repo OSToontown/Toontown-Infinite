@@ -35,10 +35,10 @@ if checkLanguage:
                     print 'WARNING: Foreign module: %s missing key: %s.%s' % (_languageModule, key, dkey)
                     fval[dkey] = dval
 
-            for dkey in fval:
+            for dkey in fval.keys():
                 if dkey not in val:
                     print 'WARNING: Foreign module: %s extra key: %s.%s' % (_languageModule, key, dkey)
 
-    for key in foreignModule.__dict__:
+    for key in foreignModule.__dict__.keys():
         if key not in englishModule.__dict__:
             print 'WARNING: Foreign module: %s extra key: %s' % (_languageModule, key)

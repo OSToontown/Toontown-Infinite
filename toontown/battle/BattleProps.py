@@ -264,7 +264,7 @@ class PropPool:
         self.propStrings[propName] = (self.getPath(5, 'half-windsor'),)
         self.propTypes[propName] = 'model'
         splatAnimFileName = self.getPath(3.5, 'splat-chan')
-        for splat in Splats:
+        for splat in Splats.keys():
             propName = 'splat-' + splat
             self.propStrings[propName] = (self.getPath(3.5, 'splat-mod'), splatAnimFileName)
             self.propTypes[propName] = 'actor'

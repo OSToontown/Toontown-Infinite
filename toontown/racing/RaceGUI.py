@@ -322,7 +322,7 @@ class RaceGUI:
     def update(self, time):
         placeSorter = []
         placeCount = 0
-        for key in self.racerDict:
+        for key in self.racerDict.keys():
             racer = self.racerDict[key]
             curvetime = racer.curvetime
             face = racer.face
@@ -375,7 +375,7 @@ class RaceGUI:
         localRacer = self.racerDict[localAvatar.doId]
         nearDiff, farDiff = RaceGlobals.TrackDict[self.race.trackId][8]
         if not localRacer.finished and self.faceEndPos[0] - localRacer.face.getX() < nearDiff:
-            for racerId in self.racerDict:
+            for racerId in self.racerDict.keys():
                 racer = self.racerDict[racerId]
                 if not racer.enabled or racerId == localAvatar.doId or racer.face.getX() >= self.faceEndPos[0]:
                     continue
@@ -407,7 +407,7 @@ class RaceGUI:
             self.wrongWaySeq.finish()
 
     def updateRacerInfo(self, avId, curvetime = None, maxlaphit = None):
-        if avId in self.racerDict:
+        if avId in self.racerDict.keys():
             self.racerDict[avId].update(curvetime=curvetime, maxlaphit=maxlaphit)
 
     def racerEntered(self, avId):

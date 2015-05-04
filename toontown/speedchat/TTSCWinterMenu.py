@@ -44,7 +44,7 @@ class TTSCWinterMenu(SCMenu):
 
             else:
                 menu = SCMenu()
-                for phrase in section[1]:
+                for phrase in section[1].keys():
                     blatherTxt = section[1][phrase]
                     if blatherTxt not in OTPLocalizer.SpeedChatStaticText:
                         print 'warning: tried to link Winter phrase %s which does not seem to exist' % phrase

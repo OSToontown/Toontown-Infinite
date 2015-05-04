@@ -70,7 +70,7 @@ class DistributedTwoDGame(DistributedMinigame):
         self.notify.debug('unload')
         DistributedMinigame.unload(self)
         taskMgr.remove(self.UpdateLocalToonTask)
-        for avId in self.toonSDs:
+        for avId in self.toonSDs.keys():
             toonSD = self.toonSDs[avId]
             toonSD.destroy()
 
@@ -111,7 +111,7 @@ class DistributedTwoDGame(DistributedMinigame):
     def offstage(self):
         self.notify.debug('offstage')
         self.assetMgr.offstage()
-        for avId in self.toonSDs:
+        for avId in self.toonSDs.keys():
             self.toonSDs[avId].exit()
 
         base.localAvatar.setTransparency(0)
@@ -298,7 +298,7 @@ class DistributedTwoDGame(DistributedMinigame):
                     base.localAvatar.setY(0)
         if base.localAvatar.getZ() < -2.0:
             self.localToonFellDown()
-        for avId in self.toonSDs:
+        for avId in self.toonSDs.keys():
             self.toonSDs[avId].update()
 
         return task.cont

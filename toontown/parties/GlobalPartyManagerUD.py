@@ -123,7 +123,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
     def __updatePartyInfo(self, partyId):
         # Update all the AIs about this public party
         party = self.party2PubInfo[partyId]
-        for sender in self.senders2Mgrs:
+        for sender in self.senders2Mgrs.keys():
             actIds = []
             for activity in self.id2Party[partyId]['activities']:
                 actIds.append(activity[0]) # First part of activity tuple should be actId
@@ -132,7 +132,7 @@ class GlobalPartyManagerUD(DistributedObjectGlobalUD):
 
     def __updatePartyCount(self, partyId):
         # Update the party guest count
-        for sender in self.senders2Mgrs:
+        for sender in self.senders2Mgrs.keys():
             self.sendToAI('updateToPublicPartyCountUdToAllAi', [self.party2PubInfo[partyId]['numGuests'], partyId], sender=sender)
 
     def partyHasStarted(self, partyId, shardId, zoneId, hostName):

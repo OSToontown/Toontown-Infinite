@@ -174,7 +174,7 @@ class TownBattleSOSPanel(DirectFrame, StateData.StateData):
                     if not base.cr.playerFriendsManager.askAvatarKnownElseWhere(avatarId):
                         newFriends.append((avatarId, 0))
 
-        for friendPair in self.friends:
+        for friendPair in self.friends.keys():
             if friendPair not in newFriends:
                 friendButton = self.friends[friendPair]
                 self.scrollList.removeItem(friendButton)

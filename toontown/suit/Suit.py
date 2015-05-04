@@ -207,7 +207,7 @@ def unloadSuits(level):
     unloadDialog(level)
 
 def loadSuitModelsAndAnims(level, flag = 0):
-    for key in ModelDict:
+    for key in ModelDict.keys():
         model, phase = ModelDict[key]
         if flag:
             filepath = 'phase_3.5' + model + 'mod'

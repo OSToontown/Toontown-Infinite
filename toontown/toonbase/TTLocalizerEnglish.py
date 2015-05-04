@@ -5945,7 +5945,7 @@ AccessoryNamePrefix = {0: 'hat unisex ',
  11: 'shoes girl '}
 AwardManagerAccessoryNames = {}
 AccessoryTypeNames = {}
-for accessoryId in CatalogAccessoryItemGlobals.AccessoryTypes:
+for accessoryId in CatalogAccessoryItemGlobals.AccessoryTypes.keys():
     accessoryInfo = CatalogAccessoryItemGlobals.AccessoryTypes[accessoryId]
     if accessoryInfo[0] % 4 == 0:
         accessoryStyleDescription = HatStylesDescriptions

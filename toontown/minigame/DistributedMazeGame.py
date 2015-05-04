@@ -606,7 +606,7 @@ class DistributedMazeGame(DistributedMinigame):
         if self.introTrack.isPlaying():
             self.introTrack.finish()
         del self.introTrack
-        for avId in self.toonHitTracks:
+        for avId in self.toonHitTracks.keys():
             track = self.toonHitTracks[avId]
             if track.isPlaying():
                 track.finish()

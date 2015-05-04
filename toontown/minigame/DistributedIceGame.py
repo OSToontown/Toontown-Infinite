@@ -792,15 +792,15 @@ class DistributedIceGame(DistributedMinigame.DistributedMinigame, DistributedIce
         self.gameFSM.request('moveTires')
 
     def enableAllTireBodies(self):
-        for avId in self.tireDict:
+        for avId in self.tireDict.keys():
             self.tireDict[avId]['tireBody'].enable()
 
     def disableAllTireBodies(self):
-        for avId in self.tireDict:
+        for avId in self.tireDict.keys():
             self.tireDict[avId]['tireBody'].disable()
 
     def areAllTiresDisabled(self):
-        for avId in self.tireDict:
+        for avId in self.tireDict.keys():
             if self.tireDict[avId]['tireBody'].isEnabled():
                 return False
 

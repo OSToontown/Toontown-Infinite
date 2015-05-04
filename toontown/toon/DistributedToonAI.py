@@ -339,7 +339,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         try:
             styleStr = stylesDict.keys()[stylesDict.values().index([idx, textureIdx, colorIdx])]
             accessoryItemId = 0
-            for itemId in CatalogAccessoryItem.AccessoryTypes:
+            for itemId in CatalogAccessoryItem.AccessoryTypes.keys():
                 if styleStr == CatalogAccessoryItem.AccessoryTypes[itemId][CatalogAccessoryItem.ATString]:
                     accessoryItemId = itemId
                     break
@@ -595,7 +595,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def d_setNPCFriendsDict(self, NPCFriendsDict):
         NPCFriendsList = []
-        for friend in NPCFriendsDict:
+        for friend in NPCFriendsDict.keys():
             NPCFriendsList.append((friend, NPCFriendsDict[friend]))
 
         self.sendUpdate('setNPCFriendsDict', [NPCFriendsList])
