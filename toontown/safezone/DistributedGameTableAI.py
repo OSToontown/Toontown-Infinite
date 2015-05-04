@@ -100,7 +100,7 @@ class DistributedGameTableAI(DistributedNodeAI):
             return None
 
         isEmpty = False
-        if self.findAvailableSeat() is not None:
+        if self.findAvailableSeat() != -1:
             isEmpty = True
 
         if isEmpty == True or self.hasPicked == False:
@@ -287,9 +287,11 @@ class DistributedGameTableAI(DistributedNodeAI):
         self.hasPicked = False
 
     def findAvatar(self, avId):
-        for toon in self.seats:
-            if toon == avId:
-                return toon
+        for si in xrange(len(self.seats)):
+            if self.seats[si] == avId:
+                return si
+                
+        return -1
          
     def countFullSeats(self):
         toonCount = 0
@@ -300,11 +302,11 @@ class DistributedGameTableAI(DistributedNodeAI):
         return toonCount
 
     def findAvailableSeat(self):
-        for seat in self.seats:
-            if seat == None:
-                return seat
-        
-        return None
+        for si in xrange(len(self.seats)):
+            if self.seats[si] == None:
+                return si
+                
+        return -1
 
     def setCheckersZoneId(self, zoneId):
         self.checkersZoneId = zoneId
