@@ -99,12 +99,9 @@ class DistributedGameTableAI(DistributedNodeAI):
         if self.findAvatar(avId) != None:
             return None
 
-        isEmpty = True
-        for xx in self.seats:
-            if xx != None:
-                isEmpty = False
-                break
-                continue
+        isEmpty = False
+        if self.findAvailableSeat() is not None:
+            isEmpty = True
 
         if isEmpty == True or self.hasPicked == False:
             self.sendUpdateToAvatarId(avId, 'allowPick', [])
@@ -139,40 +136,34 @@ class DistributedGameTableAI(DistributedNodeAI):
         if self.game:
             return
 
-        x = 0
-        for x in self.seats:
-            if x is not None:
-                x += 1
-                continue
+        activePlayers = self.countFullSeats()
 
         if gameNum == 1:
             if simbase.config.GetBool('want-chinese', 1):
                 self.game = DistributedChineseCheckersAI.DistributedChineseCheckersAI(self.air, self.doId, 'chinese',
                                                                                       self.posHpr[0], self.posHpr[1],
-                                                                                      self.posHpr[
-                                                                                          2] + 2.8300000000000001,
+                                                                                      self.posHpr[2] + 2.8300000000000001,
                                                                                       self.posHpr[3], self.posHpr[4],
                                                                                       self.posHpr[5])
-                self.sendUpdate('setZone', [
-                    self.game.zoneId])
+                self.sendUpdate('setZone', [self.game.zoneId])
 
         elif gameNum == 2:
-            if x <= 2:
+            if activePlayers <= 2:
                 if simbase.config.GetBool('want-checkers', 1):
                     self.game = DistributedCheckersAI.DistributedCheckersAI(self.air, self.doId, 'checkers',
                                                                             self.posHpr[0], self.posHpr[1],
                                                                             self.posHpr[2] + 2.8300000000000001,
                                                                             self.posHpr[3], self.posHpr[4],
                                                                             self.posHpr[5])
-                    self.sendUpdate('setZone', [
-                        self.game.zoneId])
+                    self.sendUpdate('setZone', [self.game.zoneId])
 
-        elif x <= 2:
+        elif activePlayers <= 2:
             if simbase.config.GetBool('want-findfour', 1):
-                self.game = DistributedFindFourAI.DistributedFindFourAI(self.air, self.doId, 'findFour', self.posHpr[0],
-                                                                        self.posHpr[1],
+                self.game = DistributedFindFourAI.DistributedFindFourAI(self.air, self.doId, 'findFour', 
+                                                                        self.posHpr[0], self.posHpr[1],
                                                                         self.posHpr[2] + 2.8300000000000001,
-                                                                        self.posHpr[3], self.posHpr[4], self.posHpr[5])
+                                                                        self.posHpr[3], self.posHpr[4], 
+                                                                        self.posHpr[5])
                 self.sendUpdate('setZone', [self.game.zoneId])
 
     def requestZone(self):
@@ -238,11 +229,7 @@ class DistributedGameTableAI(DistributedNodeAI):
                 seatIndex,
                 globalClockDelta.getRealNetworkTime()])
             self.getTableState()
-            numActive = 0
-            for x in self.seats:
-                if x != None:
-                    numActive = numActive + 1
-                    continue
+            numActive = self.countFullSeats()
 
             if self.game:
                 self.game.informGameOfPlayerLeave()
@@ -270,11 +257,7 @@ class DistributedGameTableAI(DistributedNodeAI):
             self.hasPicked = False
 
         self.getTableState()
-        numActive = 0
-        for x in self.seats:
-            if x != None:
-                numActive = numActive + 1
-                continue
+        numActive = self.countFullSeats()
 
         if numActive == 0 and self.game:
             simbase.air.deallocateZone(self.game.zoneId)
@@ -287,16 +270,16 @@ class DistributedGameTableAI(DistributedNodeAI):
         self.game.handlePlayerExit(avId)
 
     def handleGameOver(self):
-        for x in self.observers:
-            self.acceptExiter(x)
-            self.observers.remove(x)
+        for toon in self.observers:
+            self.acceptExiter(toon)
+            self.observers.remove(toon)
 
         if self.game:
             self.game.playersObserving = []
 
-        for x in self.seats:
-            if x != None:
-                self.acceptExiter(x)
+        for toon in self.seats:
+            if toon != None:
+                self.acceptExiter(toon)
                 continue
 
         self.game = None
@@ -304,25 +287,24 @@ class DistributedGameTableAI(DistributedNodeAI):
         self.hasPicked = False
 
     def findAvatar(self, avId):
-        for i in xrange(len(self.seats)):
-            if self.seats[i] == avId:
-                return i
-                continue
-
+        for toon in self.seats:
+            if toon == avId:
+                return toon
+         
     def countFullSeats(self):
-        avCounter = 0
-        for i in self.seats:
-            if i:
-                avCounter += 1
-                continue
-
-        return avCounter
+        toonCount = 0
+        for toon in self.seats:
+            if toon != None:
+                toonCount += 1
+                
+        return toonCount
 
     def findAvailableSeat(self):
-        for i in xrange(len(self.seats)):
-            if self.seats[i] == None:
-                return i
-                continue
+        for seat in self.seats:
+            if seat == None:
+                return seat
+        
+        return None
 
     def setCheckersZoneId(self, zoneId):
         self.checkersZoneId = zoneId

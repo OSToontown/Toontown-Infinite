@@ -387,7 +387,7 @@ class DistributedGameTable(DistributedNode.DistributedNode):
     def pickFunction(self, gameNum):
         if gameNum == 0:
             self.handleSleep()
-        if gameNum == 1:
+        elif gameNum == 1:
             self.sendUpdate('requestPickedGame', [gameNum])
         elif gameNum == 2:
             self.sendUpdate('requestPickedGame', [gameNum])
