@@ -733,7 +733,7 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
         """
         self.air.netMessenger.send('stopInvasion', [shardId])
 
-    # --- WEB ---
+    # --- NAME REVIEW ---
 
     @rpcmethod(accessLevel=MODERATOR)
     def rpc_approveName(self, avId):
