@@ -4343,7 +4343,7 @@ def maxHp(maxHp):
     """
     if not 15 <= maxHp <= ToontownGlobals.MaxHpLimit:
         return 'HP must be in range (15-%d).' % ToontownGlobals.MaxHpLimit
-    invoker = spellbook.getTarget()
+    invoker = spellbook.getInvoker()
     invoker.b_setHp(maxHp)
     invoker.b_setMaxHp(maxHp)
     invoker.toonUp(maxHp - invoker.getHp())
