@@ -10,6 +10,8 @@ from otp.distributed import OtpDoGlobals
 from otp.distributed.ClsendTracker import ClsendTracker
 from otp.otpbase import OTPLocalizer
 
+from toontown.toon.DistributedToonAI import DistributedToonAI
+
 
 class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI, PlayerBase.PlayerBase, ClsendTracker):
     def __init__(self, air):
@@ -239,7 +241,7 @@ def accessLevel(accessLevel, storage='PERSISTENT', showGM=1):
     if accessLevel not in accessName2Id.values():
         return 'Invalid access level!'
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToonAI.DistributedToonAI):
+    if not isinstance(target, DistributedToonAI):
         return 'This spell may only target Toons!'
     invoker = spellbook.getInvoker()
     if invoker == target:

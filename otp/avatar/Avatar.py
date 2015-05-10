@@ -14,6 +14,7 @@ from otp.otpbase import OTPRender
 from toontown.chat.ChatGlobals import *
 from toontown.nametag import NametagGlobals
 from toontown.nametag.NametagGroup import NametagGroup
+from toontown.toon.DistributedToon import DistributedToon
 
 teleportNotify = DirectNotifyGlobal.directNotify.newCategory('Teleport')
 teleportNotify.showTime = True
@@ -660,6 +661,6 @@ def target():
     Returns the current Spellbook target.
     """
     target = spellbook.getTarget()
-    if not isinstance(target, DistributedToon.DistributedToon):
+    if not isinstance(target, DistributedToon):
         return 'This spell may only target Toons!'
     return 'Target: %s-%d [%d]' % (target.getName(), target.doId, target.getAdminAccess())
