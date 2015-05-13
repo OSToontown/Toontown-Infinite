@@ -25,12 +25,9 @@ accountdbType = simbase.config.GetString('accountdb-type', 'developer')
 
 accessLevelClamp = ConfigVariableString(
     'access-level-clamp', '100 700',
-    "Specifies the range in which every user's access level will be confined to.")
+    "Specifies the range in which every user's access level will be confined to.").getValue()
 accessLevelMin = int(accessLevelClamp.split(' ', 1)[0])
 accessLevelMax = int(accessLevelClamp.split(' ', 1)[1])
-
-accountServerEndpoint = simbase.config.GetString(
-    'account-server-endpoint', 'https://toontowninfinite.com/api/')
 
 # --- ACCOUNT DATABASES ---
 # These classes make up the available account databases for Toontown Infinite.
