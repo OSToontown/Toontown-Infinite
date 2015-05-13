@@ -135,8 +135,8 @@ class ProductionDB(AccountDB):
         self.csm.air.webRpc.isNameAcceptable(name, _callback=callback, _errback=errback)
 
     def lookup(self, cookie, callback):
-        self.csm.air.webRpc.consumeCookie(cookie, _callback=self.lookupCallback, _errback=self.lookupErrback,
-                                          _extraArgs=[callback])
+        self.csm.air.webRpc.consumeCookie(config.GetString('distribution'), cookie, _callback=self.lookupCallback,
+                                          _errback=self.lookupErrback, _extraArgs=[callback])
 
     def lookupCallback(self, result, callback):
         response = {'success': False}
