@@ -21,25 +21,19 @@ NAME_SUBMITTED = 1
 NAME_SUBMISSION_ERROR = 2
 
 
-# Import from PyCrypto only if we are using a database that requires it. This
-# allows local hosted and developer builds of the game to run without it:
-accountDBType = simbase.config.GetString('accountdb-type', 'developer')
-if accountDBType == 'remote':
-    from Crypto.Cipher import AES
+accountdbType = simbase.config.GetString('accountdb-type', 'developer')
 
-# Sometimes we'll want to force a specific access level, such as on the
-# developer server:
-minAccessLevel = simbase.config.GetInt('min-access-level', 100)
+accessLevelClamp = ConfigVariableString(
+    'access-level-clamp', '100 700',
+    "Specifies the range in which every user's access level will be confined to.")
+accessLevelMin = int(accessLevelClamp.split(' ', 1)[0])
+accessLevelMax = int(accessLevelClamp.split(' ', 1)[1])
 
 accountServerEndpoint = simbase.config.GetString(
     'account-server-endpoint', 'https://toontowninfinite.com/api/')
-accountServerSecret = simbase.config.GetString(
-    'account-server-secret', '6163636f756e7473')
-
 
 # --- ACCOUNT DATABASES ---
 # These classes make up the available account databases for Toontown Infinite.
-# Databases with login tokens use the PyCrypto module for decrypting them.
 # DeveloperAccountDB is a special database that accepts a username, and assigns
 # each user with 600 access automatically upon login.
 
@@ -79,7 +73,6 @@ class DeveloperAccountDB(AccountDB):
     def lookup(self, username, callback):
         # Let's check if this user's ID is in your account database bridge:
         if str(username) not in self.dbm:
-
             # Nope. Let's associate them with a brand new Account object! We
             # will assign them with 600 access just because they are a
             # developer:
@@ -87,21 +80,18 @@ class DeveloperAccountDB(AccountDB):
                 'success': True,
                 'userId': username,
                 'accountId': 0,
-                'accessLevel': max(600, minAccessLevel)
+                'accessLevel': min(max(600, accessLevelMin), accessLevelMax)
             }
             callback(response)
-            return response
+            return
 
-        else:
-
-            # We have an account already, let's return what we've got:
-            response = {
-                'success': True,
-                'userId': username,
-                'accountId': int(self.dbm[str(username)]),
-            }
-            callback(response)
-            return response
+        # We have an account already, let's return what we've got:
+        response = {
+            'success': True,
+            'userId': username,
+            'accountId': int(self.dbm[str(username)]),
+        }
+        callback(response)
 
 
 # This is the same as the DeveloperAccountDB, except it doesn't automatically
@@ -115,31 +105,27 @@ class LocalAccountDB(AccountDB):
     def lookup(self, username, callback):
         # Let's check if this user's ID is in your account database bridge:
         if str(username) not in self.dbm:
-
             # Nope. Let's associate them with a brand new Account object!
             response = {
                 'success': True,
                 'userId': username,
                 'accountId': 0,
-                'accessLevel': max((700 if not self.dbm else 100), minAccessLevel)
+                'accessLevel': min(max(700 if not self.dbm else 100, accessLevelMin), accessLevelMax)
             }
             callback(response)
-            return response
+            return
 
-        else:
-
-            # We have an account already, let's return what we've got:
-            response = {
-                'success': True,
-                'userId': username,
-                'accountId': int(self.dbm[str(username)])
-            }
-            callback(response)
-            return response
+        # We have an account already, let's return what we've got:
+        response = {
+            'success': True,
+            'userId': username,
+            'accountId': int(self.dbm[str(username)])
+        }
+        callback(response)
 
 
-class RemoteAccountDB(AccountDB):
-    notify = directNotify.newCategory('RemoteAccountDB')
+class ProductionDB(AccountDB):
+    notify = directNotify.newCategory('ProductionDB')
 
     def submitNameRequest(self, avId, name, callback, errback):
         self.csm.air.webRpc.submitNameRequest(config.GetString('distribution'), avId, name,
@@ -148,105 +134,36 @@ class RemoteAccountDB(AccountDB):
     def isNameAcceptable(self, name, callback, errback):
         self.csm.air.webRpc.isNameAcceptable(name, _callback=callback, _errback=errback)
 
-    def lookup(self, token, callback):
-        # First, base64 decode the token:
-        try:
-            token = base64.b64decode(token)
-        except TypeError:
-            self.notify.warning('Could not decode the provided token!')
-            response = {
-                'success': False,
-                'reason': "Can't decode this token."
-            }
+    def lookup(self, cookie, callback):
+        self.csm.air.webRpc.consumeCookie(cookie, _callback=self.lookupCallback, _errback=self.lookupErrback,
+                                          _extraArgs=[callback])
+
+    def lookupCallback(self, result, callback):
+        response = {'success': False}
+
+        if result['success'] is False:
+            response['reason'] = 'Failed to authenticate login credentials.'
             callback(response)
-            return response
+            return
 
-        # Ensure this token is a valid size:
-        if (not token) or ((len(token) % 16) != 0):
-            self.notify.warning('Invalid token length!')
-            response = {
-                'success': False,
-                'reason': 'Invalid token length.'
-            }
-            callback(response)
-            return response
+        response['success'] = True
+        response['userId'] = result['userId']
+        response['accessLevel'] = min(max(result['accessLevel'], accessLevelMin), accessLevelMax)
 
-        # Next, decrypt the token using AES-128 in CBC mode:
-        accountServerSecret = simbase.config.GetString(
-            'account-server-secret', '6163636f756e7473')
-
-        # Ensure that our secret is the correct size:
-        if len(accountServerSecret) > AES.block_size:
-            self.notify.warning('account-server-secret is too big!')
-            accountServerSecret = accountServerSecret[:AES.block_size]
-        elif len(accountServerSecret) < AES.block_size:
-            self.notify.warning('account-server-secret is too small!')
-            accountServerSecret += '\x80'
-            while len(accountServerSecret) < AES.block_size:
-                accountServerSecret += '\x00'
-
-        # Take the initialization vector off the front of the token:
-        iv = token[:AES.block_size]
-
-        # Truncate the token to get our cipher text:
-        cipherText = token[AES.block_size:]
-
-        # Decrypt!
-        cipher = AES.new(accountServerSecret, mode=AES.MODE_CBC, IV=iv)
-        try:
-            token = json.loads(cipher.decrypt(cipherText).replace('\x00', ''))
-            if ('timestamp' not in token) or (not isinstance(token['timestamp'], int)):
-                raise ValueError
-            if ('userid' not in token) or (not isinstance(token['userid'], int)):
-                raise ValueError
-            if ('accesslevel' not in token) or (not isinstance(token['accesslevel'], int)):
-                raise ValueError
-        except ValueError, e:
-            print e
-            self.notify.warning('Invalid token.')
-            response = {
-                'success': False,
-                'reason': 'Invalid token.'
-            }
-            callback(response)
-            return response
-
-        # Next, check if this token has expired:
-        expiration = simbase.config.GetInt('account-token-expiration', 1800)
-        tokenDelta = int(time.time()) - token['timestamp']
-        if tokenDelta > expiration:
-            response = {
-                'success': False,
-                'reason': 'This token has expired.'
-            }
-            callback(response)
-            return response
-
-        # This token is valid. That's all we need to know. Next, let's check if
-        # this user's ID is in your account database bridge:
-        if str(token['userid']) not in self.dbm:
-
-            # Nope. Let's associate them with a brand new Account object!
-            response = {
-                'success': True,
-                'userId': token['userid'],
-                'accountId': 0,
-                'accessLevel': max(int(token['accesslevel']), minAccessLevel)
-            }
-            callback(response)
-            return response
-
+        if str(result['userId']) not in self.dbm:
+            response['accountId'] = 0
         else:
+            response['accountId'] = int(self.dbm[str(result['userId'])])
 
-            # Yep. Let's return their account ID and access level!
-            response = {
-                'success': True,
-                'userId': token['userid'],
-                'accountId': int(self.dbm[str(token['userid'])]),
-                'accessLevel': max(int(token['accesslevel']), minAccessLevel)
-            }
-            callback(response)
-            return response
+        callback(response)
+
+    def lookupErrback(self, callback):
+        response = {
+            'success': False,
+            'reason': 'Failed to contact the account server.'
+        }
+
+        callback(response)
 
 
 # --- FSMs ---
@@ -1019,14 +936,14 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         self.key = 'bWlub3Iub3BlbmFsLmZpeC5zdGFydC5vZi5oZWFsam9rZXM='
 
         # Instantiate our account DB interface:
-        if accountDBType == 'developer':
+        if accountdbType == 'developer':
             self.accountDB = DeveloperAccountDB(self)
-        elif accountDBType == 'local':
+        elif accountdbType == 'local':
             self.accountDB = LocalAccountDB(self)
-        elif accountDBType == 'remote':
-            self.accountDB = RemoteAccountDB(self)
+        elif accountdbType == 'production':
+            self.accountDB = ProductionDB(self)
         else:
-            self.notify.error('Invalid accountdb-type: ' + accountDBType)
+            self.notify.error('Invalid accountdb-type: ' + accountdbType)
 
     def killConnection(self, connId, reason):
         datagram = PyDatagram()

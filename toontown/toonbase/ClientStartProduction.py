@@ -14,7 +14,7 @@ accountServerEndpoint = ConfigVariableString(
     'https://toontowninfinite.com/api/').getValue()
 request = requests.post(
     accountServerEndpoint + 'login/',
-    data={'n': username, 'p': password, 'dist': distribution})
+    data={'username': username, 'password': password, 'dist': distribution})
 
 try:
     response = json.loads(request.text)
