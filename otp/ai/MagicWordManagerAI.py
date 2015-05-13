@@ -4,17 +4,22 @@ from otp.ai.MagicWordGlobal import *
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import *
 
+
 class MagicWordManagerAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("MagicWordManagerAI")
 
     def sendMagicWord(self, word, targetId):
         invokerId = self.air.getAvatarIdFromSender()
         invoker = self.air.doId2do.get(invokerId)
+        target = self.air.doId2do.get(targetId)
+        targets = spellbook.getTargets(word)
 
-        if not 'DistributedToonAI' in str(self.air.doId2do.get(targetId)):
-            self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', ['Target is not a toon object!'])
-            return
-            
+        if targets:
+            if target is not None and target.__class__.__name__ not in targets:
+                self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse',
+                                          ['Target is a %s object! Expected: %s' % (target.__class__.__name__, targets)])
+                return
+
         if not invoker:
             self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', ['Missing invoker!'])
             return
@@ -28,8 +33,7 @@ class MagicWordManagerAI(DistributedObjectAI):
             self.air.send(dg)
             return
 
-        target = self.air.doId2do.get(targetId)
-        if not target:
+        if target is None:
             self.sendUpdateToAvatarId(invokerId, 'sendMagicWordResponse', ['Missing target!'])
             return
 
@@ -41,6 +45,7 @@ class MagicWordManagerAI(DistributedObjectAI):
                                   invokerId, invoker.getAdminAccess(),
                                   targetId, target.getAdminAccess(),
                                   word, response)
+
 
 @magicWord(category=CATEGORY_COMMUNITY_MANAGER, types=[str])
 def help(wordName=None):
@@ -54,10 +59,11 @@ def help(wordName=None):
         for key in spellbook.words:
             if spellbook.words.get(key).access <= accessLevel:
                 if wname in key:
-                    return 'Did you mean %s' % (spellbook.words.get(key).name)
-        return 'I have no clue what %s is referring to' % (wordName)
+                    return 'Did you mean %s' % spellbook.words.get(key).name
+        return 'I have no clue what %s is referring to' % wordName
     return word.doc
-            
+
+
 @magicWord(category=CATEGORY_COMMUNITY_MANAGER, types=[])
 def words():
     accessLevel = spellbook.getInvoker().getAdminAccess()
@@ -68,10 +74,9 @@ def words():
             if wordString is None:
                 wordString = key
             else:
-                wordString += ", ";
-                wordString += key;
+                wordString += ", "
+                wordString += key
     if wordString is None:
         return "You are chopped liver"
     else:
         return wordString
-            
