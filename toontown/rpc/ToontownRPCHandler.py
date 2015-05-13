@@ -18,7 +18,7 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
 
         self.shardStatus = ShardStatusReceiver(air)
 
-    # --- TESTS ---
+    # --- WEBHOOKS TESTS ---
 
     @rpcmethod(accessLevel=USER)
     def rpc_ping(self, data):
