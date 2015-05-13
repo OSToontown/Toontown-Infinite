@@ -5,7 +5,7 @@ distribution qa
 server-version SERVER_VERSION
 shard-low-pop 25
 shard-mid-pop 50
-min-access-level 600
+access-level-clamp 600 700
 
 # Core features:
 want-pets #f
