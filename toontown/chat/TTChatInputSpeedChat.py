@@ -346,6 +346,7 @@ ceoMenuStructure = [2300,
  2311,
  2316,
  2317]
+CogGolfMenuStructure = [2318, 2319, 2320, 2321, 2322, 2323, 2324, 2325]
 
 class TTChatInputSpeedChat(DirectObject.DirectObject):
     DefaultSCColorScheme = SCColorScheme()
@@ -366,6 +367,7 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
         if self.allowWhiteListSpeedChat:
             self.addWhiteList()
         self.factoryMenu = None
+        self.CogGolfMenu = None
         self.kartRacingMenu = None
         self.cogMenu = None
         self.cfoMenu = None
@@ -566,6 +568,22 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
             del self.speedChat[i]
             self.factoryMenu.destroy()
             self.factoryMenu = None
+        return
+
+    def addCogGolfMenu(self):
+        if self.CogGolfMenu == None:
+            menu = SCMenu()
+            menu.rebuildFromStructure(CogGolfMenuStructure)
+            self.CogGolfMenu = SCMenuHolder(OTPLocalizer.SCMenuCogGolf, menu=menu)
+            self.speedChat[2:2] = [self.CogGolfMenu]
+        return
+
+    def removeCogGolfMenu(self):
+        if self.CogGolfMenu:
+            i = self.speedChat.index(self.CogGolfMenu)
+            del self.speedChat[i]
+            self.CogGolfMenu.destroy()
+            self.CogGolfMenu = None
         return
 
     def addKartRacingMenu(self):

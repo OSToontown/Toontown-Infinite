@@ -265,6 +265,7 @@ SCMenuBattleSquirt = 'SQUIRT'
 SCMenuBattleDrop = 'DROP'
 SCMenuGagShop = 'TROLLEY'
 SCMenuFactory = 'FACTORY'
+SCMenuCogGolf = 'COUNTRY CLUB'
 SCMenuKartRacing = 'RACING'
 SCMenuFactoryMeet = 'MEET'
 SCMenuCFOBattle = 'C.F.O.'
@@ -895,7 +896,7 @@ SpeedChatStaticTextToontown = {100: 'Hi!',
  103: 'Hey!',
  104: 'Howdy!',
  105: 'Hi everybody!',
- 106: 'Welcome to Toontown Infinite!',
+ 106: 'Welcome to Toontown!',
  107: "What's up?",
  108: 'How are you doing?',
  109: 'Hello?',
@@ -1268,6 +1269,14 @@ SpeedChatStaticTextToontown = {100: 'Hi!',
  2315: 'Hurry, your cog is hungry!',
  2316: 'Please save the snacks for sadder toons.',
  2317: 'Take the snacks before they fall.',
+ 2318: 'Go through the door.',
+ 2319: 'Stomp on the red moles.',
+ 2320: 'Watch out for the version 2.0 Cogs!',
+ 2321: 'The Cog mazes can get pretty confusing at times.',
+ 2322: 'Matching three colored golf balls causes the others to fall.',
+ 2323: 'Shoot golf balls at the matching colors and destroy the Cog Balls!',
+ 2324: 'Try avoiding the brown moles. If you stomp on one, it will send you flying into the air!',
+ 2325: 'Look for the flags near the back of the Cog Maze Game! Those should help you get to the right place.',
  3010: 'Anyone want to race?',
  3020: "Let's race!",
  3030: 'Want to race?',

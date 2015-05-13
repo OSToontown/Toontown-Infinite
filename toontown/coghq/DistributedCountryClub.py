@@ -44,7 +44,7 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
         base.localAvatar.setPosHpr(0, 0, 0, 0, 0, 0)
         self.accept('SOSPanelEnter', self.handleSOSPanel)
         self.factoryViews = FactoryCameraViews.FactoryCameraViews(self)
-        base.localAvatar.chatMgr.chatInputSpeedChat.addFactoryMenu()
+        base.localAvatar.chatMgr.chatInputSpeedChat.addCogGolfMenu()
         self.__setupHighSky()
         return
 
@@ -267,7 +267,7 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
         DistributedObject.DistributedObject.delete(self)
         self.ignore('SOSPanelEnter')
         bboard.remove('countryClub')
-        base.localAvatar.chatMgr.chatInputSpeedChat.removeFactoryMenu()
+        base.localAvatar.chatMgr.chatInputSpeedChat.removeCogGolfMenu()
         self.factoryViews.delete()
         del self.factoryViews
 
