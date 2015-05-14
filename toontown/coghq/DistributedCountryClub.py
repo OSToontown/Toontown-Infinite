@@ -202,14 +202,11 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
             minVis = roomNum - 1
             maxVis = roomNum + 1
         for i, room in enumerate(self.allRooms):
+            # Temporary fix for greying
             if i < minVis or i > maxVis:
-                if not room.getGeom().isEmpty():
-                    room.getGeom().stash()
-            elif i <= blockRoomsAboveThisNumber:
-                if not room.getGeom().isEmpty():
-                    room.getGeom().unstash()
-            elif not room.getGeom().isEmpty():
                 room.getGeom().stash()
+            else:
+                room.getGeom().unstash()
 
         self.lastCamEnterRoom = roomNum
 
