@@ -55,7 +55,7 @@ class DDPlayground(Playground.Playground):
         taskMgr.add(self.__checkToonUnderwater, 'dd-check-toon-underwater')
 
     def __checkCameraUnderwater(self, task):
-        if camera.getZ(render) < 1.0:
+        if base.camera.getZ(render) < 1.0:
             self.__submergeCamera()
         else:
             self.__emergeCamera()

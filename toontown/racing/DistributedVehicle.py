@@ -499,8 +499,8 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
             self.toon.setShear(0, 0, 0)
         NametagGlobals.setForceOnscreenChat(True)
         if self.localVehicle:
-            camera.reparentTo(self.cameraNode)
-            camera.setPosHpr(0, -33, 16, 0, -10, 0)
+            base.camera.reparentTo(self.cameraNode)
+            base.camera.setPosHpr(0, -33, 16, 0, -10, 0)
             self.physicsMgr.attachPhysicalNode(self.node())
             self.__enableControlInterface()
             self.__createPieWindshield()
@@ -519,9 +519,9 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
             self.__disableControlInterface()
             self.physicsMgr.removePhysicalNode(self.node())
             self.cleanupParticles()
-            camera.reparentTo(localAvatar)
-            camera.setPos(localAvatar.cameraPositions[0][0])
-            camera.setHpr(0, 0, 0)
+            base.camera.reparentTo(localAvatar)
+            base.camera.setPos(localAvatar.cameraPositions[0][0])
+            base.camera.setHpr(0, 0, 0)
             self.engineSfxTrack.finish()
             self.engineSfxTrack = self.generateEngineStopTrack()
         else:
@@ -1051,7 +1051,7 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
         newRoll = curRoll + rollVal * 2.0
         self.setR(newRoll)
         if not self.stopped:
-            camera.setR(-newRoll)
+            base.camera.setR(-newRoll)
         front = (rf + lf) / 2
         rear = (rr + lr) / 2
         center = (front + rear) / 2

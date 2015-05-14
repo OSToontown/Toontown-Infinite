@@ -597,8 +597,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.stopLookAround()
         self.reparentTo(render)
         self.runSound()
-        camera.reparentTo(render)
-        camera.setPosHpr(tunnelOrigin, 0, 20, 12, 180, -20, 0)
+        base.camera.reparentTo(render)
+        base.camera.setPosHpr(tunnelOrigin, 0, 20, 12, 180, -20, 0)
         base.transitions.irisIn(0.4)
         toonTrack = self.getTunnelInToonTrack(endX, tunnelOrigin)
 
@@ -618,9 +618,9 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.runSound()
         self.stopLookAround()
         tracks = Parallel()
-        camera.wrtReparentTo(render)
-        startPos = camera.getPos(tunnelOrigin)
-        startHpr = camera.getHpr(tunnelOrigin)
+        base.camera.wrtReparentTo(render)
+        startPos = base.camera.getPos(tunnelOrigin)
+        startHpr = base.camera.getHpr(tunnelOrigin)
         camLerpDur = 1.0
         reducedCamH = fitDestAngle2Src(startHpr[0], 180)
         tracks.append(LerpPosHprInterval(camera, camLerpDur, pos=Point3(0, 20, 12), hpr=Point3(reducedCamH, -20, 0), startPos=startPos, startHpr=startHpr, other=tunnelOrigin, blendType='easeInOut', name='tunnelOutLerpCamPos'))

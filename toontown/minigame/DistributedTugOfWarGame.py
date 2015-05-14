@@ -260,8 +260,8 @@ class DistributedTugOfWarGame(DistributedMinigame):
         self.sky.setZ(-5)
         self.sky.reparentTo(render)
         self.dropShadow.setColor(0, 0, 0, 0.5)
-        camera.reparentTo(render)
-        camera.setPosHpr(-11.4427, 9.03559, 2.80094, -49.104, -0.89, 0)
+        base.camera.reparentTo(render)
+        base.camera.setPosHpr(-11.4427, 9.03559, 2.80094, -49.104, -0.89, 0)
         self.dropShadow.setBin('fixed', 0, 1)
         self.splash.reparentTo(render)
         self.suitSplash.reparentTo(render)
@@ -345,8 +345,8 @@ class DistributedTugOfWarGame(DistributedMinigame):
         introPosHpr[1] = [VBase3(16.9291, 13.9302, 2.64282), VBase3(66.9685, -6.195, 0)]
         gameCamHpr = VBase3(-1.13, 1.042, 0)
         gameCamPos = VBase3(0, 1.0838, 2.745)
-        camera.reparentTo(render)
-        camera.setPosHpr(introPosHpr[self.sides[self.localAvId]][0], introPosHpr[self.sides[self.localAvId]][1])
+        base.camera.reparentTo(render)
+        base.camera.setPosHpr(introPosHpr[self.sides[self.localAvId]][0], introPosHpr[self.sides[self.localAvId]][1])
         lerpDur = 8
         self.introTrack = LerpPosHprInterval(camera, lerpDur, pos=gameCamPos, hpr=gameCamHpr, blendType='easeInOut', name=self.uniqueName('introLerpCameraPos'))
         self.introTrack.start()

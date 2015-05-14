@@ -623,7 +623,7 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         if callback == None:
             callback = self.__diedDone
         base.localAvatar.laffMeter.start()
-        camera.wrtReparentTo(render)
+        base.camera.wrtReparentTo(render)
         base.localAvatar.b_setAnimState('Died', 1, callback, [requestStatus])
         base.localAvatar.obscureMoveFurnitureButton(1)
         return
