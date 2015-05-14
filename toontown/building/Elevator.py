@@ -96,9 +96,9 @@ class Elevator(StateData.StateData):
         pass
 
     def enterBoarding(self, nodePath):
-        camera.wrtReparentTo(nodePath)
+        base.camera.wrtReparentTo(nodePath)
         if self.reverseBoardingCamera:
-            heading = PythonUtil.fitDestAngle2Src(camera.getH(nodePath), 180)
+            heading = PythonUtil.fitDestAngle2Src(base.camera.getH(nodePath), 180)
             self.cameraBoardTrack = LerpPosHprInterval(camera, 1.5, Point3(0, 18, 8), Point3(heading, -10, 0))
         else:
             self.cameraBoardTrack = LerpPosHprInterval(camera, 1.5, Point3(0, -16, 5.5), Point3(0, 0, 0))

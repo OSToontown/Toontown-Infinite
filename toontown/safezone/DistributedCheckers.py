@@ -47,7 +47,7 @@ class DistributedCheckers(DistributedNode.DistributedNode):
         self.accept('mouse1', self.mouseClick)
         self.traverser = base.cTrav
         self.pickerNode = CollisionNode('mouseRay')
-        self.pickerNP = camera.attachNewNode(self.pickerNode)
+        self.pickerNP = base.camera.attachNewNode(self.pickerNode)
         self.pickerNode.setFromCollideMask(ToontownGlobals.WallBitmask)
         self.pickerRay = CollisionRay()
         self.pickerNode.addSolid(self.pickerRay)

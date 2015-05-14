@@ -804,7 +804,7 @@ class RewardPanel(DirectFrame):
             track.start()
             base.localAvatar.loop('victory')
             base.localAvatar.stopUpdateSmartCamera()
-            camera.setPosHpr(0, 8, base.localAvatar.getHeight() * 0.66, 179, 15, 0)
+            base.camera.setPosHpr(0, 8, base.localAvatar.getHeight() * 0.66, 179, 15, 0)
         else:
             self.notify.debug('no experience, no movie.')
         return None

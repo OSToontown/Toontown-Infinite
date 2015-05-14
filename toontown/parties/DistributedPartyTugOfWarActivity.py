@@ -65,7 +65,7 @@ class DistributedPartyTugOfWarActivity(DistributedPartyTeamActivity):
         self.toonIdsToAnimIntervals[toonId] = None
         if toonId == base.localAvatar.doId:
             base.cr.playGame.getPlace().fsm.request('activity')
-            camera.wrtReparentTo(self.root)
+            base.camera.wrtReparentTo(self.root)
             self.cameraMoveIval = LerpPosHprInterval(camera, 1.5, PartyGlobals.TugOfWarCameraPos, PartyGlobals.TugOfWarCameraInitialHpr, other=self.root)
             self.cameraMoveIval.start()
             self.localToonPosIndex = self.getIndex(base.localAvatar.doId, self.localToonTeam)
@@ -632,7 +632,7 @@ class DistributedPartyTugOfWarActivity(DistributedPartyTeamActivity):
         if self.activityFSM.state != 'Active':
             return
         if self.isLocalToonPlaying:
-            camera.lookAt(self.root, offset, 0.0, PartyGlobals.TugOfWarCameraLookAtHeightOffset)
+            base.camera.lookAt(self.root, offset, 0.0, PartyGlobals.TugOfWarCameraLookAtHeightOffset)
         for toonId in self.getToonIdsAsList():
             if hasattr(self, 'fallenToons') and toonId not in self.fallenToons:
                 toon = self.getAvatar(toonId)

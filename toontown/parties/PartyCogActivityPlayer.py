@@ -330,8 +330,8 @@ class PartyCogActivityLocalPlayer(PartyCogActivityPlayer):
         arena = activityView.arena
         pos = activityView.teamCamPosLocators[self.team].getPos()
         aim = activityView.teamCamAimLocators[self.team].getPos()
-        camera.wrtReparentTo(arena)
-        self.cameraManager.setPos(camera.getPos(render))
+        base.camera.wrtReparentTo(arena)
+        self.cameraManager.setPos(base.camera.getPos(render))
         self.tempNP.reparentTo(arena)
         self.tempNP.setPos(arena, pos)
         self.cameraManager.setTargetPos(self.tempNP.getPos(render))
@@ -340,5 +340,5 @@ class PartyCogActivityLocalPlayer(PartyCogActivityPlayer):
         self.tempNP.setPos(arena, aim)
         self.cameraManager.setTargetLookAtPos(self.tempNP.getPos(render))
         self.cameraManager.setEnabled(True)
-        camera.setP(0.0)
-        camera.setR(0.0)
+        base.camera.setP(0.0)
+        base.camera.setR(0.0)
