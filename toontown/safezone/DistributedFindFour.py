@@ -297,7 +297,7 @@ class DistributedFindFour(DistributedNode.DistributedNode):
         if self.seatPos <= 2:
             position = self.table.seats[1].getPos()
             position = position + Vec3(0, -8, 12.8)
-            int = LerpPosHprInterval(camera, 2, position, Vec3(0, -38, 0), base.camera.getPos(), base.camera.getHpr())
+            int = LerpPosHprInterval(base.camera, 2, position, Vec3(0, -38, 0), base.camera.getPos(), base.camera.getHpr())
         else:
             position = self.table.seats[4].getPos()
             position = position + Vec3(0, -8, 12.8)

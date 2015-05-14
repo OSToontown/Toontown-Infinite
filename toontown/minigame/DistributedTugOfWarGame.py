@@ -348,7 +348,7 @@ class DistributedTugOfWarGame(DistributedMinigame):
         base.camera.reparentTo(render)
         base.camera.setPosHpr(introPosHpr[self.sides[self.localAvId]][0], introPosHpr[self.sides[self.localAvId]][1])
         lerpDur = 8
-        self.introTrack = LerpPosHprInterval(camera, lerpDur, pos=gameCamPos, hpr=gameCamHpr, blendType='easeInOut', name=self.uniqueName('introLerpCameraPos'))
+        self.introTrack = LerpPosHprInterval(base.camera, lerpDur, pos=gameCamPos, hpr=gameCamHpr, blendType='easeInOut', name=self.uniqueName('introLerpCameraPos'))
         self.introTrack.start()
         base.camLens.setMinFov((60 + 2 * self.numPlayers)/(4./3.))
         base.camLens.setFar(450.0)

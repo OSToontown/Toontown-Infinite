@@ -222,7 +222,7 @@ class DistributedToonHallInterior(DistributedToonInterior):
         self.sillyMeter.flattenMedium()
         self.sillyMeter.makeSubpart('arrow', ['uvj_progressBar*', 'def_springA'])
         self.sillyMeter.makeSubpart('meter', ['def_pivot'], ['uvj_progressBar*', 'def_springA'])
-        self.audio3d = Audio3DManager.Audio3DManager(base.sfxManagerList[0], camera)
+        self.audio3d = Audio3DManager.Audio3DManager(base.sfxManagerList[0], base.camera)
         self.phase1Sfx = self.audio3d.loadSfx('phase_4/audio/sfx/tt_s_prp_sillyMeterPhaseOne.ogg')
         self.phase1Sfx.setLoop(True)
         self.phase2Sfx = self.audio3d.loadSfx('phase_4/audio/sfx/tt_s_prp_sillyMeterPhaseTwo.ogg')

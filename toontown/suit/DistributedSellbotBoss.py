@@ -319,18 +319,18 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         track.append(bossAnimTrack)
         dialogTrack = Track(
             (0, Parallel(
-                camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), blendType='easeInOut'),
+                base.camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), blendType='easeInOut'),
                 IndirectInterval(toonTrack, 0, 18))),
             (5.6, Func(self.setChatAbsolute, promoteDoobers, CFSpeech)),
             (9, IndirectInterval(dooberTrack, 0, 9)),
             (10, Sequence(
                 Func(self.clearChat),
-                camera.posHprInterval(5, Point3(0, -120, 0), Point3(0, 13, 0), blendType='easeInOut'))),
+                base.camera.posHprInterval(5, Point3(0, -120, 0), Point3(0, 13, 0), blendType='easeInOut'))),
             (12, Func(self.setChatAbsolute, doobersAway, CFSpeech)),
             (18, Parallel(
                 Func(self.clearChat),
                 IndirectInterval(dooberTrack, 14),
-                camera.posHprInterval(4, Point3(-25, -99, 10), Point3(-14, 10, 0), blendType='easeInOut'),
+                base.camera.posHprInterval(4, Point3(-25, -99, 10), Point3(-14, 10, 0), blendType='easeInOut'),
                 IndirectInterval(toonTrack, 30))),
             (20.5, Func(self.setChatAbsolute, welcomeToons, CFSpeech)),
             (23, Func(self.setChatAbsolute, promoteToons, CFSpeech)),
@@ -342,15 +342,15 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             (26, Sequence(
                 Func(self.clearChat),
                 Func(self.cagedToon.clearChat),
-                Func(camera.setPosHpr, -12, -15, 27, -151, -15, 0),
+                Func(base.camera.setPosHpr, -12, -15, 27, -151, -15, 0),
                 ActorInterval(self, 'Ff_lookRt'))),
             (28, Sequence(
                 Func(self.cagedToon.setChatAbsolute, rescueQuery, CFSpeech),
-                Func(camera.setPosHpr, -12, 48, 94, -26, 20, 0),
+                Func(base.camera.setPosHpr, -12, 48, 94, -26, 20, 0),
                 ActorInterval(self.cagedToon, 'wave'),
                 Func(self.cagedToon.loop, 'neutral'))),
             (32, Sequence(
-                camera.posHprInterval(0.8, Point3(-20, -35, 10), Point3(-88, 25, 0), blendType='easeInOut'),
+                base.camera.posHprInterval(0.8, Point3(-20, -35, 10), Point3(-88, 25, 0), blendType='easeInOut'),
                 Func(self.setChatAbsolute, discoverToons, CFSpeech),
                 Func(self.cagedToon.nametag3d.setScale, 1),
                 Func(self.cagedToon.clearChat),         

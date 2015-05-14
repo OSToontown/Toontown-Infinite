@@ -623,7 +623,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         startHpr = base.camera.getHpr(tunnelOrigin)
         camLerpDur = 1.0
         reducedCamH = fitDestAngle2Src(startHpr[0], 180)
-        tracks.append(LerpPosHprInterval(camera, camLerpDur, pos=Point3(0, 20, 12), hpr=Point3(reducedCamH, -20, 0), startPos=startPos, startHpr=startHpr, other=tunnelOrigin, blendType='easeInOut', name='tunnelOutLerpCamPos'))
+        tracks.append(LerpPosHprInterval(base.camera, camLerpDur, pos=Point3(0, 20, 12), hpr=Point3(reducedCamH, -20, 0), startPos=startPos, startHpr=startHpr, other=tunnelOrigin, blendType='easeInOut', name='tunnelOutLerpCamPos'))
         toonTrack = self.getTunnelOutToonTrack(startX, startY, tunnelOrigin)
         tracks.append(toonTrack)
         irisDur = 0.4

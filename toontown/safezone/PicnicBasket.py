@@ -149,7 +149,7 @@ class PicnicBasket(StateData.StateData):
     def enterBoarding(self, nodePath, side):
         base.camera.wrtReparentTo(nodePath)
         heading = PythonUtil.fitDestAngle2Src(base.camera.getH(nodePath), 90 * side)
-        self.cameraBoardTrack = LerpPosHprInterval(camera, 1.5, Point3(14.4072 * side, 0, 3.8667), Point3(heading, -15, 0))
+        self.cameraBoardTrack = LerpPosHprInterval(base.camera, 1.5, Point3(14.4072 * side, 0, 3.8667), Point3(heading, -15, 0))
         self.cameraBoardTrack.start()
         return None
 

@@ -471,15 +471,15 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
         base.camera.wrtReparentTo(self.picnicTable)
         heading = PythonUtil.fitDestAngle2Src(base.camera.getH(), 90)
         if seatIndex < 3:
-            self.cameraBoardTrack = LerpPosHprInterval(camera, 2.0, Point3(0, 0, 17), Point3(0, -90, 0))
+            self.cameraBoardTrack = LerpPosHprInterval(base.camera, 2.0, Point3(0, 0, 17), Point3(0, -90, 0))
         elif base.camera.getH() < 0:
-            self.cameraBoardTrack = LerpPosHprInterval(camera, 2.0, Point3(0, 0, 17), Point3(-180, -90, 0))
+            self.cameraBoardTrack = LerpPosHprInterval(base.camera, 2.0, Point3(0, 0, 17), Point3(-180, -90, 0))
         else:
-            self.cameraBoardTrack = LerpPosHprInterval(camera, 2.0, Point3(0, 0, 17), Point3(180, -90, 0))
+            self.cameraBoardTrack = LerpPosHprInterval(base.camera, 2.0, Point3(0, 0, 17), Point3(180, -90, 0))
         self.cameraBoardTrack.start()
 
     def moveCameraBack(self):
-        self.cameraBoardTrack = LerpPosHprInterval(camera, 2.5, self.oldCameraPos, self.oldCameraHpr)
+        self.cameraBoardTrack = LerpPosHprInterval(base.camera, 2.5, self.oldCameraPos, self.oldCameraHpr)
         self.cameraBoardTrack.start()
 
     def __enableCollisions(self):

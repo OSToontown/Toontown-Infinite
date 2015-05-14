@@ -622,9 +622,9 @@ class DistributedTravelGame(DistributedMinigame):
         if self.FlyCameraUp:
             if self.FocusOnTrolleyWhileMovingUp:
                 camIval1.append(LerpPosInterval(camera, duration - setRightHprTime, finalPos, name='cameraMove'))
-                camIval2 = Sequence(LerpHprInterval(camera, setRightHprTime, finalHpr, name='cameraHpr'))
+                camIval2 = Sequence(LerpHprInterval(base.camera, setRightHprTime, finalHpr, name='cameraHpr'))
             else:
-                camIval2 = Sequence(LerpPosHprInterval(camera, setRightHprTime, finalPos, finalHpr, blendType='easeIn', name='cameraHpr'))
+                camIval2 = Sequence(LerpPosHprInterval(base.camera, setRightHprTime, finalPos, finalHpr, blendType='easeIn', name='cameraHpr'))
             camIval = Sequence(camIval1, camIval2)
         else:
             camIval = Sequence(camIval1)

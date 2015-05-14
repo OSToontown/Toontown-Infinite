@@ -1126,7 +1126,7 @@ class DistributedMazeGame(DistributedMinigame):
         startHpr = iCamParent.getHpr()
         startHpr.setX(PythonUtil.reduceAngle(startHpr[0]))
         lerpTrack.append(LerpPosHprInterval(iCamParent, lerpDur, pos=Point3(0, 0, 0), hpr=Point3(0, 0, 0), startHpr=startHpr, name=self.uniqueName('introLerpParent')))
-        lerpTrack.append(LerpPosHprInterval(camera, lerpDur, pos=origCamPos, hpr=origCamHpr, blendType='easeInOut', name=self.uniqueName('introLerpCameraPos')))
+        lerpTrack.append(LerpPosHprInterval(base.camera, lerpDur, pos=origCamPos, hpr=origCamHpr, blendType='easeInOut', name=self.uniqueName('introLerpCameraPos')))
         base.localAvatar.startLookAround()
 
         def cleanup(origCamParent = origCamParent, origCamPos = origCamPos, origCamHpr = origCamHpr, iCamParent = iCamParent):

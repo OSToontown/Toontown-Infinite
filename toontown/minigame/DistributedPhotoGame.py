@@ -1371,7 +1371,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         base.camera.setHpr(0, 0, 0)
         base.camera.lookAt(self.tripod)
         lookatHpr = base.camera.getHpr()
-        self.introSequence = LerpPosHprInterval(camera, 4.0, pos=self.tripod.getPos(render), hpr=lookatHpr, startPos=self.data['CAMERA_INTIAL_POSTION'], blendType='easeInOut')
+        self.introSequence = LerpPosHprInterval(base.camera, 4.0, pos=self.tripod.getPos(render), hpr=lookatHpr, startPos=self.data['CAMERA_INTIAL_POSTION'], blendType='easeInOut')
         self.introSequence.start()
 
     def construct(self):
