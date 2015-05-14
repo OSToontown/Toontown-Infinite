@@ -96,7 +96,7 @@ class DistributedFindFour(DistributedNode.DistributedNode):
         self.accept('mouse1', self.mouseClick)
         self.traverser = base.cTrav
         self.pickerNode = CollisionNode('mouseRay')
-        self.pickerNP = camera.attachNewNode(self.pickerNode)
+        self.pickerNP = base.camera.attachNewNode(self.pickerNode)
         self.pickerNode.setFromCollideMask(BitMask32(4096))
         self.pickerRay = CollisionRay()
         self.pickerNode.addSolid(self.pickerRay)
@@ -297,14 +297,14 @@ class DistributedFindFour(DistributedNode.DistributedNode):
         if self.seatPos <= 2:
             position = self.table.seats[1].getPos()
             position = position + Vec3(0, -8, 12.8)
-            int = LerpPosHprInterval(camera, 2, position, Vec3(0, -38, 0), camera.getPos(), camera.getHpr())
+            int = LerpPosHprInterval(camera, 2, position, Vec3(0, -38, 0), base.camera.getPos(), base.camera.getHpr())
         else:
             position = self.table.seats[4].getPos()
             position = position + Vec3(0, -8, 12.8)
-            if camera.getH() < 0:
-                int = LerpPosHprInterval(camera, 2, position, Vec3(-180, -20, 0), camera.getPos(), camera.getHpr())
+            if base.camera.getH() < 0:
+                int = LerpPosHprInterval(base.camera, 2, position, Vec3(-180, -20, 0), base.camera.getPos(), base.camera.getHpr())
             else:
-                int = LerpPosHprInterval(camera, 2, position, Vec3(180, -20, 0), camera.getPos(), camera.getHpr())
+                int = LerpPosHprInterval(base.camera, 2, position, Vec3(180, -20, 0), base.camera.getPos(), base.camera.getHpr())
         int.start()
 
     def enterWaitingToBegin(self):

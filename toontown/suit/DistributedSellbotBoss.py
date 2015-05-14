@@ -266,9 +266,9 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def makeIntroductionMovie(self, delayDeletes):
         track = Parallel()
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         self.titleSeq = Sequence(Func(self.titleText.show), Wait(5), LerpColorScaleInterval(self.titleText, 1, VBase4(1, 1, 1, 0)))
-        track.append(Parallel(self.titleSeq, camera.posHprInterval(1.75, Point3(0, 25, 30), Point3(-10, -13, 0), blendType='easeInOut')))
+        track.append(Parallel(self.titleSeq, base.camera.posHprInterval(1.75, Point3(0, 25, 30), Point3(-10, -13, 0), blendType='easeInOut')))
         localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov)
         dooberTrack = Parallel()
         if self.doobers:
@@ -364,7 +364,7 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 LerpColorScaleInterval(self.skyNode, 3, Vec4(0.6, 0.6, 0.8, 1)),
                 Sequence(
                     self.toonNormalEyes(self.involvedToons),
-                    camera.posHprInterval(1, Point3(-13, -125, 35), Point3(-10.0, -12.5, 0), blendType='easeInOut'),
+                    base.camera.posHprInterval(1, Point3(-13, -125, 35), Point3(-10.0, -12.5, 0), blendType='easeInOut'),
                     Func(self.loop, 'Fb_neutral'),
                     Func(self.rampA.request, 'retract'),
                     Func(self.rampB.request, 'retract'),
@@ -374,7 +374,7 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                                  Wait(2),
                                  Parallel(
                                     Func(self.setChatAbsolute, attackToons, CFSpeech),
-                                    camera.posHprInterval(0.8, Point3(-25, -35, 20), Point3(-90, 0, 0))),
+                                    base.camera.posHprInterval(0.8, Point3(-25, -35, 20), Point3(-90, 0, 0))),
                                  Wait(2.5)
                                 ))))))
         track.append(dialogTrack)
@@ -423,8 +423,8 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         seq = Sequence(name=name)
         seq.append(Func(self.cage.setPos, self.cagePos[self.cageIndex]))
         if hasLocalToon:
-            seq += [Func(camera.reparentTo, render),
-             Func(camera.setPosHpr, self.cage, 0, -50, 0, 0, 0, 0),
+            seq += [Func(base.camera.reparentTo, render),
+             Func(base.camera.setPosHpr, self.cage, 0, -50, 0, 0, 0, 0),
              Func(localAvatar.setCameraFov, ToontownGlobals.CogHQCameraFov),
              Func(self.hide)]
         seq += [Wait(0.5),
@@ -436,9 +436,9 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
          Func(self.cagedToonMovieFunction, 4, self.cageIndex)]
         if hasLocalToon:
             seq += [Func(self.show),
-             Func(camera.reparentTo, localAvatar),
-             Func(camera.setPos, localAvatar.cameraPositions[0][0]),
-             Func(camera.setHpr, 0, 0, 0)]
+             Func(base.camera.reparentTo, localAvatar),
+             Func(base.camera.setPos, localAvatar.cameraPositions[0][0]),
+             Func(base.camera.setHpr, 0, 0, 0)]
         self.cageIndex += 1
         return seq
 
@@ -498,9 +498,9 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             Func(self.cagedToon.loop, 'neutral'),
             Func(self.cagedToon.headsUp, localAvatar),
             Func(self.cagedToon.setLocalPageChat, speech, 0),
-            Func(camera.reparentTo, localAvatar),
-            Func(camera.setPos, 0, -9, 9),
-            Func(camera.lookAt, self.cagedToon, Point3(0, 0, 2)), name=name)
+            Func(base.camera.reparentTo, localAvatar),
+            Func(base.camera.setPos, 0, -9, 9),
+            Func(base.camera.lookAt, self.cagedToon, Point3(0, 0, 2)), name=name)
         return seq
 
     def __showOnscreenMessage(self, text):
@@ -800,8 +800,8 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.rampC.request('retract')
         self.reparentTo(render)
         self.setCageIndex(2)
-        camera.reparentTo(render)
-        camera.setPosHpr(self.cage, 0, -17, 3.3, 0, 0, 0)
+        base.camera.reparentTo(render)
+        base.camera.setPosHpr(self.cage, 0, -17, 3.3, 0, 0, 0)
         (localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov),)
         self.hide()
         self.acceptOnce('doneChatPage', self.__onToBattleTwo)
@@ -858,8 +858,8 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.rampB.request('retract')
         self.rampC.request('extend')
         self.setCageIndex(4)
-        camera.reparentTo(render)
-        camera.setPosHpr(self.cage, 0, -17, 3.3, 0, 0, 0)
+        base.camera.reparentTo(render)
+        base.camera.setPosHpr(self.cage, 0, -17, 3.3, 0, 0, 0)
         (localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov),)
         self.hide()
         self.acceptOnce('doneChatPage', self.__onToBattleThree)
@@ -1059,8 +1059,8 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.rampB.request('retract')
         self.rampC.request('extend')
         self.__arrangeToonsAroundCage()
-        camera.reparentTo(render)
-        camera.setPosHpr(-24, 52, 27.5, -53, -13, 0)
+        base.camera.reparentTo(render)
+        base.camera.setPosHpr(-24, 52, 27.5, -53, -13, 0)
         intervalName = 'EpilogueMovie'
         seq = Sequence(self.__makeCageOpenMovie(), name=intervalName)
         seq.start()

@@ -168,15 +168,15 @@ class DistributedLevelBattle(DistributedBattle.DistributedBattle):
             TauntCamX = 0
             TauntCamHeight = random.choice((MidTauntCamHeight, 1, 11))
             camTrack = Sequence()
-            camTrack.append(Func(camera.reparentTo, suitLeader))
+            camTrack.append(Func(base.camera.reparentTo, suitLeader))
             camTrack.append(Func(base.camLens.setMinFov, self.camFOFov/(4./3.)))
-            camTrack.append(Func(camera.setPos, TauntCamX, TauntCamY, TauntCamHeight))
-            camTrack.append(Func(camera.lookAt, suitLeader, suitOffsetPnt))
+            camTrack.append(Func(base.camera.setPos, TauntCamX, TauntCamY, TauntCamHeight))
+            camTrack.append(Func(base.camera.lookAt, suitLeader, suitOffsetPnt))
             camTrack.append(Wait(delay))
             camTrack.append(Func(base.camLens.setMinFov, self.camFov/(4./3.)))
-            camTrack.append(Func(camera.wrtReparentTo, self))
-            camTrack.append(Func(camera.setPos, self.camFOPos))
-            camTrack.append(Func(camera.lookAt, suit))
+            camTrack.append(Func(base.camera.wrtReparentTo, self))
+            camTrack.append(Func(base.camera.setPos, self.camFOPos))
+            camTrack.append(Func(base.camera.lookAt, suit))
         mtrack = Parallel(suitTrack, toonTrack)
         if self.hasLocalToon():
             NametagGlobals.setWant2dNametags(False)
@@ -211,8 +211,8 @@ class DistributedLevelBattle(DistributedBattle.DistributedBattle):
 
         name = self.uniqueName('floorReward')
         track = Sequence(toonTracks, Func(callback), name=name)
-        camera.setPos(0, 0, 1)
-        camera.setHpr(180, 10, 0)
+        base.camera.setPos(0, 0, 1)
+        base.camera.setHpr(180, 10, 0)
         self.storeInterval(track, name)
         track.start(ts)
 

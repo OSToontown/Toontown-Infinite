@@ -215,9 +215,9 @@ class DistributedDivingGame(DistributedMinigame):
     def getIntroMovie(self):
         seq = Sequence()
         seq.append(Wait(2.0))
-        seq.append(LerpFunc(camera.setZ, duration=5, fromData=36, toData=-23, blendType='easeInOut', name='intro'))
+        seq.append(LerpFunc(base.camera.setZ, duration=5, fromData=36, toData=-23, blendType='easeInOut', name='intro'))
         seq.append(Wait(2.0))
-        seq.append(LerpFunc(camera.setZ, duration=5, fromData=-23, toData=36 + 3, blendType='easeInOut', name='intro'))
+        seq.append(LerpFunc(base.camera.setZ, duration=5, fromData=-23, toData=36 + 3, blendType='easeInOut', name='intro'))
         return seq
 
     def onstage(self):
@@ -227,12 +227,12 @@ class DistributedDivingGame(DistributedMinigame):
         DistributedSmoothNode.activateSmoothing(1, 1)
         numToons = self.numPlayers
         self.NUMTREASURES = numToons
-        camera.reparentTo(render)
-        camera.setZ(36)
-        camera.setHpr(0,0,0)
-        camera.setX(0)
+        base.camera.reparentTo(render)
+        base.camera.setZ(36)
+        base.camera.setHpr(0,0,0)
+        base.camera.setX(0)
         base.camLens.setMinFov(31/(4./3.))
-        camera.setY(-54)
+        base.camera.setY(-54)
         base.camLens.setFar(1500)
         self.introMovie = self.getIntroMovie()
         self.introMovie.start()
@@ -945,7 +945,7 @@ class DistributedDivingGame(DistributedMinigame):
         z = self.getAvatar(self.localAvId).getZ() + 3
         camBottom = math.tan(base.camLens.getVfov()/2.0*math.pi/180)*54
         z = max(z, -42+camBottom)
-        camera.setZ(z)
+        base.camera.setZ(z)
         ambVolume = abs(z - 25.0) / 50.0 + 0.1
         if ambVolume < 0.0:
             ambVolume = 0.0

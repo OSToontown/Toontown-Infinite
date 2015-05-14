@@ -835,7 +835,7 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         if doAnimation:
             toonTrack = Sequence(Func(self.av.setPlayRate, 1.0, 'run'), Func(self.av.loop, 'run'), LerpPosHprInterval(self.av, 1.0, Point3(0, 0, 0), Point3(0, 0, 0)), Func(self.__placeAvatar), Parallel(ActorInterval(self.av, 'pole'), Func(self.pole.pose, 'cast', 0), LerpScaleInterval(self.pole, duration=0.5, scale=1.0, startScale=0.01)), Func(self.av.loop, 'pole-neutral'))
             if self.localToonFishing:
-                camera.wrtReparentTo(render)
+                base.camera.wrtReparentTo(render)
                 self.track.append(LerpPosHprInterval(nodePath=camera, other=self.av, duration=1.5, pos=Point3(0, -12, 15), hpr=VBase3(0, -38, 0), blendType='easeInOut'))
                 toonTrack.append(Func(self.__showCastGui))
                 toonTrack.append(Func(self.__initCastGui))
