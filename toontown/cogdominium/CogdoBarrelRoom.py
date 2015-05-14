@@ -124,7 +124,7 @@ class CogdoBarrelRoom:
         trackName = '__introBarrelRoom-%d' % avatar.doId
         track = Parallel(name=trackName)
         track.append(self.__stomperIntervals())
-        track.append(Sequence(Func(camera.reparentTo, render), Func(camera.setPosHpr, self.model, -20.0, -87.9, 12.0, -30, 0, 0), Func(base.transitions.irisIn, 0.5), Wait(1.0), LerpHprInterval(camera, duration=2.0, startHpr=Vec3(-30, 0, 0), hpr=Vec3(0, 0, 0), blendType='easeInOut'), Wait(2.5), LerpHprInterval(camera, duration=3.0, startHpr=Vec3(0, 0, 0), hpr=Vec3(-45, 0, 0), blendType='easeInOut'), Wait(2.5)))
+        track.append(Sequence(Func(base.camera.reparentTo, render), Func(base.camera.setPosHpr, self.model, -20.0, -87.9, 12.0, -30, 0, 0), Func(base.transitions.irisIn, 0.5), Wait(1.0), LerpHprInterval(base.camera, duration=2.0, startHpr=Vec3(-30, 0, 0), hpr=Vec3(0, 0, 0), blendType='easeInOut'), Wait(2.5), LerpHprInterval(base.camera, duration=3.0, startHpr=Vec3(0, 0, 0), hpr=Vec3(-45, 0, 0), blendType='easeInOut'), Wait(2.5)))
         track.delayDelete = DelayDelete.DelayDelete(avatar, 'introBarrelRoomTrack')
         track.setDoneEvent(trackName)
         return (track, trackName)
@@ -155,7 +155,7 @@ class CogdoBarrelRoom:
 
     def __rewardCamera(self):
         trackName = 'cogdoBarrelRoom-RewardCamera'
-        track = Sequence(Func(camera.reparentTo, render), Func(camera.setPosHpr, self.model, 0, 0, 11.0, 0, -14, 0), Func(self.showBattleAreaLight, False), name=trackName)
+        track = Sequence(Func(base.camera.reparentTo, render), Func(base.camera.setPosHpr, self.model, 0, 0, 11.0, 0, -14, 0), Func(self.showBattleAreaLight, False), name=trackName)
         return (track, trackName)
 
     def showRewardUi(self, results, callback = None):

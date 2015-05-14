@@ -79,7 +79,7 @@ class CogdoFlyingGameIntro(CogdoGameMovie):
         self._toonDialogueSfx = audioMgr.createSfx('toonDialogue')
 
         def start():
-            camera.wrtReparentTo(render)
+            base.camera.wrtReparentTo(render)
             self._startUpdateTask()
 
         def end():
@@ -89,7 +89,7 @@ class CogdoFlyingGameIntro(CogdoGameMovie):
         dialogue = TTLocalizer.CogdoFlyingIntroMovieDialogue
         waitDur = introDuration / len(dialogue)
         flyDur = introDuration - waitDur * 0.5
-        flyThroughIval = Parallel(camera.posInterval(flyDur, self._exit.getPos(render) + Point3(0, -22, 1), blendType='easeInOut'), camera.hprInterval(flyDur, Point3(0, 5, 0), blendType='easeInOut'))
+        flyThroughIval = Parallel(base.camera.posInterval(flyDur, self._exit.getPos(render) + Point3(0, -22, 1), blendType='easeInOut'), base.camera.hprInterval(flyDur, Point3(0, 5, 0), blendType='easeInOut'))
         self._ival = Sequence(Func(start), Parallel(flyThroughIval, Sequence(Func(self.displayLine, 'cog', self._getRandomLine(dialogue[0])), Wait(waitDur), Func(self.displayLine, 'toon', self._getRandomLine(dialogue[1])), Wait(waitDur), Func(self.displayLine, 'cog', self._getRandomLine(dialogue[2])), Wait(waitDur))), Func(end))
 
     def _updateTask(self, task):
@@ -126,13 +126,13 @@ class CogdoFlyingGameFinish(CogdoGameMovie):
         CogdoGameMovie.load(self)
 
         def showDoor():
-            camera.wrtReparentTo(render)
-            camera.setPos(self._exit, 0, -55, 40)
-            camera.lookAt(self._exit, 0, 0, -20)
+            base.camera.wrtReparentTo(render)
+            base.camera.setPos(self._exit, 0, -55, 40)
+            base.camera.lookAt(self._exit, 0, 0, -20)
             self._exit.open()
 
         exitDur = 1.0
-        showExitIval = Sequence(Func(camera.wrtReparentTo, render), Parallel(camera.posInterval(exitDur, Point3(0, -55, 40), other=self._exit, blendType='easeInOut'), camera.hprInterval(exitDur, Point3(0, -45, 0), blendType='easeInOut')))
+        showExitIval = Sequence(Func(base.camera.wrtReparentTo, render), Parallel(base.camera.posInterval(exitDur, Point3(0, -55, 40), other=self._exit, blendType='easeInOut'), base.camera.hprInterval(exitDur, Point3(0, -45, 0), blendType='easeInOut')))
 
         def showPlayersLeaving():
             for player in self._players:

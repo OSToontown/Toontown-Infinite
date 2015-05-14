@@ -561,8 +561,8 @@ class DistributedMazeGame(DistributedMinigame):
         self.camParent.reparentTo(base.localAvatar)
         self.camParent.setPos(0, 0, 0)
         self.camParent.setHpr(render, 0, 0, 0)
-        camera.reparentTo(self.camParent)
-        camera.setPos(self.camOffset)
+        base.camera.reparentTo(self.camParent)
+        base.camera.setPos(self.camOffset)
         self.__spawnCameraTask()
         self.toonRNGs = []
         for i in xrange(self.numPlayers):
@@ -612,7 +612,7 @@ class DistributedMazeGame(DistributedMinigame):
                 track.finish()
 
         self.__killCameraTask()
-        camera.wrtReparentTo(render)
+        base.camera.wrtReparentTo(render)
         self.camParent.removeNode()
         del self.camParent
         for panel in self.scorePanels:
@@ -814,23 +814,23 @@ class DistributedMazeGame(DistributedMinigame):
             cameraTrack = Sequence()
         else:
             self.camParent.reparentTo(parentNode)
-            startCamPos = camera.getPos()
-            destCamPos = camera.getPos()
+            startCamPos = base.camera.getPos()
+            destCamPos = base.camera.getPos()
             zenith = trajectory.getPos(flyDur/2.0)[2]
             destCamPos.setZ(zenith*1.3)
             destCamPos.setY(destCamPos[1]*0.3)
             def camTask(task, zenith = zenith, flyNode = toon, startCamPos = startCamPos, camOffset = destCamPos - startCamPos):
                 u = flyNode.getZ()/zenith
-                camera.setPos(startCamPos + camOffset*u)
-                camera.lookAt(toon)
+                base.camera.setPos(startCamPos + camOffset*u)
+                base.camera.lookAt(toon)
                 return Task.cont
             camTaskName = 'mazeToonFlyCam-' + `avId`
             taskMgr.add(camTask, camTaskName, priority=20)
             def cleanupCamTask(self = self, toon = toon, camTaskName = camTaskName, startCamPos = startCamPos):
                 taskMgr.remove(camTaskName)
                 self.camParent.reparentTo(toon)
-                camera.setPos(startCamPos)
-                camera.lookAt(toon)
+                base.camera.setPos(startCamPos)
+                base.camera.lookAt(toon)
 
             cameraTrack = Sequence(
                 Wait(flyDur),
@@ -979,7 +979,7 @@ class DistributedMazeGame(DistributedMinigame):
 
     def __spawnCameraTask(self):
         self.notify.debug('spawnCameraTask')
-        camera.lookAt(base.localAvatar)
+        base.camera.lookAt(base.localAvatar)
         taskMgr.remove(self.CAMERA_TASK)
         taskMgr.add(self.__cameraTask, self.CAMERA_TASK, priority=45)
 
@@ -1110,15 +1110,15 @@ class DistributedMazeGame(DistributedMinigame):
 
     def getIntroTrack(self):
         self.__cameraTask(None)
-        origCamParent = camera.getParent()
-        origCamPos = camera.getPos()
-        origCamHpr = camera.getHpr()
+        origCamParent = base.camera.getParent()
+        origCamPos = base.camera.getPos()
+        origCamHpr = base.camera.getHpr()
         iCamParent = base.localAvatar.attachNewNode('iCamParent')
         iCamParent.setH(180)
-        camera.reparentTo(iCamParent)
+        base.camera.reparentTo(iCamParent)
         toonHeight = base.localAvatar.getHeight()
-        camera.setPos(0, -15, toonHeight * 3)
-        camera.lookAt(0, 0, toonHeight / 2.0)
+        base.camera.setPos(0, -15, toonHeight * 3)
+        base.camera.lookAt(0, 0, toonHeight / 2.0)
         iCamParent.wrtReparentTo(origCamParent)
         waitDur = 5.0
         lerpDur = 4.5
@@ -1130,9 +1130,9 @@ class DistributedMazeGame(DistributedMinigame):
         base.localAvatar.startLookAround()
 
         def cleanup(origCamParent = origCamParent, origCamPos = origCamPos, origCamHpr = origCamHpr, iCamParent = iCamParent):
-            camera.reparentTo(origCamParent)
-            camera.setPos(origCamPos)
-            camera.setHpr(origCamHpr)
+            base.camera.reparentTo(origCamParent)
+            base.camera.setPos(origCamPos)
+            base.camera.setHpr(origCamHpr)
             iCamParent.removeNode()
             del iCamParent
             base.localAvatar.stopLookAround()

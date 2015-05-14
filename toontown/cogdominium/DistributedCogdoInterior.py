@@ -488,12 +488,12 @@ class DistributedCogdoInterior(DistributedObject.DistributedObject):
         self.elevatorModelIn.reparentTo(elevIn)
         self.leftDoorIn.setPos(3.5, 0, 0)
         self.rightDoorIn.setPos(-3.5, 0, 0)
-        camera.reparentTo(self.elevatorModelIn)
-        camera.setH(180)
-        camera.setP(0)
-        camera.setPos(0, 14, 4)
+        base.camera.reparentTo(self.elevatorModelIn)
+        base.camera.setH(180)
+        base.camera.setP(0)
+        base.camera.setPos(0, 14, 4)
         base.playMusic(self.elevatorMusic, looping=1, volume=0.8)
-        track = Sequence(Func(base.transitions.noTransitions), ElevatorUtils.getRideElevatorInterval(ELEVATOR_NORMAL), ElevatorUtils.getOpenInterval(self, self.leftDoorIn, self.rightDoorIn, self.openSfx, None, type=ELEVATOR_NORMAL), Func(camera.wrtReparentTo, render))
+        track = Sequence(Func(base.transitions.noTransitions), ElevatorUtils.getRideElevatorInterval(ELEVATOR_NORMAL), ElevatorUtils.getOpenInterval(self, self.leftDoorIn, self.rightDoorIn, self.openSfx, None, type=ELEVATOR_NORMAL), Func(base.camera.wrtReparentTo, render))
         for toon in self.toons:
             track.append(Func(toon.wrtReparentTo, render))
 
@@ -620,8 +620,8 @@ class DistributedCogdoInterior(DistributedObject.DistributedObject):
     def enterBattle(self, ts = 0):
         if self._wantBarrelRoom and self.elevatorOutOpen == 1:
             self.__playCloseElevatorOut(self.uniqueName('close-out-elevator'), delay=2)
-            camera.setPos(0, -15, 6)
-            camera.headsUp(self.elevatorModelOut)
+            base.camera.setPos(0, -15, 6)
+            base.camera.headsUp(self.elevatorModelOut)
 
     def _showExitElevator(self):
         self.elevatorModelOut.reparentTo(self.elevOut)
@@ -629,8 +629,8 @@ class DistributedCogdoInterior(DistributedObject.DistributedObject):
         self.rightDoorOut.setPos(-3.5, 0, 0)
         if not self._wantBarrelRoom and self.elevatorOutOpen == 1:
             self.__playCloseElevatorOut(self.uniqueName('close-out-elevator'))
-            camera.setPos(0, -15, 6)
-            camera.headsUp(self.elevatorModelOut)
+            base.camera.setPos(0, -15, 6)
+            base.camera.headsUp(self.elevatorModelOut)
         return None
 
     def exitBattle(self):
@@ -649,10 +649,10 @@ class DistributedCogdoInterior(DistributedObject.DistributedObject):
             suit.loop('neutral')
 
         if len(self.suits) == len(self.joiningReserves):
-            camSequence = Sequence(Func(camera.wrtReparentTo, localAvatar), Func(camera.setPos, Point3(0, 5, 5)), Func(camera.headsUp, self.elevatorModelOut))
+            camSequence = Sequence(Func(base.camera.wrtReparentTo, localAvatar), Func(base.camera.setPos, Point3(0, 5, 5)), Func(base.camera.headsUp, self.elevatorModelOut))
         else:
-            camSequence = Sequence(Func(camera.wrtReparentTo, self.elevatorModelOut), Func(camera.setPos, Point3(0, -8, 2)), Func(camera.setHpr, Vec3(0, 10, 0)))
-        track = Sequence(camSequence, Parallel(SoundInterval(self.openSfx), LerpPosInterval(self.leftDoorOut, ElevatorData[ELEVATOR_NORMAL]['closeTime'], Point3(0, 0, 0), startPos=ElevatorUtils.getLeftClosePoint(ELEVATOR_NORMAL), blendType='easeOut'), LerpPosInterval(self.rightDoorOut, ElevatorData[ELEVATOR_NORMAL]['closeTime'], Point3(0, 0, 0), startPos=ElevatorUtils.getRightClosePoint(ELEVATOR_NORMAL), blendType='easeOut')), Wait(SUIT_HOLD_ELEVATOR_TIME), Func(camera.wrtReparentTo, render), Func(callback))
+            camSequence = Sequence(Func(base.camera.wrtReparentTo, self.elevatorModelOut), Func(base.camera.setPos, Point3(0, -8, 2)), Func(base.camera.setHpr, Vec3(0, 10, 0)))
+        track = Sequence(camSequence, Parallel(SoundInterval(self.openSfx), LerpPosInterval(self.leftDoorOut, ElevatorData[ELEVATOR_NORMAL]['closeTime'], Point3(0, 0, 0), startPos=ElevatorUtils.getLeftClosePoint(ELEVATOR_NORMAL), blendType='easeOut'), LerpPosInterval(self.rightDoorOut, ElevatorData[ELEVATOR_NORMAL]['closeTime'], Point3(0, 0, 0), startPos=ElevatorUtils.getRightClosePoint(ELEVATOR_NORMAL), blendType='easeOut')), Wait(SUIT_HOLD_ELEVATOR_TIME), Func(base.camera.wrtReparentTo, render), Func(callback))
         track.start(ts)
         self.activeIntervals[name] = track
 
@@ -756,7 +756,7 @@ class DistributedCogdoInterior(DistributedObject.DistributedObject):
         track = Parallel(name=trackName)
         base.cr.playGame.getPlace().fsm.request('stopped')
         speech = TTLocalizer.CogdoExecutiveSuiteToonThankYou % self.SOSToonName
-        track.append(Sequence(Func(camera.wrtReparentTo, localAvatar), Func(camera.setPos, 0, -9, 9), Func(camera.lookAt, Point3(5, 15, 0)), Parallel(self.cage.posInterval(0.75, self.cagePos[1], blendType='easeOut'), SoundInterval(self.cageLowerSfx, duration=0.5)), Parallel(self.cageDoor.hprInterval(0.5, VBase3(0, 90, 0), blendType='easeOut'), Sequence(SoundInterval(self.cageDoorSfx), duration=0)), Wait(0.25), Func(self.shopOwnerNpc.wrtReparentTo, render), Func(self.shopOwnerNpc.setScale, 1), Func(self.shopOwnerNpc.loop, 'walk'), Func(self.shopOwnerNpc.headsUp, Point3(0, 10, 0)), ParallelEndTogether(self.shopOwnerNpc.posInterval(1.5, Point3(0, 10, 0)), self.shopOwnerNpc.hprInterval(0.5, VBase3(180, 0, 0), blendType='easeInOut')), Func(self.shopOwnerNpc.setChatAbsolute, TTLocalizer.CagedToonYippee, CFSpeech), ActorInterval(self.shopOwnerNpc, 'jump'), Func(self.shopOwnerNpc.loop, 'neutral'), Func(self.shopOwnerNpc.headsUp, localAvatar), Func(self.shopOwnerNpc.setLocalPageChat, speech, 0), Func(camera.lookAt, self.shopOwnerNpc, Point3(0, 0, 2))))
+        track.append(Sequence(Func(base.camera.wrtReparentTo, localAvatar), Func(base.camera.setPos, 0, -9, 9), Func(base.camera.lookAt, Point3(5, 15, 0)), Parallel(self.cage.posInterval(0.75, self.cagePos[1], blendType='easeOut'), SoundInterval(self.cageLowerSfx, duration=0.5)), Parallel(self.cageDoor.hprInterval(0.5, VBase3(0, 90, 0), blendType='easeOut'), Sequence(SoundInterval(self.cageDoorSfx), duration=0)), Wait(0.25), Func(self.shopOwnerNpc.wrtReparentTo, render), Func(self.shopOwnerNpc.setScale, 1), Func(self.shopOwnerNpc.loop, 'walk'), Func(self.shopOwnerNpc.headsUp, Point3(0, 10, 0)), ParallelEndTogether(self.shopOwnerNpc.posInterval(1.5, Point3(0, 10, 0)), self.shopOwnerNpc.hprInterval(0.5, VBase3(180, 0, 0), blendType='easeInOut')), Func(self.shopOwnerNpc.setChatAbsolute, TTLocalizer.CagedToonYippee, CFSpeech), ActorInterval(self.shopOwnerNpc, 'jump'), Func(self.shopOwnerNpc.loop, 'neutral'), Func(self.shopOwnerNpc.headsUp, localAvatar), Func(self.shopOwnerNpc.setLocalPageChat, speech, 0), Func(base.camera.lookAt, self.shopOwnerNpc, Point3(0, 0, 2))))
         self.activeIntervals[trackName] = track
         self.accept('doneChatPage', self.__outroPenthouseChatDone)
         return track

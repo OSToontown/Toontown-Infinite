@@ -99,7 +99,7 @@ class CogdoMazeGameIntro(CogdoGameMovie):
         waitDuration = introDuration / len(dialogue)
 
         def start():
-            camera.wrtReparentTo(render)
+            base.camera.wrtReparentTo(render)
             self._exit.open(animate=False)
 
         def showBoss():
@@ -112,12 +112,12 @@ class CogdoMazeGameIntro(CogdoGameMovie):
             self._exit.close()
             self._state = 2
 
-        showExitIval = Parallel(camera.posInterval(waitDuration * 0.5, (10, -25, 20), other=self._exit, blendType='easeInOut'), Sequence(Wait(waitDuration * 0.25), Func(bossSuit.play, 'effort'), camera.hprInterval(waitDuration * 0.25, (30, -30, 0), blendType='easeInOut'), Func(self._exit.close), Wait(waitDuration * 0.5)))
+        showExitIval = Parallel(base.camera.posInterval(waitDuration * 0.5, (10, -25, 20), other=self._exit, blendType='easeInOut'), Sequence(Wait(waitDuration * 0.25), Func(bossSuit.play, 'effort'), base.camera.hprInterval(waitDuration * 0.25, (30, -30, 0), blendType='easeInOut'), Func(self._exit.close), Wait(waitDuration * 0.5)))
 
         def showWaterCooler():
             wc = self._maze.getWaterCoolers()[0]
             self._setCamTarget(wc, 25, angle=Point3(-30, 60, 0))
-            camera.wrtReparentTo(self._camHelperNode)
+            base.camera.wrtReparentTo(self._camHelperNode)
             self._state = 3
 
         def end():
@@ -127,27 +127,27 @@ class CogdoMazeGameIntro(CogdoGameMovie):
         self._startUpdateTask()
 
     def _setCamTarget(self, targetNP, distance, offset = Point3(0, 0, 0), angle = Point3(0, 0, 0)):
-        camera.wrtReparentTo(render)
+        base.camera.wrtReparentTo(render)
         self._camTarget = targetNP
         self._camOffset = offset
         self._camAngle = angle
         self._camDistance = distance
         self._camHelperNode.setPos(self._camTarget, self._camOffset)
         self._camHelperNode.setHpr(self._camTarget, 180 + self._camAngle[0], self._camAngle[1], self._camAngle[2])
-        camera.setPos(self._camHelperNode, 0, self._camDistance, 0)
+        base.camera.setPos(self._camHelperNode, 0, self._camDistance, 0)
 
     def _updateTask(self, task):
         dt = globalClock.getDt()
         if self._state == 1:
             self._camHelperNode.setPos(self._camTarget.getPos() + self._camOffset)
-            camera.setPos(self._camHelperNode, 0, self._camDistance, 0)
-            camera.lookAt(self._camTarget, 0, 0, 4)
+            base.camera.setPos(self._camHelperNode, 0, self._camDistance, 0)
+            base.camera.lookAt(self._camTarget, 0, 0, 4)
         elif self._state == 2:
-            camera.lookAt(self._camTarget, 0, 0, 5)
+            base.camera.lookAt(self._camTarget, 0, 0, 5)
         elif self._state == 3:
             self._camHelperNode.setHpr(self._camHelperNode, dt, dt, 0)
-            camera.setY(camera, 0.8 * dt)
-            camera.lookAt(self._camTarget, 0, 0, 3)
+            base.camera.setY(camera, 0.8 * dt)
+            base.camera.lookAt(self._camTarget, 0, 0, 3)
         return task.cont
 
     def unload(self):

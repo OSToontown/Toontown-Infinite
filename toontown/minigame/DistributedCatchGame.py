@@ -335,8 +335,8 @@ class DistributedCatchGame(DistributedMinigame):
         DistributedMinigame.onstage(self)
         self.ground.reparentTo(render)
         self.scorePanels = []
-        camera.reparentTo(render)
-        camera.setPosHpr(*self.CameraPosHpr)
+        base.camera.reparentTo(render)
+        base.camera.setPosHpr(*self.CameraPosHpr)
         lt = base.localAvatar
         lt.reparentTo(render)
         self.__placeToon(self.localAvId)
@@ -452,8 +452,8 @@ class DistributedCatchGame(DistributedMinigame):
         self.notify.debug('setGameStart')
         DistributedMinigame.setGameStart(self, timestamp)
         self.introMovie.finish()
-        camera.reparentTo(render)
-        camera.setPosHpr(*self.CameraPosHpr)
+        base.camera.reparentTo(render)
+        base.camera.setPosHpr(*self.CameraPosHpr)
         self.gameFSM.request('play')
 
     def enterOff(self):
@@ -856,7 +856,7 @@ class DistributedCatchGame(DistributedMinigame):
          0.0)
         suitViewCamPosHpr = (0, -11.5, 13, 0, -35, 0)
         finalCamPosHpr = self.CameraPosHpr
-        cameraIval = Sequence(Func(camera.reparentTo, render), Func(camera.setPosHpr, treeNode, *initialCamPosHpr), WaitInterval(4.0), LerpPosHprInterval(camera, 2.0, Point3(*suitViewCamPosHpr[:3]), Point3(*suitViewCamPosHpr[3:]), blendType='easeInOut', name='lerpToSuitView'), WaitInterval(4.0), LerpPosHprInterval(camera, 3.0, Point3(*finalCamPosHpr[:3]), Point3(*finalCamPosHpr[3:]), blendType='easeInOut', name='lerpToPlayView'))
+        cameraIval = Sequence(Func(base.camera.reparentTo, render), Func(base.camera.setPosHpr, treeNode, *initialCamPosHpr), WaitInterval(4.0), LerpPosHprInterval(base.camera, 2.0, Point3(*suitViewCamPosHpr[:3]), Point3(*suitViewCamPosHpr[3:]), blendType='easeInOut', name='lerpToSuitView'), WaitInterval(4.0), LerpPosHprInterval(base.camera, 3.0, Point3(*finalCamPosHpr[:3]), Point3(*finalCamPosHpr[3:]), blendType='easeInOut', name='lerpToPlayView'))
 
         def getIntroToon(toonProperties, parent, pos):
             toon = Toon.Toon()
