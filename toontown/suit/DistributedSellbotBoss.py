@@ -149,6 +149,8 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.battleTwoMusic.stop()
         self.battleThreeMusic.stop()
         self.epilogueMusic.stop()
+        render.setColorScale(1, 1, 1, 1)
+        aspect2d.setColorScale(1, 1, 1, 1)
         while len(self.toonMopathInterval):
             toonMopath = self.toonMopathInterval[0]
             toonMopath.finish()
@@ -360,7 +362,8 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 self.loseCogSuits(self.toonsA, self.battleANode, (0, 18, 5, -180, 0, 0)),
                 self.loseCogSuits(self.toonsB, self.battleBNode, (0, 18, 5, -180, 0, 0)))),
             (38, Parallel(
-                LerpColorScaleInterval(self.geom, 3, Vec4(0.7, 0.7, 0.9, 1)),
+                LerpColorScaleInterval(render, 3, Vec4(0.7, 0.7, 0.9, 1)),
+                LerpColorScaleInterval(aspect2d, 3, Vec4(0.7, 0.7, 0.9, 1)),
                 LerpColorScaleInterval(self.skyNode, 3, Vec4(0.6, 0.6, 0.8, 1)),
                 Sequence(
                     self.toonNormalEyes(self.involvedToons),
