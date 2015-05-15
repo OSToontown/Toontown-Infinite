@@ -5177,4 +5177,4 @@ def immortal():
 def gagPouch(value):
     invoker = spellbook.getInvoker()
     invoker.b_setMaxCarry(value)
-    return 'Gag pouch set.
+    return 'Gag pouch set.'
