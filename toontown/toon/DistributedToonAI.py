@@ -5172,3 +5172,9 @@ def immortal():
     invoker = spellbook.getInvoker()
     invoker.setImmortalMode(not invoker.immortalMode)
     return 'Immortal Mode: %s' % ('ON' if invoker.immortalMode else 'OFF')
+    
+@magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
+def gagPouch(value):
+    invoker = spellbook.getInvoker()
+    invoker.b_setMaxCarry(value)
+    return 'Gag pouch set.
