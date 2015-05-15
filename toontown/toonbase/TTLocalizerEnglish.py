@@ -9439,6 +9439,10 @@ IdesOfMarchStart = 'Toons go GREEN!'
 LogoutForced = 'You have done something wrong\n and are being logged out automatically,\n additionally your account may be frozen.\n Try going on a walk outside, it is fun.'
 CountryClubToonEnterElevator = '%s \nhas jumped in the golf kart.'
 CountryClubBossConfrontedMsg = '%s is battling the Club President!'
+CountryClubFloorNum2Name = [
+    'First Hole', 'Second Hole', 'Third Hole', 'Fourth Hole', 'Fifth Hole',
+    'Sixth Hole', 'Seventh Hole', 'Eighth Hole', 'Ninth Hole'
+]
 ElevatorBlockedRoom = 'All challenges must be defeated first.'
 MolesLeft = 'Moles Left: %d'
 MolesInstruction = 'Mole Stomp!\nJump on the red moles!'
