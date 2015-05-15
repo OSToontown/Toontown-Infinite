@@ -258,7 +258,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
         self.d_setDNA(self.oldStyle.makeNetString(), 1)
         self.popupInfo.reparentTo(hidden)
 
-    def d_setDNA(self, dnaString, finished, whichItems = ClosetGlobals.SHIRT | ClosetGlobals.SHORTS):
+    def d_setDNA(self, dnaString, finished, whichItems=ClosetGlobals.SHIRT | ClosetGlobals.SHORTS):
         self.sendUpdate('setDNA', [dnaString, finished, whichItems])
 
     def setCustomerDNA(self, avId, dnaString):
