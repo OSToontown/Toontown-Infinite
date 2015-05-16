@@ -27,6 +27,7 @@ want-pets #f
 want-parties #f
 want-cogdominiums #f
 want-achievements #f
+want-game-tables #t
 
 # Chat:
 want-whitelist #f

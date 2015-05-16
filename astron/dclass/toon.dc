@@ -258,9 +258,12 @@ from toontown.parties import DistributedPartyValentineJukebox40Activity/AI
 from toontown.friends import TTPlayerFriendsManager/UD
 from toontown.friends import TTIFriendsManager/UD
 from toontown.uberdog import TTSpeedchatRelay/UD
+from toontown.safezone import DistributedChineseCheckers/AI
+from toontown.safezone import DistributedCheckers/AI
+from toontown.safezone import DistributedFindFour/AI
+from toontown.safezone import DistributedGameTable/AI
 from toontown.safezone import DistributedGolfKart/AI
 from toontown.safezone import DistributedPicnicBasket/AI
-from toontown.safezone import DistributedGameTable/AI
 from toontown.distributed import DistributedTimer/AI
 from toontown.suit import DistributedBossbotBoss/AI
 from toontown.coghq import DistributedCogKart/AI
@@ -278,9 +281,6 @@ from toontown.coghq import DistributedGolfSpot/AI
 from toontown.minigame import DistributedIceGame/AI
 from toontown.minigame import DistributedCogThiefGame/AI
 from toontown.minigame import DistributedTwoDGame/AI
-from toontown.safezone import DistributedChineseCheckers/AI
-from toontown.safezone import DistributedCheckers/AI
-from toontown.safezone import DistributedFindFour/AI
 from toontown.uberdog.DistributedMailManager/AI/UD import DistributedMailManager/AI/UD
 from toontown.uberdog.DistributedPartyManager/AI/UD import DistributedPartyManager/AI/UD
 from toontown.rpc.AwardManager/UD import AwardManager/UD
@@ -2886,6 +2886,83 @@ dclass TTPlayerFriendsManager : PlayerFriendsManager {
 dclass TTSpeedchatRelay : SpeedchatRelay {
 };
 
+dclass DistributedChineseCheckers : DistributedNode {
+  requestExit() clsend airecv;
+  requestBegin() clsend airecv;
+  requestMove(uint8 todo0[]) clsend airecv;
+  requestTimer() clsend airecv;
+  requestSeatPositions() clsend airecv;
+  startBeginTimer(uint16 todo0, int16 todo1) broadcast ram;
+  gameStart(uint8 playerNum) broadcast;
+  setTableDoId(uint32 doId) required broadcast ram;
+  setGameState(uint8 tableState[], uint8 moveList[]) required broadcast ram;
+  setTimer(int16 timerEnd) broadcast ram required;
+  setTurnTimer(int16 turnEnd) broadcast ram required;
+  sendTurn(uint8 playersTurn) broadcast ram;
+  requestWin() clsend airecv;
+  announceWin(uint32 avId) broadcast;
+  announceSeatPositions(uint8 playerPos[]) broadcast;
+};
+
+dclass DistributedCheckers : DistributedNode {
+  requestExit() clsend airecv;
+  requestBegin() clsend airecv;
+  requestTimer() clsend airecv;
+  requestMove(uint8 todo0[]) clsend airecv;
+  startBeginTimer(uint16 todo0, int16 todo1) broadcast ram;
+  gameStart(uint8 playerNum) broadcast;
+  setTableDoId(uint32 doId) required broadcast ram;
+  setGameState(uint8 tableState[], uint8 moveList[]) required broadcast ram;
+  setTimer(int16 timerEnd) broadcast ram required;
+  setTurnTimer(int16 turnEnd) broadcast ram required;
+  sendTurn(uint8 playersTurn) broadcast ram;
+  requestWin() clsend airecv;
+  announceWin(uint32 avId) broadcast;
+  illegalMove() broadcast;
+};
+
+dclass DistributedFindFour : DistributedNode {
+  requestExit() clsend airecv;
+  requestBegin() clsend airecv;
+  requestMove(uint8 todo0) clsend airecv;
+  requestTimer() clsend airecv;
+  requestWin(uint8 todo0[]) clsend airecv;
+  startBeginTimer(uint16 todo0, int16 todo1) broadcast ram;
+  setTableDoId(uint32 doId) required broadcast ram;
+  setGameState(uint8 tableState[][], uint8 moveCol, uint8 movePos, uint8 turn) required broadcast ram;
+  setTimer(int16 timerEnd) broadcast ram required;
+  setTurnTimer(int16 turnEnd) broadcast ram required;
+  gameStart(uint8 playerNum) broadcast;
+  sendTurn(uint8 playersTurn) broadcast ram;
+  announceWin(uint32 avId) broadcast;
+  announceWinLocation(uint8 todo0, uint8 todo1, uint8 todo2, uint8 todo3) broadcast;
+  announceWinnerPosition(uint8 x, uint8 y, uint8 winDirection, uint8 playerNum) broadcast;
+  illegalMove() broadcast;
+  tie() broadcast;
+};
+
+dclass DistributedGameTable : DistributedNode {
+  fillSlot(uint32 avId, uint8 index, int16 timestamp, uint32 parentDoId) broadcast;
+  emptySlot(uint32 avId, uint8 index, int16 timestamp) broadcast;
+  requestTableState() airecv clsend;
+  setTableState(uint32 tableStateList[], uint8 isplaying) broadcast ram;
+  setGameZone(uint32 zoneId, uint8 gamestate) broadcast;
+  setIsPlaying(uint8 isPlaying) broadcast ram;
+  requestJoin(uint8 todo0) airecv clsend;
+  rejectJoin() broadcast;
+  requestObserve() airecv clsend;
+  leaveObserve() airecv clsend;
+  requestGameZone() airecv clsend;
+  requestPickedGame(uint8 todo0) clsend airecv;
+  requestExit() airecv clsend;
+  requestZone() clsend airecv;
+  announceWinner(string winString, uint32 avId) broadcast;
+  allowObserve() broadcast;
+  allowPick() broadcast;
+  setZone(uint32 zoneId) broadcast;
+  setPosHpr(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) required broadcast ram;
+};
+
 dclass DistributedGolfKart : DistributedObject {
   setState(string, int16) broadcast ram;
   fillSlot0(uint32) broadcast ram;
@@ -2928,26 +3005,6 @@ dclass DistributedPicnicBasket : DistributedObject {
   setPicnicDone();
   setPosHpr(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) required broadcast ram;
   setTableNumber(int16) required broadcast ram;
-};
-
-dclass DistributedGameTable : DistributedObject {
-  requestJoin(uint8) airecv clsend;
-  rejectJoin();
-  requestExit() airecv clsend;
-  fillSlot0(uint32) broadcast ram;
-  fillSlot1(uint32) broadcast ram;
-  fillSlot2(uint32) broadcast ram;
-  fillSlot3(uint32) broadcast ram;
-  fillSlot4(uint32) broadcast ram;
-  fillSlot5(uint32) broadcast ram;
-  emptySlot0(uint32, int16) broadcast ram;
-  emptySlot1(uint32, int16) broadcast ram;
-  emptySlot2(uint32, int16) broadcast ram;
-  emptySlot3(uint32, int16) broadcast ram;
-  emptySlot4(uint32, int16) broadcast ram;
-  emptySlot5(uint32, int16) broadcast ram;
-  setPosHpr(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) required broadcast ram;
-  announceWinner(uint32) broadcast;
 };
 
 dclass DistributedBossbotBoss : DistributedBossCog {
@@ -3131,61 +3188,6 @@ dclass DistributedTwoDGame : DistributedMinigame {
   setEnemyShot(uint32, uint8, uint8, uint32) broadcast;
   addVictoryScore(uint32, uint8) broadcast;
   setEveryoneDone() broadcast;
-};
-
-dclass DistributedChineseCheckers : DistributedNode {
-  requestExit() clsend airecv;
-  requestBegin() clsend airecv;
-  requestMove(uint8 []) clsend airecv;
-  requestTimer() clsend airecv;
-  requestSeatPositions() clsend airecv;
-  startBeginTimer(uint16, int16) broadcast ram;
-  gameStart(uint8) broadcast;
-  setTableDoId(uint32) required broadcast ram;
-  setGameState(uint8 [], uint8 []) required broadcast ram;
-  setTimer(int16) broadcast ram required;
-  setTurnTimer(int16) broadcast ram required;
-  sendTurn(uint8) broadcast ram;
-  requestWin() clsend airecv;
-  announceWin(uint32) broadcast;
-  announceSeatPositions(uint8 []) broadcast;
-};
-
-dclass DistributedCheckers : DistributedNode {
-  requestExit() clsend airecv;
-  requestBegin() clsend airecv;
-  requestTimer() clsend airecv;
-  requestMove(uint8 []) clsend airecv;
-  startBeginTimer(uint16, int16) broadcast ram;
-  gameStart(uint8) broadcast;
-  setTableDoId(uint32) required broadcast ram;
-  setGameState(uint8 [], uint8 []) required broadcast ram;
-  setTimer(int16) broadcast ram required;
-  setTurnTimer(int16) broadcast ram required;
-  sendTurn(uint8) broadcast ram;
-  requestWin() clsend airecv;
-  announceWin(uint32) broadcast;
-  illegalMove() broadcast;
-};
-
-dclass DistributedFindFour : DistributedNode {
-  requestExit() clsend airecv;
-  requestBegin() clsend airecv;
-  requestMove(uint8) clsend airecv;
-  requestTimer() clsend airecv;
-  requestWin(uint8 []) clsend airecv;
-  startBeginTimer(uint16, int16) broadcast ram;
-  setTableDoId(uint32) required broadcast ram;
-  setGameState(uint8 [][], uint8, uint8, uint8) required broadcast ram;
-  setTimer(int16) broadcast ram required;
-  setTurnTimer(int16) broadcast ram required;
-  gameStart(uint8) broadcast;
-  sendTurn(uint8) broadcast ram;
-  announceWin(uint32) broadcast;
-  announceWinLocation(uint8, uint8, uint8, uint8) broadcast;
-  announceWinnerPosition(uint8, uint8, uint8, uint8) broadcast;
-  illegalMove() broadcast;
-  tie() broadcast;
 };
 
 dclass DistributedMailManager : DistributedObject {

@@ -85,14 +85,17 @@ class OZHoodAI(HoodAI.HoodAI):
     def findGameTables(self, dnaGroup, zoneId, area, overrideDNAZone=False):
         gameTables = []
         if isinstance(dnaGroup, DNAGroup) and ('game_table' in dnaGroup.getName()):
+            nameInfo = dnaGroup.getName().split('_')
             for i in xrange(dnaGroup.getNumChildren()):
+                nameInfo = dnaGroup.getName().split('_')
                 childDnaGroup = dnaGroup.at(i)
                 if 'game_table' in childDnaGroup.getName():
                     pos = childDnaGroup.getPos()
                     hpr = childDnaGroup.getHpr()
-                    gameTable = DistributedGameTableAI.DistributedGameTableAI(simbase.air)
-                    gameTable.setPosHpr(pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2])
+                    gameTable = DistributedGameTableAI.DistributedGameTableAI(simbase.air, zoneId,
+                        nameInfo[2], pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2])    
                     gameTable.generateWithRequired(zoneId)
+                    gameTables.append(gameTable)
         elif isinstance(dnaGroup, DNAVisGroup) and (not overrideDNAZone):
             zoneId = ZoneUtil.getTrueZoneId(int(dnaGroup.getName().split(':')[0]), zoneId)
         for i in xrange(dnaGroup.getNumChildren()):
@@ -111,3 +114,5 @@ class OZHoodAI(HoodAI.HoodAI):
                 foundGameTables = self.findGameTables(
                     dnaData, zoneId, area, overrideDNAZone=True)
                 self.gameTables.extend(foundGameTables)
+        for gameTable in self.gameTables:
+            gameTable.start()
