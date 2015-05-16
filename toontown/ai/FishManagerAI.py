@@ -106,7 +106,7 @@ def fish(fishName):
     if fishName.lower() == 'remove':
         if invoker.doId not in simbase.air.fishManager.requestedFish:
             return 'You have not requested a fish.'
-        del simbase.air.fishManager.fishRequests[invoker.doId]
+        del simbase.air.fishManager.requestedFish[invoker.doId]
         return 'Removed your fish request.'
 
     for genus in TTLocalizer.FishSpeciesNames:
