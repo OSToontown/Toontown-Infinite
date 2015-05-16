@@ -3,7 +3,8 @@ import math
 from direct.task.Task import Task
 from panda3d.core import BillboardEffect, Vec3, Point3, PGButton, VBase4
 from panda3d.core import DepthWriteAttrib
-from direct.interval.IntervalGlobal import Sequence, LerpScaleInterval
+from direct.interval.IntervalGlobal import Sequence, Parallel
+from direct.interval.IntervalGlobal import LerpScaleInterval, Func
 
 from toontown.chat.ChatBalloon import ChatBalloon
 from toontown.nametag import NametagGlobals
@@ -25,14 +26,14 @@ class Nametag3d(Nametag, Clickable3d):
         self.billboardOffset = 3
         self.doBillboardEffect()
 
-        self.popupTrack = None
+        self.chatBalloonAnimTrack = None
 
     def destroy(self):
         self.ignoreAll()
 
-        if self.popupTrack is not None:
-            self.popupTrack.finish()
-            self.popupTrack = None
+        if self.chatBalloonAnimTrack is not None:
+            self.chatBalloonAnimTrack.finish()
+            self.chatBalloonAnimTrack = None
 
         Nametag.destroy(self)
         Clickable3d.destroy(self)
@@ -131,10 +132,6 @@ class Nametag3d(Nametag, Clickable3d):
             # We can't draw this without a font.
             return
 
-        if self.popupTrack is not None:
-            self.popupTrack.finish()
-            self.popupTrack = None
-
         if self.isClickable():
             foreground, background = self.chatColor[self.clickState]
         else:
@@ -151,12 +148,6 @@ class Nametag3d(Nametag, Clickable3d):
             reversed=self.chatReversed,
             button=self.chatButton[self.clickState])
         self.chatBalloon.reparentTo(self.contents)
-
-        self.popupTrack = Sequence(
-            LerpScaleInterval(self.chatBalloon, 0.25, 1.25, startScale=0, blendType='easeIn'),
-            LerpScaleInterval(self.chatBalloon, 0.125, 1, startScale=1.25, blendType='easeOut')
-        )
-        self.popupTrack.start()
 
     def drawNametag(self):
         if self.font is None:
@@ -195,3 +186,17 @@ class Nametag3d(Nametag, Clickable3d):
         self.panelWidth = self.textNode.getWidth() + self.PANEL_X_PADDING
         self.panelHeight = self.textNode.getHeight() + self.PANEL_Z_PADDING
         self.panel.setScale(self.panelWidth, 1, self.panelHeight)
+
+    def animateChatBalloon(self):
+        if self.chatBalloonAnimTrack is not None:
+            self.chatBalloonAnimTrack.finish()
+            self.chatBalloonAnimTrack = None
+
+        self.chatBalloonAnimTrack = Sequence(
+            Parallel(
+                LerpScaleInterval(self.chatBalloon, 0.25, 1.25, startScale=0, blendType='easeIn'),
+                Func(self.contents.show)
+            ),
+            LerpScaleInterval(self.chatBalloon, 0.125, 1, startScale=1.25, blendType='easeOut')
+        )
+        self.chatBalloonAnimTrack.start()
