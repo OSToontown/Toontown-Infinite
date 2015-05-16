@@ -268,14 +268,16 @@ class NametagGroup:
             return
 
         self.chatPageIndex = chatPageIndex
+
+        chatText = self.chatPages[chatPageIndex]
         for nametag in self.nametags:
-            if isinstance(nametag, Nametag3d):
+            if chatText and isinstance(nametag, Nametag3d):
                 nametag.contents.hide()
 
-            nametag.setChatText(self.chatPages[self.chatPageIndex])
+            nametag.setChatText(chatText)
             nametag.update()
 
-            if isinstance(nametag, Nametag3d):
+            if chatText and isinstance(nametag, Nametag3d):
                 nametag.animateChatBalloon()
 
     def getChatPageIndex(self):
