@@ -78,4 +78,11 @@ class CogHood(Hood):
         base.localAvatar.setCameraFov(ToontownGlobals.DefaultCameraFov)
         base.camLens.setNearFar(ToontownGlobals.DefaultCameraNear, ToontownGlobals.DefaultCameraFar)
 
+        self.setNoFog()
+
         Hood.exit(self)
+
+    def setNoFog(self):
+        if base.wantFog:
+            render.clearFog()
+            self.sky.clearFog()
