@@ -258,8 +258,8 @@ class ToonHood(Hood):
 
     def setWhiteFog(self):
         if base.wantFog:
-            self.fog.setColor(self.whiteFogColor)
-            self.fog.setLinearRange(0.0, 400.0)
+            self.fog.setColor(0.6, 0.6, 0.6)
+            self.fog.setExpDensity(0.008)
             render.clearFog()
             render.setFog(self.fog)
             self.sky.clearFog()
