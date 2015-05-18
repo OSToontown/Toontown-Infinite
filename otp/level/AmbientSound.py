@@ -32,7 +32,7 @@ class AmbientSound(BasicEntities.NodePathEntity):
         if hasattr(self, 'sound'):
             del self.sound
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def attribChanged(self, *args):
             self.destroySound()

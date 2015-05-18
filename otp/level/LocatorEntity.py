@@ -27,7 +27,7 @@ class LocatorEntity(Entity.Entity, NodePath):
             else:
                 self.reparentTo(parent)
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def attribChanged(self, attrib, value):
             self.doReparent()

@@ -13,6 +13,7 @@ class Entity(DirectObject):
         self.level = level
         self.entId = entId
         if self.level is not None and self.entId is not None:
+            print 'Entity initializeEntity %s %s' % (self.level, self.entId) 
             self.level.initializeEntity(self)
         return
 
@@ -86,7 +87,7 @@ class Entity(DirectObject):
     def setAttribInit(self, attrib, value):
         self.__dict__[attrib] = value
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def handleAttribChange(self, attrib, value):
             setter = self.privGetSetter(attrib)

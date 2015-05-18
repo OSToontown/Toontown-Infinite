@@ -36,7 +36,7 @@ class DistributedEntityAI(DistributedObjectAI.DistributedObjectAI, Entity.Entity
     def getEntId(self):
         return self.entId
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def setParentEntId(self, parentEntId):
             self.parentEntId = parentEntId

@@ -45,7 +45,7 @@ class VisibilityExtender(Entity.Entity):
         self.destroyVisExt()
         Entity.Entity.destroy(self)
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def setNewZones(self, newZones):
             extended = self.extended

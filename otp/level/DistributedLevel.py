@@ -78,13 +78,13 @@ class DistributedLevel(DistributedObject.DistributedObject, Level.Level):
         pass
 
     def initializeLevel(self, levelSpec):
-        if __dev__:
+        if config.GetBool('want-ingame-editor', False):
             self.candidateSpec = levelSpec
             self.sendUpdate('requestCurrentLevelSpec', [levelSpec.stringHash(), levelSpec.entTypeReg.getHashStr()])
         else:
             self.privGotSpec(levelSpec)
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def reportModelSpecSyncError(self, msg):
             DistributedLevel.notify.error('%s\n\nyour spec does not match the level model\nuse SpecUtil.updateSpec, then restart your AI and client' % msg)
@@ -468,7 +468,7 @@ class DistributedLevel(DistributedObject.DistributedObject, Level.Level):
             self.visChangedThisFrame = 0
         return Task.cont
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def setAttribChange(self, entId, attribName, valueStr, username):
             value = eval(valueStr)

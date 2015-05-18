@@ -11,15 +11,13 @@ class EditMgrBase(Entity.Entity):
         Entity.Entity.destroy(self)
         self.ignoreAll()
 
-    if __dev__:
+    def setInsertEntity(self, data):
+        self.level.setEntityCreatorUsername(data['entId'], data['username'])
+        self.level.levelSpec.insertEntity(data['entId'], data['entType'], data['parentEntId'])
+        self.level.levelSpec.doSetAttrib(self.entId, 'insertEntity', None)
+        return
 
-        def setInsertEntity(self, data):
-            self.level.setEntityCreatorUsername(data['entId'], data['username'])
-            self.level.levelSpec.insertEntity(data['entId'], data['entType'], data['parentEntId'])
-            self.level.levelSpec.doSetAttrib(self.entId, 'insertEntity', None)
-            return
-
-        def setRemoveEntity(self, data):
-            self.level.levelSpec.removeEntity(data['entId'])
-            self.level.levelSpec.doSetAttrib(self.entId, 'removeEntity', None)
-            return
+    def setRemoveEntity(self, data):
+        self.level.levelSpec.removeEntity(data['entId'])
+        self.level.levelSpec.doSetAttrib(self.entId, 'removeEntity', None)
+        return

@@ -109,7 +109,7 @@ class DistributedSwitchAI(DistributedSwitchBase.DistributedSwitchBase, Distribut
             self.doLaterTask = None
         return
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def attribChanged(self, attrib, value):
             self.takedown()

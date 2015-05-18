@@ -136,7 +136,7 @@ class DistributedGoon(DistributedCrushableEntity.DistributedCrushableEntity, Goo
         if self.radar:
             self.radar.clearClipPlane()
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def refreshPath(self):
             self.setPath()
@@ -145,7 +145,7 @@ class DistributedGoon(DistributedCrushableEntity.DistributedCrushableEntity, Goo
 
     def setPath(self):
         self.path = self.level.getEntity(self.parentEntId)
-        if __dev__:
+        if config.GetBool('want-ingame-editor', False):
             if hasattr(self, 'pathChangeEvent'):
                 self.ignore(self.pathChangeEvent)
             self.pathChangeEvent = self.path.getChangeEvent()

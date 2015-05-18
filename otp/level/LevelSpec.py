@@ -4,7 +4,7 @@ from direct.showbase.PythonUtil import list2dict, uniqueElements
 import string
 import LevelConstants
 import types
-if __dev__:
+if config.GetBool('want-ingame-editor', False):
     import os
 
 class LevelSpec:
@@ -14,15 +14,15 @@ class LevelSpec:
     def __init__(self, spec = None, scenario = 0):
         newSpec = 0
         if type(spec) is types.ModuleType:
-            if __dev__:
+            if config.GetBool('want-ingame-editor', False):
                 reload(spec)
             self.specDict = spec.levelSpec
-            if __dev__:
+            if config.GetBool('want-ingame-editor', False):
                 self.setFilename(spec.__file__)
         elif type(spec) is types.DictType:
             self.specDict = spec
         elif spec is None:
-            if __dev__:
+            if config.GetBool('want-ingame-editor', False):
                 newSpec = 1
                 self.specDict = {'globalEntities': {},
                  'scenarios': [{}]}
@@ -32,7 +32,7 @@ class LevelSpec:
             self.entId2specDict.update(list2dict(self.getScenarioEntIds(i), value=self.privGetScenarioEntityDict(i)))
 
         self.setScenario(scenario)
-        if __dev__:
+        if config.GetBool('want-ingame-editor', False):
             if newSpec:
                 import EntityTypes
                 import EntityTypeRegistry
@@ -132,7 +132,7 @@ class LevelSpec:
             spec = self.getEntitySpec(zoneNum)
             print 'zone %s: %s' % (zoneNum, spec['name'])
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def setLevel(self, level):
             self.level = level

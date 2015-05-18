@@ -9,7 +9,7 @@ class NodePathEntityBase:
         if doReparent:
             self.callSetters('parentEntId')
         self.getNodePath().setName('%s-%s' % (self.__class__.__name__, self.entId))
-        if __dev__:
+        if config.GetBool('want-ingame-editor', False):
             self.getNodePath().setTag('entity', '1')
 
     def setParentEntId(self, parentEntId):
@@ -17,7 +17,7 @@ class NodePathEntityBase:
         self.level.requestReparent(self, self.parentEntId)
 
     def destroy(self):
-        if __dev__:
+        if config.GetBool('want-ingame-editor', False):
             self.getNodePath().clearTag('entity')
 
 

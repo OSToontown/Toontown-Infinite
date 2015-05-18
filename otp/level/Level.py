@@ -17,7 +17,7 @@ class Level:
         self.levelSpec = levelSpec
         self.scenarioIndex = scenarioIndex
         self.levelSpec.setScenario(self.scenarioIndex)
-        if __dev__:
+        if config.GetBool('want-ingame-editor', False):
             self.levelSpec.setLevel(self)
         self.entranceId2entity = {}
         self.entId2createCallbacks = {}
@@ -220,7 +220,7 @@ class Level:
     def handleVisChange(self):
         pass
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def getAttribChangeEventName(self):
             return 'attribChange-%s' % self.levelId

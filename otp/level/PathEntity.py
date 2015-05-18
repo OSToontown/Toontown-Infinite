@@ -20,7 +20,7 @@ class PathEntity(BasicEntities.NodePathEntity):
         pathTableId = GoonPathData.taskZoneId2pathId[self.level.getTaskZoneId()]
         if self.pathIndex in GoonPathData.Paths[pathTableId]:
             self.path = GoonPathData.Paths[pathTableId][self.pathIndex]
-            if __dev__:
+            if config.GetBool('want-ingame-editor', False):
                 messenger.send(self.getChangeEvent())
         else:
             PathEntity.notify.warning('invalid pathIndex: %s' % pathIndex)
@@ -47,7 +47,7 @@ class PathEntity(BasicEntities.NodePathEntity):
 
         return track
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def getChangeEvent(self):
             return self.getUniqueName('pathChanged')

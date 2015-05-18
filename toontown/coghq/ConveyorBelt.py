@@ -100,7 +100,7 @@ class ConveyorBelt(BasicEntities.NodePathEntity):
             for tread in self.treads:
                 tread.parentingNode.clearClipPlane()
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def attribChanged(self, attrib, value):
             self.destroyBelt()

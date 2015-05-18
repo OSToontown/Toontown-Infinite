@@ -26,7 +26,7 @@ class CollisionSolidEntity(BasicEntities.NodePathEntity):
         node.addSolid(solid)
         node.setCollideMask(OTPGlobals.WallBitmask)
         self.collNodePath = self.attachNewNode(node)
-        if __dev__:
+        if config.GetBool('want-ingame-editor', False):
             if self.showSolid:
                 self.showCS()
             else:
@@ -38,7 +38,7 @@ class CollisionSolidEntity(BasicEntities.NodePathEntity):
             self.collNodePath = None
         return
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def attribChanged(self, attrib, value):
             print 'attribChanged'

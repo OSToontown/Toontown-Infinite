@@ -32,7 +32,7 @@ class EntrancePoint(BasicEntities.NodePathEntity):
             if self.entranceId in self.level.entranceId2entity:
                 del self.level.entranceId2entity[self.entranceId]
 
-    if __dev__:
+    if config.GetBool('want-ingame-editor', False):
 
         def attribChanged(self, *args):
             BasicEntities.NodePathEntity.attribChanged(self, *args)
