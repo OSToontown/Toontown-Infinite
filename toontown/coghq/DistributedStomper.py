@@ -346,7 +346,7 @@ class DistributedStomper(DistributedCrusherEntity.DistributedCrusherEntity):
                 self.level.b_setOuch(self.damage, 'Squish')
                 base.localAvatar.setZ(self.getZ(render) + 0.025)
 
-    if config.GetBool('want-ingame-editor', False):
+    if __dev__:
 
         def attribChanged(self, *args):
             self.stopStomper()

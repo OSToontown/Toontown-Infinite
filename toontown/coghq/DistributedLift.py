@@ -201,7 +201,7 @@ class DistributedLift(BasicEntities.DistributedNodePathEntity):
     def exitWaiting(self):
         pass
 
-    if config.GetBool('want-ingame-editor', False):
+    if __dev__:
 
         def attribChanged(self, *args):
             BasicEntities.DistributedNodePathEntity.attribChanged(self, *args)

@@ -44,7 +44,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
         return joinChances
 
     def __genSuitInfos(self, level, track):
-        if config.GetBool('want-ingame-editor', False):
+        if __dev__:
             pass
 
         def getSuitDict(spec, cogId, level = level, track = track):

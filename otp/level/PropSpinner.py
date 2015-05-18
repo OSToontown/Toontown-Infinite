@@ -51,7 +51,7 @@ class PropSpinner(Entity):
             self.spinTracks.pause()
             del self.spinTracks
 
-    if config.GetBool('want-ingame-editor', False):
+    if __dev__:
 
         def attribChanged(self, *args):
             self.destroyProps()

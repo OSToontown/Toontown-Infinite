@@ -208,7 +208,7 @@ class DistributedDoorEntityAI(DistributedDoorEntityBase.DistributedDoorEntityBas
             if self.fsm.getCurrentState() is not self.states[2]:
                 self.fsm.request(self.states[1])
 
-    if config.GetBool('want-ingame-editor', False):
+    if __dev__:
 
         def attribChanged(self, attrib, value):
             self.takedown()

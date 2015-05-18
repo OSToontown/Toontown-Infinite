@@ -84,7 +84,7 @@ class GearEntity(BasicEntities.NodePathEntity):
             self.rotateIval.pause()
             del self.rotateIval
 
-    if config.GetBool('want-ingame-editor', False):
+    if __dev__:
 
         def setDegreesPerSec(self, degreesPerSec):
             if self.entInitialized:

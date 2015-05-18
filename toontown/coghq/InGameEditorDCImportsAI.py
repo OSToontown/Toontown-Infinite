@@ -1,2 +1,3 @@
-from direct.directutil import DistributedLargeBlobSenderAI
-import DistributedInGameEditorAI
+if __dev__:
+    from direct.directutil import DistributedLargeBlobSenderAI
+    import DistributedInGameEditorAI

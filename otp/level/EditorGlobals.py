@@ -1,7 +1,7 @@
 from direct.showbase.PythonUtil import uniqueElements
 EditTargetPostName = 'inGameEditTarget'
 EntIdRange = 10000
-username2entIdBase = {'Coldplay': 1 * EntIdRange,
+username2entIdBase = {'darren': 1 * EntIdRange,
  'samir': 2 * EntIdRange,
  'skyler': 3 * EntIdRange,
  'joe': 4 * EntIdRange,

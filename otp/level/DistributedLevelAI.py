@@ -20,21 +20,22 @@ class DistributedLevelAI(DistributedObjectAI.DistributedObjectAI, Level.Level):
         self.numPlayers = len(self.avIdList)
         self.presentAvIds = list(self.avIdList)
         self.notify.debug('expecting avatars: %s' % str(self.avIdList))
-        if config.GetBool('want-ingame-editor', False):
+        if __dev__:
             self.modified = 0
 
     def setLevelSpec(self, levelSpec):
         self.levelSpec = levelSpec
 
-    def generate(self, levelSpec):
+    def generate(self, levelSpec = None):
         self.notify.debug('generate')
         DistributedObjectAI.DistributedObjectAI.generate(self)
-        if levelSpec is None:
-            print 'why tf is levelSpec None: %s' % self.levelSpec
+        if levelSpec == None:
             levelSpec = self.levelSpec
         self.initializeLevel(levelSpec)
         self.sendUpdate('setZoneIds', [self.zoneIds])
         self.sendUpdate('setStartTimestamp', [self.startTimestamp])
+        if __dev__:
+            pass
         return
 
     def getLevelZoneId(self):
@@ -51,7 +52,8 @@ class DistributedLevelAI(DistributedObjectAI.DistributedObjectAI, Level.Level):
 
     def delete(self, deAllocZone = True):
         self.notify.debug('delete')
-        self.removeAutosaveTask()
+        if __dev__:
+            self.removeAutosaveTask()
         self.destroyLevel()
         self.ignoreAll()
         if deAllocZone:
@@ -64,7 +66,8 @@ class DistributedLevelAI(DistributedObjectAI.DistributedObjectAI, Level.Level):
         lol = zip([1] * levelSpec.getNumScenarios(), range(levelSpec.getNumScenarios()))
         scenarioIndex = weightedChoice(lol)
         Level.Level.initializeLevel(self, self.doId, levelSpec, scenarioIndex)
-        self.accept(self.editMgrEntity.getSpecSaveEvent(), self.saveSpec)
+        if __dev__:
+            self.accept(self.editMgrEntity.getSpecSaveEvent(), self.saveSpec)
         for avId in self.avIdList:
             self.acceptOnce(self.air.getAvatarExitEvent(avId), Functor(self.handleAvatarDisconnect, avId))
 
@@ -129,45 +132,47 @@ class DistributedLevelAI(DistributedObjectAI.DistributedObjectAI, Level.Level):
         self.sendUpdateToAvatarId(senderId, 'setSpecSenderDoId', [largeBlob.doId])
         return
 
-    def setAttribChange(self, entId, attribName, value, username = 'SYSTEM'):
-        DistributedLevelAI.notify.info('setAttribChange(%s): %s, %s = %s' % (username,
-         entId,
-         attribName,
-         repr(value)))
-        self.sendUpdate('setAttribChange', [entId,
-         attribName,
-         repr(value),
-         username])
-        self.levelSpec.setAttribChange(entId, attribName, value, username)
-        self.modified = 1
-        self.scheduleAutosave()
+    if __dev__:
 
-    AutosavePeriod = simbase.config.GetFloat('level-autosave-period-minutes', 5)
+        def setAttribChange(self, entId, attribName, value, username = 'SYSTEM'):
+            DistributedLevelAI.notify.info('setAttribChange(%s): %s, %s = %s' % (username,
+             entId,
+             attribName,
+             repr(value)))
+            self.sendUpdate('setAttribChange', [entId,
+             attribName,
+             repr(value),
+             username])
+            self.levelSpec.setAttribChange(entId, attribName, value, username)
+            self.modified = 1
+            self.scheduleAutosave()
 
-    def scheduleAutosave(self):
-        if hasattr(self, 'autosaveTask'):
-            return
-        self.autosaveTaskName = self.uniqueName('autosaveSpec')
-        self.autosaveTask = taskMgr.doMethodLater(DistributedLevelAI.AutosavePeriod * 60, self.autosaveSpec, self.autosaveTaskName)
+        AutosavePeriod = simbase.config.GetFloat('level-autosave-period-minutes', 5)
 
-    def removeAutosaveTask(self):
-        if hasattr(self, 'autosaveTask'):
-            taskMgr.remove(self.autosaveTaskName)
-            del self.autosaveTask
+        def scheduleAutosave(self):
+            if hasattr(self, 'autosaveTask'):
+                return
+            self.autosaveTaskName = self.uniqueName('autosaveSpec')
+            self.autosaveTask = taskMgr.doMethodLater(DistributedLevelAI.AutosavePeriod * 60, self.autosaveSpec, self.autosaveTaskName)
 
-    def autosaveSpec(self, task = None):
-        self.removeAutosaveTask()
-        if self.modified:
-            DistributedLevelAI.notify.info('autosaving spec')
-            filename = self.levelSpec.getFilename()
-            filename = '%s.autosave' % filename
-            self.levelSpec.saveToDisk(filename, makeBackup=0)
+        def removeAutosaveTask(self):
+            if hasattr(self, 'autosaveTask'):
+                taskMgr.remove(self.autosaveTaskName)
+                del self.autosaveTask
 
-    def saveSpec(self, task = None):
-        DistributedLevelAI.notify.info('saving spec')
-        self.removeAutosaveTask()
-        if not self.modified:
-            DistributedLevelAI.notify.info('no changes to save')
-            return
-        self.levelSpec.saveToDisk()
-        self.modified = 0
+        def autosaveSpec(self, task = None):
+            self.removeAutosaveTask()
+            if self.modified:
+                DistributedLevelAI.notify.info('autosaving spec')
+                filename = self.levelSpec.getFilename()
+                filename = '%s.autosave' % filename
+                self.levelSpec.saveToDisk(filename, makeBackup=0)
+
+        def saveSpec(self, task = None):
+            DistributedLevelAI.notify.info('saving spec')
+            self.removeAutosaveTask()
+            if not self.modified:
+                DistributedLevelAI.notify.info('no changes to save')
+                return
+            self.levelSpec.saveToDisk()
+            self.modified = 0

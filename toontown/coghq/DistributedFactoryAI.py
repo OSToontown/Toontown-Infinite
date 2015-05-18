@@ -11,9 +11,6 @@ import CogDisguiseGlobals
 from toontown.suit import DistributedFactorySuitAI
 from toontown.toonbase import ToontownGlobals, ToontownBattleGlobals
 from toontown.coghq import DistributedBattleFactoryAI
-if config.GetBool('want-ingame-editor', False):
-    from otp.level.EditMgrAI import EditMgrAI
-    from otp.level.LevelConstants import EditMgrEntId
 
 class DistributedFactoryAI(DistributedLevelAI.DistributedLevelAI, FactoryBase.FactoryBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedFactoryAI')
@@ -32,22 +29,16 @@ class DistributedFactoryAI(DistributedLevelAI.DistributedLevelAI, FactoryBase.Fa
     def generate(self):
         self.notify.info('generate')
         self.notify.info('start factory %s %s creation, frame=%s' % (self.factoryId, self.doId, globalClock.getFrameCount()))
-        if config.GetBool('want-ingame-editor', False):
+        if __dev__:
             simbase.factory = self
         self.notify.info('loading spec')
         specModule = FactorySpecs.getFactorySpecModule(self.factoryId)
-        print 'specModule is %s' % specModule
         factorySpec = LevelSpec.LevelSpec(specModule)
-        if config.GetBool('want-ingame-editor', False):
+        if __dev__:
             self.notify.info('creating entity type registry')
             typeReg = self.getEntityTypeReg()
             factorySpec.setEntityTypeReg(typeReg)
         self.notify.info('creating entities')
-        print 'Factory Spec is %s' % factorySpec
-        if config.GetBool('want-ingame-editor', False):
-            self.entities = {}
-            self.levelSpec = factorySpec
-            self.editMgrEntity = EditMgrAI(self, EditMgrEntId)
         DistributedLevelAI.DistributedLevelAI.generate(self, factorySpec)
         self.notify.info('creating cogs')
         cogSpecModule = FactorySpecs.getCogSpecModule(self.factoryId)
@@ -69,7 +60,7 @@ class DistributedFactoryAI(DistributedLevelAI.DistributedLevelAI, FactoryBase.Fa
 
     def delete(self):
         self.notify.info('delete: %s' % self.doId)
-        if config.GetBool('want-ingame-editor', False):
+        if __dev__:
             if hasattr(simbase, 'factory') and simbase.factory is self:
                 del simbase.factory
         suits = self.suits

@@ -7,7 +7,7 @@ class ZoneEntity(ZoneEntityBase.ZoneEntityBase, BasicEntities.NodePathAttribs):
         ZoneEntityBase.ZoneEntityBase.__init__(self, level, entId)
         self.nodePath = self.level.getZoneNode(self.entId)
         if self.nodePath is None:
-            if config.GetBool('want-ingame-editor', False):
+            if __dev__:
                 self.level.reportModelSpecSyncError('unknown zoneNum %s; zone was removed from model?' % self.entId)
             else:
                 self.notify.error('zone %s not found in level model' % self.entId)
@@ -37,7 +37,7 @@ class ZoneEntity(ZoneEntityBase.ZoneEntityBase, BasicEntities.NodePathAttribs):
             if self.visibleZoneNums[zoneNum] == 0:
                 del self.visibleZoneNums[zoneNum]
 
-    if config.GetBool('want-ingame-editor', False):
+    if __dev__:
 
         def setVisibility(self, visibility):
             self.decrementRefCounts(self.visibility)

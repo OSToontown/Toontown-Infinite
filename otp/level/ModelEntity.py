@@ -35,7 +35,7 @@ class ModelEntity(BasicEntities.NodePathEntity):
         if self.model:
             self.model.reparentTo(self)
             if self.collisionsOnly:
-                if config.GetBool('want-ingame-editor', False):
+                if __dev__:
                     self.model.setTransparency(1)
                     self.model.setColorScale(1, 1, 1, 0.1)
                 else:

@@ -18,7 +18,8 @@ class FactoryBase:
     def getFactoryType(self):
         return self.factoryType
 
-    if config.GetBool('want-ingame-editor', False):
+    if __dev__:
+
         def getEntityTypeReg(self):
             import FactoryEntityTypes
             from otp.level import EntityTypeRegistry

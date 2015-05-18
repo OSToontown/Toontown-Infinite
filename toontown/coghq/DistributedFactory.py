@@ -16,7 +16,7 @@ from toontown.coghq import FactoryCameraViews
 from direct.controls.ControlManager import CollisionHandlerRayStart
 from otp.ai.MagicWordGlobal import *
 from toontown.nametag.NametagGlobals import *
-if config.GetBool('want-ingame-editor', False):
+if __dev__:
     from otp.level import EditorGlobals
 
 class DistributedFactory(DistributedLevel.DistributedLevel, FactoryBase.FactoryBase):
@@ -40,7 +40,7 @@ class DistributedFactory(DistributedLevel.DistributedLevel, FactoryBase.FactoryB
         DistributedLevel.DistributedLevel.generate(self)
         self.factoryViews = FactoryCameraViews.FactoryCameraViews(self)
         base.localAvatar.chatMgr.chatInputSpeedChat.addFactoryMenu()
-        if config.GetBool('want-ingame-editor', False):
+        if __dev__:
             bboard.post(EditorGlobals.EditTargetPostName, self)
         self.accept('SOSPanelEnter', self.handleSOSPanel)
 
@@ -50,7 +50,7 @@ class DistributedFactory(DistributedLevel.DistributedLevel, FactoryBase.FactoryB
         self.factoryViews.delete()
         del self.factoryViews
         self.ignore('SOSPanelEnter')
-        if config.GetBool('want-ingame-editor', False):
+        if __dev__:
             bboard.removeIfEqual(EditorGlobals.EditTargetPostName, self)
 
     def setFactoryId(self, id):
@@ -74,13 +74,13 @@ class DistributedFactory(DistributedLevel.DistributedLevel, FactoryBase.FactoryB
         DistributedLevel.DistributedLevel.levelAnnounceGenerate(self)
         specModule = FactorySpecs.getFactorySpecModule(self.factoryId)
         factorySpec = LevelSpec.LevelSpec(specModule)
-        if config.GetBool('want-ingame-editor', False):
+        if __dev__:
             typeReg = self.getEntityTypeReg()
             factorySpec.setEntityTypeReg(typeReg)
         DistributedLevel.DistributedLevel.initializeLevel(self, factorySpec)
 
     def privGotSpec(self, levelSpec):
-        if config.GetBool('want-ingame-editor', False):
+        if __dev__:
             if not levelSpec.hasEntityTypeReg():
                 typeReg = self.getEntityTypeReg()
                 levelSpec.setEntityTypeReg(typeReg)

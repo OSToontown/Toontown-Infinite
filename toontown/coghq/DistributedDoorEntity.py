@@ -126,11 +126,11 @@ class DistributedDoorEntity(DistributedDoorEntityBase.DistributedDoorEntityBase,
 
         self.accept('exit%s' % (self.getName(),), self.exitTrigger)
         self.acceptAvatar()
-        if config.GetBool('want-ingame-editor', False):
+        if __dev__:
             self.initWantDoors()
 
     def takedown(self):
-        if config.GetBool('want-ingame-editor', False):
+        if __dev__:
             self.shutdownWantDoors()
         self.ignoreAll()
         if self.track is not None:
@@ -449,7 +449,7 @@ class DistributedDoorEntity(DistributedDoorEntityBase.DistributedDoorEntityBase,
         self.doorRight.setPos(Vec3(0.0))
 
 
-    if config.GetBool('want-ingame-editor', False):
+    if __dev__:
         def initWantDoors(self):
             self.accept('wantDoorsChanged', self.onWantDoorsChanged)
             self.onWantDoorsChanged()
