@@ -82,7 +82,7 @@ from toontown.toonbase.ToontownGlobals import FT_FullSuit, FT_Leg, FT_Arm, FT_To
 QuestRandGen = random.Random()
 
 def seedRandomGen(npcId, avId, tier, rewardHistory):
-    QuestRandGen.seed(npcId * 100 + avId + tier + len(rewardHistory))
+    QuestRandGen.seed(npcId * 100 + avId + tier + len(rewardHistory) + time.time())
 
 
 def seededRandomChoice(seq):
