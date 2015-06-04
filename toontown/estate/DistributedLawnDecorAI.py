@@ -18,6 +18,8 @@ class DistributedLawnDecorAI(DistributedNodeAI):
         self.pos = None
         self.heading = None
 
+        self.movie = None
+
     def getPlot(self):
         return self.plotIndex
 
@@ -36,13 +38,18 @@ class DistributedLawnDecorAI(DistributedNodeAI):
     def removeItem(self):
         pass
 
-    def setMovie(self, todo0, todo1):
-        pass
+    def setMovie(self, movie, avId):
+        if not self.gardenManager.house.avatarId == avId:
+            self.notify.warning('Avatar %s tried to access a garden that is not theirs!' % avId)
+            self.sendUpdate('interactionDenied', [avId])
+            return
+        self.movie = movie
+        self.sendUpdate('setMovie', [movie, avId])
 
     def movieDone(self):
         pass
 
-    def interactionDenied(self, todo0):
+    def interactionDenied(self, avId):
         pass
 
     def construct(self, gardenData):

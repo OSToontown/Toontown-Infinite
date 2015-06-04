@@ -1163,3 +1163,4 @@ TrophyDict = {0: (TTLocalizer.GardenTrophyNameDict[0],),
               3: (TTLocalizer.GardenTrophyNameDict[3],)}
 
 EmptyPlot = 0
+TreePlot = 1
