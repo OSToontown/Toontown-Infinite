@@ -1020,7 +1020,8 @@ ToonStatuaryPlot = 3
 ChangingStatuaryPlot = 4
 AnimatedStatuaryPlot = 5
 
-GROWTH_INTERVAL = 86400
+# Time in seconds for the next growth cycle.
+GROWTH_INTERVAL = 21600
 MAX_GROWTH_LEVEL = 21
 
 SAPLING = 0
