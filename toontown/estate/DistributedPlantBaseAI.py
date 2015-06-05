@@ -1,6 +1,7 @@
 from toontown.estate.DistributedLawnDecorAI import DistributedLawnDecorAI
 from toontown.estate import GardenGlobals
 
+
 class DistributedPlantBaseAI(DistributedLawnDecorAI):
     notify = directNotify.newCategory("DistributedPlantBaseAI")
 
@@ -30,13 +31,39 @@ class DistributedPlantBaseAI(DistributedLawnDecorAI):
     def getGrowthLevel(self):
         return self.growthLevel
 
+    def getGrowthThresholds(self):
+        return GardenGlobals.PlantAttributes[self.typeIndex]['growthThresholds']
+
+    def getGrowthState(self):
+        state = 0
+        for v in self.getGrowthThresholds():
+            if self.growthLevel >= v:
+                state += 1
+        return state
+
     def waterPlant(self):
-        self.waterLevel += 1
-        self.d_setWaterLevel(self.waterLevel)
+        avId = self.air.getAvatarIdFromSender()
+        av = self.air.doId2do.get(avId)
+        if not av:
+            return
+
+        if self.waterLevel < GardenGlobals.getMaxWateringCanPower():
+            self.waterLevel += GardenGlobals.getWateringCanPower(av.wateringCan, av.wateringCanSkill)
+            self.d_setWaterLevel(self.waterLevel)
+
+            self.gardenManager.updateGardenData()
+
         self.setMovie(GardenGlobals.MOVIE_WATER, self.air.getAvatarIdFromSender())
 
     def waterPlantDone(self):
-        pass
+        avId = self.air.getAvatarIdFromSender()
+        av = self.air.doId2do.get(avId)
+        if not av:
+            return
+
+        currSkill = av.getWateringCanSkill()
+        if self.waterLevel < GardenGlobals.getMaxWateringCanPower():
+            av.b_setWateringCanSkill(currSkill + 1 + self.getGrowthState())
 
     def construct(self, gardenData):
         DistributedLawnDecorAI.construct(self, gardenData)
@@ -46,6 +73,18 @@ class DistributedPlantBaseAI(DistributedLawnDecorAI):
         self.growthLevel = gardenData.getInt8()
 
         self.timestamp = gardenData.getUint32()
+
+        self.updateFromTimestamp()
+
+    def updateFromTimestamp(self):
+        seconds = self.gardenManager.getTimestamp() - self.timestamp
+        days = seconds / GardenGlobals.GROWTH_INTERVAL
+        unwateredDays = self.growthLevel - days
+        self.waterLevel = max(self.waterLevel - unwateredDays, -1)
+        if self.waterLevel < 0:
+            # This tree is wilted, don't grow it.
+            return
+        self.growthLevel = min(days, GardenGlobals.MAX_GROWTH_LEVEL)
 
     def pack(self, gardenData):
         DistributedLawnDecorAI.pack(self, gardenData)

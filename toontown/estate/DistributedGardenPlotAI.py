@@ -1,8 +1,5 @@
 from toontown.estate.DistributedLawnDecorAI import DistributedLawnDecorAI
-from toontown.estate import DistributedGagTreeAI
 from toontown.estate import GardenGlobals
-from direct.distributed.PyDatagramIterator import PyDatagramIterator
-from direct.distributed.PyDatagram import PyDatagram
 
 
 class DistributedGardenPlotAI(DistributedLawnDecorAI):
@@ -14,6 +11,7 @@ class DistributedGardenPlotAI(DistributedLawnDecorAI):
         self.occupier = GardenGlobals.EmptyPlot
 
     def plantGagTree(self, gagTrack, gagLevel):
+        self.setMovie(GardenGlobals.MOVIE_PLANT, self.air.getAvatarIdFromSender())
         self.gardenManager.constructTree(self.plotIndex, gagTrack, gagLevel)
 
     def plantStatuary(self, species):
@@ -29,7 +27,7 @@ class DistributedGardenPlotAI(DistributedLawnDecorAI):
         if self.movie == GardenGlobals.MOVIE_PLANT:
             self.setMovie(GardenGlobals.MOVIE_FINISHREMOVING, self.air.getAvatarIdFromSender())
             self.gardenManager.treeFinished(self.plotIndex)
-            self.delete()
+            self.requestDelete()
 
     def construct(self, gardenData):
         DistributedLawnDecorAI.construct(self, gardenData)

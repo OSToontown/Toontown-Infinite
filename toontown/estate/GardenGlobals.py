@@ -1164,3 +1164,9 @@ TrophyDict = {0: (TTLocalizer.GardenTrophyNameDict[0],),
 
 EmptyPlot = 0
 TreePlot = 1
+
+GROWTH_INTERVAL = 86400
+MAX_GROWTH_LEVEL = 21
+
+SAPLING = 0
+FULL_TREE = 3
