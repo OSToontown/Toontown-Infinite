@@ -331,7 +331,7 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         self.camFloorRayNode.setPos(self.ccSphereNodePath, 0, 0, 0)
 
     def attachCamera(self):
-        camera.reparentTo(self)
+        base.camera.reparentTo(self)
         base.enableMouse()
         base.setMouseOnNode(self.node())
         self.ignoreMouse = not self.wantMouse
@@ -601,20 +601,20 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
             self.positionCameraWithPusher(self.getCompromiseCameraPos(), self.getLookAtPoint())
         else:
             camPos = self.getCompromiseCameraPos()
-            savePos = camera.getPos()
-            saveHpr = camera.getHpr()
+            savePos = base.camera.getPos()
+            saveHpr = base.camera.getHpr()
             self.positionCameraWithPusher(camPos, self.getLookAtPoint())
             x = camPos[0]
             y = camPos[1]
             z = camPos[2]
-            destHpr = camera.getHpr()
+            destHpr = base.camera.getHpr()
             h = destHpr[0]
             p = destHpr[1]
             r = destHpr[2]
-            camera.setPos(savePos)
-            camera.setHpr(saveHpr)
+            base.camera.setPos(savePos)
+            base.camera.setHpr(saveHpr)
             taskMgr.remove('posCamera')
-            camera.posQuatInterval(duration, Vec3(x, y, z), Vec3(h, p, r), name='posCamera').start()
+            base.camera.lerpPosHpr(x, y, z, h, p, r, time, task='posCamera')
 
     def getClampedAvatarHeight(self):
         return max(self.getHeight(), 3.0)
@@ -728,15 +728,15 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         self.initCameraPositions()
         self.setCameraPositionByIndex(self.cameraIndex)
         self.posCamera(0, 0.0)
-        self.__instantaneousCamPos = camera.getPos()
+        self.__instantaneousCamPos = base.camera.getPos()
         if push:
             self.cTrav.addCollider(self.ccSphereNodePath, self.camPusher)
             self.ccTravOnFloor.addCollider(self.ccRay2NodePath, self.camFloorCollisionBroadcaster)
             self.__disableSmartCam = 0
         else:
             self.__disableSmartCam = 1
-        self.__lastPosWrtRender = camera.getPos(render)
-        self.__lastHprWrtRender = camera.getHpr(render)
+        self.__lastPosWrtRender = base.camera.getPos(render)
+        self.__lastHprWrtRender = base.camera.getHpr(render)
         taskName = self.taskName('updateSmartCamera')
         taskMgr.remove(taskName)
         taskMgr.add(self.updateSmartCamera, taskName, priority=47)
@@ -757,12 +757,12 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
 
     def updateSmartCamera(self, task):
         if not self.__camCollCanMove and not self.__cameraHasBeenMoved:
-            if self.__lastPosWrtRender == camera.getPos(render):
-                if self.__lastHprWrtRender == camera.getHpr(render):
+            if self.__lastPosWrtRender == base.camera.getPos(render):
+                if self.__lastHprWrtRender == base.camera.getHpr(render):
                     return Task.cont
         self.__cameraHasBeenMoved = 0
-        self.__lastPosWrtRender = camera.getPos(render)
-        self.__lastHprWrtRender = camera.getHpr(render)
+        self.__lastPosWrtRender = base.camera.getPos(render)
+        self.__lastHprWrtRender = base.camera.getHpr(render)
         self.__idealCameraObstructed = 0
         if not self.__disableSmartCam:
             self.ccTrav.traverse(self.__geom)
@@ -783,23 +783,23 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         return Task.cont
 
     def positionCameraWithPusher(self, pos, lookAt):
-        camera.setPos(pos)
+        base.camera.setPos(pos)
         self.ccPusherTrav.traverse(self.__geom)
-        camera.lookAt(lookAt)
+        base.camera.lookAt(lookAt)
 
     def nudgeCamera(self):
         CLOSE_ENOUGH = 0.1
         curCamPos = self.__instantaneousCamPos
-        curCamHpr = camera.getHpr()
+        curCamHpr = base.camera.getHpr()
         targetCamPos = self.getCompromiseCameraPos()
         targetCamLookAt = self.getLookAtPoint()
         posDone = 0
         if Vec3(curCamPos - targetCamPos).length() <= CLOSE_ENOUGH:
-            camera.setPos(targetCamPos)
+            base.camera.setPos(targetCamPos)
             posDone = 1
-        camera.setPos(targetCamPos)
-        camera.lookAt(targetCamLookAt)
-        targetCamHpr = camera.getHpr()
+        base.camera.setPos(targetCamPos)
+        base.camera.lookAt(targetCamLookAt)
+        targetCamHpr = base.camera.getHpr()
         hprDone = 0
         if Vec3(curCamHpr - targetCamHpr).length() <= CLOSE_ENOUGH:
             hprDone = 1
@@ -812,14 +812,14 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
             newHpr = targetCamHpr * lerpRatio + curCamHpr * (1 - lerpRatio)
         else:
             newHpr = targetCamHpr
-        camera.setPos(self.__instantaneousCamPos)
-        camera.setHpr(newHpr)
+        base.camera.setPos(self.__instantaneousCamPos)
+        base.camera.setHpr(newHpr)
 
     def popCameraToDest(self):
         newCamPos = self.getCompromiseCameraPos()
         newCamLookAt = self.getLookAtPoint()
         self.positionCameraWithPusher(newCamPos, newCamLookAt)
-        self.__instantaneousCamPos = camera.getPos()
+        self.__instantaneousCamPos = base.camera.getPos()
 
     def handleCameraObstruction(self, camObstrCollisionEntry):
         collisionPoint = camObstrCollisionEntry.getSurfacePoint(self.ccLineNodePath)
@@ -839,7 +839,7 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         self.camFloorCollisionQueue.sortEntries()
         camObstrCollisionEntry = self.camFloorCollisionQueue.getEntry(0)
         camHeightFromFloor = camObstrCollisionEntry.getSurfacePoint(self.ccRayNodePath)[2]
-        self.cameraZOffset = camera.getPos()[2] + camHeightFromFloor
+        self.cameraZOffset = base.camera.getPos()[2] + camHeightFromFloor
         if self.cameraZOffset < 0:
             self.cameraZOffset = 0
         if self.__floorDetected == 0:

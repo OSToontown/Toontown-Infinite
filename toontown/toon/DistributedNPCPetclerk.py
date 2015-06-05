@@ -126,8 +126,8 @@ class DistributedNPCPetclerk(DistributedNPCToonBase):
             self.setupAvatars(self.av)
             if self.isLocalToon:
                 self.hideNametag2d()
-                camera.wrtReparentTo(render)
-                seq = Sequence((camera.posQuatInterval(1, Vec3(-5, 9, self.getHeight() - 0.5), Vec3(-150, -2, 0), other=self, blendType='easeOut', name=self.uniqueName('lerpCamera'))))
+                base.camera.wrtReparentTo(render)
+                seq = Sequence((base.camera.posQuatInterval(1, Vec3(-5, 9, self.getHeight() - 0.5), Vec3(-150, -2, 0), other=self, blendType='easeOut', name=self.uniqueName('lerpCamera'))))
                 seq.start()
                 taskMgr.doMethodLater(1.0, self.popupPetshopGUI, self.uniqueName('popupPetshopGUI'))
         elif mode == NPCToons.SELL_MOVIE_COMPLETE:

@@ -380,14 +380,14 @@ class DistributedTravelGame(DistributedMinigame):
         del self.music
 
     def moveCameraToTop(self):
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         p = self.cameraTopView
-        camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
+        base.camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
 
     def moveCameraToTrolley(self):
-        camera.reparentTo(self.trolleyCar)
-        camera.setPos(-25, 0, 7.5)
-        camera.setHpr(-90, 0, 0)
+        base.camera.reparentTo(self.trolleyCar)
+        base.camera.setPos(-25, 0, 7.5)
+        base.camera.setHpr(-90, 0, 0)
 
     def onstage(self):
         self.notify.debug('onstage')
@@ -575,7 +575,7 @@ class DistributedTravelGame(DistributedMinigame):
 
     def enterMoveTrolley(self):
         self.notify.debug('enterMoveTrolley')
-        camera.wrtReparentTo(render)
+        base.camera.wrtReparentTo(render)
         keyAngle = round(self.TrolleyMoveDuration) * 360
         dist = Vec3(self.trainSwitches[self.destSwitch].getPos() - self.trainSwitches[self.currentSwitch].getPos()).length()
         wheelAngle = dist / (2.0 * math.pi * 0.95) * 360
@@ -609,8 +609,8 @@ class DistributedTravelGame(DistributedMinigame):
         def focusOnTrolley(t, self = self):
             pos = self.trolleyCar.getPos()
             pos.setZ(pos.getZ() + 7.5)
-            camera.lookAt(pos)
-            self.lastFocusHpr = camera.getHpr()
+            base.camera.lookAt(pos)
+            self.lastFocusHpr = base.camera.getHpr()
 
         setRightHprTime = 0
         if self.FlyCameraUp:
@@ -622,9 +622,9 @@ class DistributedTravelGame(DistributedMinigame):
         if self.FlyCameraUp:
             if self.FocusOnTrolleyWhileMovingUp:
                 camIval1.append(LerpPosInterval(camera, duration - setRightHprTime, finalPos, name='cameraMove'))
-                camIval2 = Sequence(LerpHprInterval(camera, setRightHprTime, finalHpr, name='cameraHpr'))
+                camIval2 = Sequence(LerpHprInterval(base.camera, setRightHprTime, finalHpr, name='cameraHpr'))
             else:
-                camIval2 = Sequence(LerpPosHprInterval(camera, setRightHprTime, finalPos, finalHpr, blendType='easeIn', name='cameraHpr'))
+                camIval2 = Sequence(LerpPosHprInterval(base.camera, setRightHprTime, finalPos, finalHpr, blendType='easeIn', name='cameraHpr'))
             camIval = Sequence(camIval1, camIval2)
         else:
             camIval = Sequence(camIval1)

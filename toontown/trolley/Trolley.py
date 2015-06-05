@@ -145,8 +145,8 @@ class Trolley(StateData.StateData):
         return None
 
     def enterBoarding(self, nodePath):
-        camera.wrtReparentTo(nodePath)
-        self.cameraBoardTrack = LerpPosHprInterval(camera, 1.5, Point3(-35, 0, 8), Point3(-90, 0, 0))
+        base.camera.wrtReparentTo(nodePath)
+        self.cameraBoardTrack = LerpPosHprInterval(base.camera, 1.5, Point3(-35, 0, 8), Point3(-90, 0, 0))
         self.cameraBoardTrack.start()
         return None
 
@@ -180,7 +180,7 @@ class Trolley(StateData.StateData):
         return None
 
     def enterTrolleyLeaving(self):
-        camera.posHprInterval(3, (0, 18.55, 3.75), (-180, 0, 0), blendType='easeInOut').start()
+        base.camera.posHprInterval(3, (0, 18.55, 3.75), (-180, 0, 0), blendType='easeInOut').start()
         self.acceptOnce('playMinigame', self.handlePlayMinigame)
         return None
 

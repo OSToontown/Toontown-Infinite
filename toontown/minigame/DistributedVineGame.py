@@ -75,9 +75,9 @@ class DistributedVineGame(DistributedMinigame):
         return retval
 
     def moveCameraToSide(self):
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         p = self.cameraSideView
-        camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
+        base.camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
 
     def getTitle(self):
         return TTLocalizer.VineGameTitle
@@ -635,9 +635,9 @@ class DistributedVineGame(DistributedMinigame):
         self.attachLocalToonToVine(vineToAttach, VineGameGlobals.VineFellDownT)
 
     def makeCameraFollowJumpingToon(self):
-        camera.setHpr(0, 0, 0)
+        base.camera.setHpr(0, 0, 0)
         if self.TwoVineView:
-            camera.setPos(self.cameraTwoVineSidePos)
+            base.camera.setPos(self.cameraTwoVineSidePos)
             maxVine = self.lastJumpVine + 1
             if maxVine >= len(self.vines):
                 maxVine = len(self.vines) - 1
@@ -650,13 +650,13 @@ class DistributedVineGame(DistributedMinigame):
             minX = 0
             if self.vines:
                 minX = self.vines[minVine].getX()
-            camera.setX(base.localAvatar.getX(render))
-            if camera.getX() > maxX:
-                camera.setX(maxX)
-            if camera.getX() < minX:
-                camera.setX(minX)
+            base.camera.setX(base.localAvatar.getX(render))
+            if base.camera.getX() > maxX:
+                base.camera.setX(maxX)
+            if base.camera.getX() < minX:
+                base.camera.setX(minX)
         else:
-            camera.setPos(self.cameraSidePos)
+            base.camera.setPos(self.cameraSidePos)
             maxVine = self.lastJumpVine + 1
             if maxVine >= len(self.vines):
                 maxVine = len(self.vines) - 1
@@ -665,11 +665,11 @@ class DistributedVineGame(DistributedMinigame):
             if minVine < 0:
                 minVine = 0
             minX = self.vines[minVine].getX()
-            camera.setX(base.localAvatar.getX(render))
-            if camera.getX() > maxX:
-                camera.setX(maxX)
-            if camera.getX() < minX:
-                camera.setX(minX)
+            base.camera.setX(base.localAvatar.getX(render))
+            if base.camera.getX() > maxX:
+                base.camera.setX(maxX)
+            if base.camera.getX() < minX:
+                base.camera.setX(minX)
 
     def __updateOtherToonsClimbing(self):
         for avId in self.toonInfo.keys():
@@ -815,9 +815,9 @@ class DistributedVineGame(DistributedMinigame):
         return retPos
 
     def focusCameraOnVine(self, vineIndex):
-        camera.setHpr(0, 0, 0)
+        base.camera.setHpr(0, 0, 0)
         newCameraPos = self.getFocusCameraPos(vineIndex, self.lastJumpFacingRight)
-        camera.setPos(newCameraPos)
+        base.camera.setPos(newCameraPos)
 
     def attachLocalToonToVine(self, vineIndex, vineT, focusCameraImmediately = True, playSfx = False):
         self.notify.debug('focusCameraImmediately = %s' % focusCameraImmediately)

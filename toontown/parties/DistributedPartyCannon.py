@@ -176,9 +176,9 @@ class DistributedPartyCannon(DistributedObject, Cannon):
             base.localAvatar.pose('slip-forward', 25)
             base.cr.playGame.getPlace().setState('activity')
             base.localAvatar.collisionsOff()
-            camera.reparentTo(self.barrelNode)
-            camera.setPos(0, -2, 5)
-            camera.setP(-20)
+            base.camera.reparentTo(self.barrelNode)
+            base.camera.setPos(0, -2, 5)
+            base.camera.setP(-20)
             if not self.activity.hasPlayedBefore():
                 self.activity.displayRules()
                 self.acceptOnce(DistributedPartyCannonActivity.RULES_DONE_EVENT, self.__enableCannonControl)
@@ -224,7 +224,7 @@ class DistributedPartyCannon(DistributedObject, Cannon):
             if pos:
                 self.notify.debug('toon setting position to %s' % pos)
                 base.localAvatar.setPos(pos)
-            camera.reparentTo(base.localAvatar)
+            base.camera.reparentTo(base.localAvatar)
             base.localAvatar.collisionsOn()
             base.localAvatar.startPosHprBroadcast()
             base.localAvatar.enableAvatarControls()

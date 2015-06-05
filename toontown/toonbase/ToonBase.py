@@ -129,7 +129,7 @@ class ToonBase(OTPBase.OTPBase):
         self.endlessQuietZone = False
         self.wantDynamicShadows = 0
         self.exitErrorCode = 0
-        camera.setPosHpr(0, 0, 0, 0, 0, 0)
+        base.camera.setPosHpr(0, 0, 0, 0, 0, 0)
         self.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         self.camLens.setNearFar(ToontownGlobals.DefaultCameraNear, ToontownGlobals.DefaultCameraFar)
         self.musicManager.setVolume(0.65)

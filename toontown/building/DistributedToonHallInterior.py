@@ -176,9 +176,11 @@ class DistributedToonHallInterior(DistributedToonInterior):
     def calculateFrameRange(self, frameNo):
         pass
 
+    # Since the Silly Meter is currently non-existent in our story, we need to temporarily remove the models related to it until it's introduced.
+
     def enterSetup(self):
-        ropes = loader.loadModel('phase_4/models/modules/tt_m_ara_int_ropes')
-        ropes.reparentTo(self.interior)
+        # ropes = loader.loadModel('phase_4/models/modules/tt_m_ara_int_ropes')
+        # ropes.reparentTo(self.interior)
         self.sillyMeter = Actor.Actor('phase_4/models/props/tt_a_ara_ttc_sillyMeter_default', {'arrowTube': 'phase_4/models/props/tt_a_ara_ttc_sillyMeter_arrowFluid',
          'phaseOne': 'phase_4/models/props/tt_a_ara_ttc_sillyMeter_phaseOne',
          'phaseTwo': 'phase_4/models/props/tt_a_ara_ttc_sillyMeter_phaseTwo',
@@ -186,25 +188,27 @@ class DistributedToonHallInterior(DistributedToonInterior):
          'phaseFour': 'phase_4/models/props/tt_a_ara_ttc_sillyMeter_phaseFour',
          'phaseFourToFive': 'phase_4/models/props/tt_a_ara_ttc_sillyMeter_phaseFourToFive',
          'phaseFive': 'phase_4/models/props/tt_a_ara_ttc_sillyMeter_phaseFive'})
-        self.sillyMeter.reparentTo(self.interior)
-        self.flatSillyMeter = loader.loadModel('phase_3.5/models/modules/tt_m_ara_int_sillyMeterFlat')
-        self.flatSillyMeter.reparentTo(self.interior)
-        self.flatSillyMeter.hide()
-        self.flatDuck = loader.loadModel('phase_3.5/models/modules/tt_m_ara_int_scientistDuckFlat')
-        loc1 = self.interior.find('**/npc_origin_1')
-        if loc1:
-            self.flatDuck.reparentTo(loc1)
-        self.flatDuck.hide()
-        self.flatMonkey = loader.loadModel('phase_3.5/models/modules/tt_m_ara_int_scientistMonkeyFlat')
-        loc1 = self.interior.find('**/npc_origin_2')
-        if loc1:
-            self.flatMonkey.reparentTo(loc1)
-        self.flatMonkey.hide()
-        self.flatHorse = loader.loadModel('phase_3.5/models/modules/tt_m_ara_int_scientistHorseFlat')
-        loc1 = self.interior.find('**/npc_origin_3')
-        if loc1:
-            self.flatHorse.reparentTo(loc1)
-        self.flatHorse.hide()
+        # self.sillyMeter.reparentTo(self.interior)
+        self.interior.find('**/sillyOMeterSign').removeNode()
+
+        # self.flatSillyMeter = loader.loadModel('phase_3.5/models/modules/tt_m_ara_int_sillyMeterFlat')
+        # self.flatSillyMeter.reparentTo(self.interior)
+        # self.flatSillyMeter.hide()
+        # self.flatDuck = loader.loadModel('phase_3.5/models/modules/tt_m_ara_int_scientistDuckFlat')
+        # loc1 = self.interior.find('**/npc_origin_1')
+        # if loc1:
+            # self.flatDuck.reparentTo(loc1)
+        # self.flatDuck.hide()
+        # self.flatMonkey = loader.loadModel('phase_3.5/models/modules/tt_m_ara_int_scientistMonkeyFlat')
+        # loc1 = self.interior.find('**/npc_origin_2')
+        # if loc1:
+            # self.flatMonkey.reparentTo(loc1)
+        # self.flatMonkey.hide()
+        # self.flatHorse = loader.loadModel('phase_3.5/models/modules/tt_m_ara_int_scientistHorseFlat')
+        # loc1 = self.interior.find('**/npc_origin_3')
+        # if loc1:
+            # self.flatHorse.reparentTo(loc1)
+        # self.flatHorse.hide()
         self.smPhase1 = self.sillyMeter.find('**/stage1')
         self.smPhase2 = self.sillyMeter.find('**/stage2')
         self.smPhase3 = self.sillyMeter.find('**/stage3')
@@ -218,7 +222,7 @@ class DistributedToonHallInterior(DistributedToonInterior):
         self.sillyMeter.flattenMedium()
         self.sillyMeter.makeSubpart('arrow', ['uvj_progressBar*', 'def_springA'])
         self.sillyMeter.makeSubpart('meter', ['def_pivot'], ['uvj_progressBar*', 'def_springA'])
-        self.audio3d = Audio3DManager.Audio3DManager(base.sfxManagerList[0], camera)
+        self.audio3d = Audio3DManager.Audio3DManager(base.sfxManagerList[0], base.camera)
         self.phase1Sfx = self.audio3d.loadSfx('phase_4/audio/sfx/tt_s_prp_sillyMeterPhaseOne.ogg')
         self.phase1Sfx.setLoop(True)
         self.phase2Sfx = self.audio3d.loadSfx('phase_4/audio/sfx/tt_s_prp_sillyMeterPhaseTwo.ogg')
@@ -573,17 +577,17 @@ class DistributedToonHallInterior(DistributedToonInterior):
 
     def enterFlat(self):
         self.sillyMeter.hide()
-        self.flatSillyMeter.show()
-        self.flatDuck.show()
-        self.flatMonkey.show()
-        self.flatHorse.show()
+        # self.flatSillyMeter.show()
+        # self.flatDuck.show()
+        # self.flatMonkey.show()
+        # self.flatHorse.show()
 
     def exitFlat(self):
         self.sillyMeter.show()
-        self.flatSillyMeter.hide()
-        self.flatDuck.hide()
-        self.flatMonkey.hide()
-        self.flatHorse.hide()
+        # self.flatSillyMeter.hide()
+        # self.flatDuck.hide()
+        # self.flatMonkey.hide()
+        # self.flatHorse.hide()
 
     def enterOff(self):
         if hasattr(self, 'animSeq') and self.animSeq:
@@ -610,7 +614,7 @@ class DistributedToonHallInterior(DistributedToonInterior):
          Point3(0.0, 10.0, 5.0),
          Point3(0.0, 10.0, 5.0),
          1)
-        self.setupCollisions(2.5)
+        # self.setupCollisions(2.5)
         self.firstEnter = 1
         self.accept('CamChangeColl' + '-into', self.handleCloseToWall)
 
@@ -620,45 +624,46 @@ class DistributedToonHallInterior(DistributedToonInterior):
     def handleCloseToWall(self, collEntry):
         if self.firstEnter == 0:
             return
-        interiorRopes = self.interior.find('**/*interior_ropes')
-        if interiorRopes == collEntry.getIntoNodePath().getParent():
-            return
-        self.restoreCam()
-        self.accept('CamChangeColl' + '-exit', self.handleAwayFromWall)
+        # interiorRopes = self.interior.find('**/*interior_ropes')
+        # if interiorRopes == collEntry.getIntoNodePath().getParent():
+            # return
+        # self.restoreCam()
+        # self.accept('CamChangeColl' + '-exit', self.handleAwayFromWall)
 
-    def handleAwayFromWall(self, collEntry):
-        if self.firstEnter == 1:
-            self.cleanUpCollisions()
-            self.setupCollisions(0.75)
-            self.oldView = base.localAvatar.cameraIndex
-            base.localAvatar.addCameraPosition(self.toonhallView)
-            self.firstEnter = 0
-            self.setUpToonHallCam()
-            return
-        flippy = self.interior.find('**/*Flippy*/*NPCToon*')
-        if flippy == collEntry.getIntoNodePath():
-            self.setUpToonHallCam()
+    # def handleAwayFromWall(self, collEntry):
+        # if self.firstEnter == 1:
+            # self.cleanUpCollisions()
+            # self.setupCollisions(0.75)
+            # self.oldView = base.localAvatar.cameraIndex
+            # base.localAvatar.addCameraPosition(self.toonhallView)
+            # self.firstEnter = 0
+            # self.setUpToonHallCam()
+            # return
+        # flippy = self.interior.find('**/*Flippy*/*NPCToon*')
+        # if flippy == collEntry.getIntoNodePath():
+            # self.setUpToonHallCam()
 
-    def setupCollisions(self, radius):
-        r = base.localAvatar.getClampedAvatarHeight() * radius
-        cs = CollisionSphere(0, 0, 0, r)
-        cn = CollisionNode('CamChangeColl')
-        cn.addSolid(cs)
-        cn.setFromCollideMask(ToontownGlobals.WallBitmask)
-        cn.setIntoCollideMask(BitMask32.allOff())
-        self.camChangeNP = base.localAvatar.getPart('torso', '1000').attachNewNode(cn)
-        self.cHandlerEvent = CollisionHandlerEvent()
-        self.cHandlerEvent.addInPattern('%fn-into')
-        self.cHandlerEvent.addOutPattern('%fn-exit')
-        base.cTrav.addCollider(self.camChangeNP, self.cHandlerEvent)
 
-    def cleanUpCollisions(self):
-        base.cTrav.removeCollider(self.camChangeNP)
-        self.camChangeNP.detachNode()
-        if hasattr(self, 'camChangeNP'):
-            del self.camChangeNP
-        if hasattr(self, 'cHandlerEvent'):
-            del self.cHandlerEvent
+    # def setupCollisions(self, radius):
+        # r = base.localAvatar.getClampedAvatarHeight() * radius
+        # cs = CollisionSphere(0, 0, 0, r)
+        # cn = CollisionNode('CamChangeColl')
+        # cn.addSolid(cs)
+        # cn.setFromCollideMask(ToontownGlobals.WallBitmask)
+        # cn.setIntoCollideMask(BitMask32.allOff())
+        # self.camChangeNP = base.localAvatar.getPart('torso', '1000').attachNewNode(cn)
+        # self.cHandlerEvent = CollisionHandlerEvent()
+        # self.cHandlerEvent.addInPattern('%fn-into')
+        # self.cHandlerEvent.addOutPattern('%fn-exit')
+        # base.cTrav.addCollider(self.camChangeNP, self.cHandlerEvent)
+
+    # def cleanUpCollisions(self):
+        # base.cTrav.removeCollider(self.camChangeNP)
+        # self.camChangeNP.detachNode()
+        # if hasattr(self, 'camChangeNP'):
+            # del self.camChangeNP
+        # if hasattr(self, 'cHandlerEvent'):
+            # del self.cHandlerEvent
 
     def cleanUpSounds(self):
 
@@ -707,7 +712,7 @@ class DistributedToonHallInterior(DistributedToonInterior):
         base.localAvatar.resetCameraPosition()
         self.restoreCam()
         self.ignoreAll()
-        self.cleanUpCollisions()
+        # self.cleanUpCollisions()
         if hasattr(self, 'sillyFSM'):
             self.sillyFSM.requestFinalState()
             del self.sillyFSM

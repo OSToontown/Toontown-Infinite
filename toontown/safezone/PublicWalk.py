@@ -36,6 +36,8 @@ class PublicWalk(Walk.Walk):
         base.localAvatar.endAllowPies()
 
     def __handleStickerBookEntry(self):
+        if base.aspect2d.isHidden():
+            return
         currentState = base.localAvatar.animFSM.getCurrentState().getName()
         if currentState == 'jumpAirborne':
             return
@@ -48,6 +50,8 @@ class PublicWalk(Walk.Walk):
             return
 
     def __handleOptionsEntry(self):
+        if base.aspect2d.isHidden():
+            return
         currentState = base.localAvatar.animFSM.getCurrentState().getName()
         if currentState == 'jumpAirborne':
             return

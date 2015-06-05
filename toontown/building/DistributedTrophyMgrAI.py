@@ -1,6 +1,6 @@
 from direct.directnotify.DirectNotifyGlobal import *
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
-
+from toontown.toonbase.TTLocalizer import RemoveTrophy
 
 MAX_LISTING = 10
 
@@ -35,6 +35,10 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
         if avId in self.trophyScores:
             trophyScore = self.trophyScores[avId] - numFloors
             self.updateTrophyScore(avId, trophyScore)
+            av = self.air.doId2do.get(avId)
+            if av is not None:
+                # Let the avatar know the building was taken over.
+                av.d_setSystemMessage(0, RemoveTrophy)
 
     def updateTrophyScore(self, avId, trophyScore):
         av = self.air.doId2do.get(avId)

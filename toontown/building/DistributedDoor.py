@@ -274,7 +274,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         if hasattr(avatar, 'stopSmooth'):
             avatar.stopSmooth()
         if avatar.doId == base.localAvatar.doId:
-            track.append(LerpPosHprInterval(nodePath = camera, other = avatar, duration = duration, pos = Point3(0, -8, avatar.getHeight()), hpr = VBase3(0, 0, 0), blendType = 'easeInOut'))
+            track.append(LerpPosHprInterval(nodePath = base.camera, other = avatar, duration = duration, pos = Point3(0, -8, avatar.getHeight()), hpr = VBase3(0, 0, 0), blendType = 'easeInOut'))
         finalPos = avatar.getParent().getRelativePoint(otherNP, Point3(self.doorX, 2, ToontownGlobals.FloorOffset))
         moveHere = Sequence(self.getAnimStateInterval(avatar, 'walk'), LerpPosInterval(nodePath = avatar, duration = duration, pos = finalPos, blendType = 'easeIn'))
         track.append(moveHere)
@@ -454,7 +454,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         if avatar.doId == base.localAvatar.doId:
             track.append(
                 PosHprInterval(
-                    camera, VBase3(-self.doorX, 5, avatar.getHeight()),
+                    base.camera, VBase3(-self.doorX, 5, avatar.getHeight()),
                     VBase3(180, 0, 0), other=otherNP
                 )
             )

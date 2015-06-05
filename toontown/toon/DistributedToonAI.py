@@ -3144,7 +3144,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         type = SuitDNA.getSuitType(suitName)
         level, type, track = sp.pickLevelTypeAndTrack(None, type, track)
         building.suitTakeOver(track, level, None)
-        self.notify.warning('cogTakeOver %s %s %d %d' % (track,
+        self.notify.debug('cogTakeOver %s %s %d %d' % (track,
          level,
          building.block,
          self.zoneId))
@@ -4343,7 +4343,7 @@ def maxHp(maxHp):
     """
     if not 15 <= maxHp <= ToontownGlobals.MaxHpLimit:
         return 'HP must be in range (15-%d).' % ToontownGlobals.MaxHpLimit
-    invoker = spellbook.getTarget()
+    invoker = spellbook.getInvoker()
     invoker.b_setHp(maxHp)
     invoker.b_setMaxHp(maxHp)
     invoker.toonUp(maxHp - invoker.getHp())
@@ -5172,3 +5172,9 @@ def immortal():
     invoker = spellbook.getInvoker()
     invoker.setImmortalMode(not invoker.immortalMode)
     return 'Immortal Mode: %s' % ('ON' if invoker.immortalMode else 'OFF')
+    
+@magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
+def gagPouch(value):
+    invoker = spellbook.getInvoker()
+    invoker.b_setMaxCarry(value)
+    return 'Gag pouch set.'

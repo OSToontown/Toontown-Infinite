@@ -577,9 +577,9 @@ class DistributedTargetGame(DistributedMinigame):
         self.rubberBands.append(localBand)
         toon.dropShadow.hide()
         toonPos = base.localAvatar.getPos()
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         toonPos = self.getAvatar(self.localAvId).getPos()
-        camera.setPosHpr(toonPos[0], toonPos[1] - 18, toonPos[2] + 10, 0, -15, 0)
+        base.camera.setPosHpr(toonPos[0], toonPos[1] - 18, toonPos[2] + 10, 0, -15, 0)
         base.camLens.setMinFov(80/(4./3.))
         base.camLens.setFar(self.FOGDISTGROUND)
         base.setBackgroundColor(self.AMB_COLOR)
@@ -679,7 +679,7 @@ class DistributedTargetGame(DistributedMinigame):
         toon.dropShadow.hide()
         self.__spawnUpdateLocalToonTask()
         toonPos = base.localAvatar.getPos()
-        camera.setPosHpr(toonPos[0], toonPos[1] - 26, toonPos[2] + 10, 0, -15, 0)
+        base.camera.setPosHpr(toonPos[0], toonPos[1] - 26, toonPos[2] + 10, 0, -15, 0)
         base.camLens.setMinFov(80/(4./3.))
         self.resetNums()
 
@@ -709,7 +709,7 @@ class DistributedTargetGame(DistributedMinigame):
         render.clearFog()
         base.camLens.setFar(ToontownGlobals.DefaultCameraFar)
         base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
-        camera.setHpr(0, 90, 0)
+        base.camera.setHpr(0, 90, 0)
         base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         self.arrowKeys.destroy()
         del self.arrowKeys
@@ -862,12 +862,12 @@ class DistributedTargetGame(DistributedMinigame):
         self.gameFSM.request('launch')
         self.powerBar.show()
         self.powerBar['value'] = self.startPower
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         self.__placeToon(self.localAvId)
         toonPos = self.getAvatar(self.localAvId).getPos()
         newPos = Point3(toonPos[0], toonPos[1] - 25, toonPos[2] + 7)
         newHpr = Point3(0, -15, 0)
-        self.cameraWork = camera.posHprInterval(2.5, newPos, newHpr, blendType='easeInOut')
+        self.cameraWork = base.camera.posHprInterval(2.5, newPos, newHpr, blendType='easeInOut')
         self.cameraWork.start()
         base.camLens.setMinFov(80/(4./3.))
         self.stretchY = self.startPower
@@ -908,8 +908,8 @@ class DistributedTargetGame(DistributedMinigame):
         toon.b_setAnimState('swim', 1.0)
         toon.stopBobSwimTask()
         toon.dropShadow.hide()
-        camera.reparentTo(base.localAvatar)
-        camera.setPosHpr(0, self.CAMERA_Y + self.TOON_Y + 12, 5, 0, -15, 0)
+        base.camera.reparentTo(base.localAvatar)
+        base.camera.setPosHpr(0, self.CAMERA_Y + self.TOON_Y + 12, 5, 0, -15, 0)
         base.camLens.setMinFov(80/(4./3.))
         self.help.show()
         self.help['text'] = TTLocalizer.TargetGameFlyHelp
@@ -931,7 +931,7 @@ class DistributedTargetGame(DistributedMinigame):
         self.gravity = 4
         newHpr = Point3(0, -68, 0)
         newPos = Point3(0, self.CAMERA_Y + self.TOON_Y + 15, 15)
-        camera.posHprInterval(2.5, newPos, newHpr, blendType='easeInOut').start()
+        base.camera.posHprInterval(2.5, newPos, newHpr, blendType='easeInOut').start()
         open = self.umbrella.find('**/open_umbrella')
         open.show()
         closed = self.umbrella.find('**/closed_umbrella')
@@ -1021,7 +1021,7 @@ class DistributedTargetGame(DistributedMinigame):
             self.localTrack.append(Parallel(Func(base.localAvatar.b_setAnimState, 'victory', 1.0), Func(self.playSound, 'score')))
         newHpr = Point3(180, 10, 0)
         newPos = Point3(0, -(self.CAMERA_Y + self.TOON_Y + 12), 1)
-        camera.posHprInterval(5.0, newPos, newHpr, blendType='easeInOut').start()
+        base.camera.posHprInterval(5.0, newPos, newHpr, blendType='easeInOut').start()
         self.help.hide()
         self.localTrack.start()
         return
@@ -1327,7 +1327,7 @@ class DistributedTargetGame(DistributedMinigame):
             self.cTrav.traverse(render)
         if stateName in ['fly', 'fall', 'bouncing']:
             self.__posBroadcast(dt)
-        visZ = camera.getZ(render)
+        visZ = base.camera.getZ(render)
         lowHeight = 100
         lowRange = 20
         opacityLow = 1

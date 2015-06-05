@@ -318,11 +318,11 @@ class DistributedCogThiefGame(DistributedMinigame):
             toon.setHpr(0, 0, 0)
 
     def moveCameraToTop(self):
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         p = self.cameraTopView
-        camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
+        base.camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
         base.camLens.setMinFov(46/(4./3.))
-        camera.setZ(camera.getZ() + base.config.GetFloat('cog-thief-z-camera-adjust', 0.0))
+        base.camera.setZ(base.camera.getZ() + base.config.GetFloat('cog-thief-z-camera-adjust', 0.0))
 
     def destroyGameWalk(self):
         self.notify.debug('destroyOrthoWalk')

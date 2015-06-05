@@ -522,9 +522,9 @@ class DistributedIceGame(DistributedMinigame.DistributedMinigame, DistributedIce
             toon.setHpr(0, 0, 0)
 
     def moveCameraToTop(self):
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         p = self.cameraThreeQuarterView
-        camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
+        base.camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
 
     def setupTire(self, avId, index):
         tireNp, tireBody, tireOdeGeom = self.createTire(index)

@@ -1,11 +1,12 @@
 from pandac.PandaModules import *
-from direct.showbase.PythonUtil import Functor, PriorityCallbacks
+from direct.showbase.PythonUtil import Functor
+from toontown.util.PriorityCallbacks import PriorityCallbacks
 from direct.task import Task
 from toontown.distributed.ToontownMsgTypes import *
 from otp.otpbase import OTPGlobals
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import StateData
-from direct.fsm import ClassicFSM, State
+from direct.fsm import ClassicFSM
 from direct.fsm import State
 import ZoneUtil
 
