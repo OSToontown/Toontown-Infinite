@@ -22,7 +22,7 @@ except ValueError:
     print "Couldn't verify account credentials."
 else:
     if not response['success']:
-        print response['reason']
+        print response['result']
     else:
         os.environ['TTI_PLAYCOOKIE'] = response['cookie']
 
