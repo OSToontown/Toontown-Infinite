@@ -5188,7 +5188,7 @@ def shovelSkill(value):
 @magicWord(category=CATEGORY_PROGRAMMER, types=[])
 def maxTrees():
     invoker = spellbook.getInvoker()
-    estate = simbase.air.estateManager.toon2estate.get(invoker.doId)
+    estate = simbase.air.estateManager.toon2estate.get(invoker)
     if not estate:
         return 'Unable to locate estate.'
     for house in estate.houses:
