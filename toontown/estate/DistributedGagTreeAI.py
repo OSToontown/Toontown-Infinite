@@ -64,11 +64,9 @@ class DistributedGagTreeAI(DistributedPlantBaseAI):
 
         gardenData.addUint8(self.wilted)
 
-    def removeItem(self):
-        self.setMovie(GardenGlobals.MOVIE_REMOVE, self.air.getAvatarIdFromSender())
-        self.gardenManager.revertToPlot(self.plotIndex)
-
     def movieDone(self):
         if self.movie == GardenGlobals.MOVIE_REMOVE:
             self.gardenManager.removeFinished(self.plotIndex)
             self.requestDelete()
+
+        DistributedPlantBaseAI.movieDone(self)

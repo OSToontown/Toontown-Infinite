@@ -65,6 +65,8 @@ class DistributedPlantBaseAI(DistributedLawnDecorAI):
         if self.waterLevel < GardenGlobals.getMaxWateringCanPower():
             av.b_setWateringCanSkill(currSkill + 1 + self.getGrowthState())
 
+        self.setMovie(GardenGlobals.MOVIE_CLEAR, self.air.getAvatarIdFromSender())
+
     def construct(self, gardenData):
         DistributedLawnDecorAI.construct(self, gardenData)
 

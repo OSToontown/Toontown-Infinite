@@ -15,10 +15,12 @@ class DistributedGardenPlotAI(DistributedLawnDecorAI):
         self.gardenManager.constructTree(self.plotIndex, gagTrack, gagLevel)
 
     def plantStatuary(self, species):
-        pass
+        self.setMovie(GardenGlobals.MOVIE_PLANT, self.air.getAvatarIdFromSender())
+        self.gardenManager.constructStatuary(self.plotIndex, species)
 
     def plantToonStatuary(self, species, dnaCode):
-        pass
+        self.setMovie(GardenGlobals.MOVIE_PLANT, self.air.getAvatarIdFromSender())
+        self.gardenManager.constructToonStatuary(self.plotIndex, species, dnaCode)
 
     def plantNothing(self, burntBeans):
         pass
@@ -28,6 +30,7 @@ class DistributedGardenPlotAI(DistributedLawnDecorAI):
             self.setMovie(GardenGlobals.MOVIE_FINISHREMOVING, self.air.getAvatarIdFromSender())
             self.gardenManager.treeFinished(self.plotIndex)
             self.requestDelete()
+        DistributedLawnDecorAI.movieDone(self)
 
     def construct(self, gardenData):
         DistributedLawnDecorAI.construct(self, gardenData)

@@ -2726,8 +2726,6 @@ dclass DistributedGardenPlot : DistributedLawnDecor {
 
 dclass DistributedStatuary : DistributedLawnDecor {
   setTypeIndex(uint8) required broadcast ram;
-  setWaterLevel(int8) required broadcast ram;
-  setGrowthLevel(int8) required broadcast ram;
 };
 
 dclass DistributedToonStatuary : DistributedStatuary {

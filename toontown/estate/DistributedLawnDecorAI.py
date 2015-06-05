@@ -36,7 +36,8 @@ class DistributedLawnDecorAI(DistributedNodeAI):
         pass
 
     def removeItem(self):
-        pass
+        self.setMovie(GardenGlobals.MOVIE_REMOVE, self.air.getAvatarIdFromSender())
+        self.gardenManager.revertToPlot(self.plotIndex)
 
     def setMovie(self, movie, avId):
         if not self.gardenManager.house.avatarId == avId:
@@ -47,10 +48,10 @@ class DistributedLawnDecorAI(DistributedNodeAI):
         self.sendUpdate('setMovie', [movie, avId])
 
     def movieDone(self):
-        pass
+        self.setMovie(GardenGlobals.MOVIE_CLEAR, self.air.getAvatarIdFromSender())
 
     def interactionDenied(self, avId):
-        pass
+        self.sendUpdate('interactionDenied', [avId])
 
     def construct(self, gardenData):
         self.plotIndex = gardenData.getUint8()

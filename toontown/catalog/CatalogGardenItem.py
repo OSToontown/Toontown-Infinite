@@ -78,8 +78,9 @@ class CatalogGardenItem(CatalogItem.CatalogItem):
 
     def cleanupPicture(self):
         CatalogItem.CatalogItem.cleanupPicture(self)
-        self.model.detachNode()
-        self.model = None
+        if hasattr(self, 'model'):
+            self.model.detachNode()
+            self.model = None
         return
 
     def output(self, store = -1):

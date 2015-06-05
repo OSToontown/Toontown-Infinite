@@ -36,7 +36,6 @@ class DistributedEstateAI(DistributedObjectAI):
         
     def generate(self):
         DistributedObjectAI.generate(self)
-        print 'Estate generate'
         self.pond = DistributedFishingPondAI(self.air)
         self.pond.setArea(ToontownGlobals.MyEstate)
         self.pond.generateWithRequired(self.zoneId)
