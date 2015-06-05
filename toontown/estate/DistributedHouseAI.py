@@ -59,7 +59,8 @@ class DistributedHouseAI(DistributedObjectAI):
             self.mailbox = DistributedMailboxAI(self.air, self)
             self.mailbox.generateWithRequired(self.zoneId)
 
-        self.createGardenManager()
+        if config.GetBool('want-gardening', False):
+            self.createGardenManager()
 
         if not self.isInteriorInitialized:
             self.notify.info('Initializing interior...')
