@@ -168,7 +168,7 @@ class DistributedCogThiefGame(DistributedMinigame):
         lt.reparentTo(render)
         self.__placeToon(self.localAvId)
         lt.setSpeed(0, 0)
-        # self.moveCameraToTop()
+        self.moveCameraToTop()
         toonSD = self.toonSDs[self.localAvId]
         toonSD.enter()
         toonSD.fsm.request('normal')
