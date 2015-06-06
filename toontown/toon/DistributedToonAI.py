@@ -5070,11 +5070,11 @@ def track(command, track, value=None):
     if command.lower() == 'bonus':
         if value is None:
             return 'You must provide a bonus value.'
-        if not 0 <= value <= 6:
-            return 'Bonus value not in range (0-6).'
-        trackBonusLevel = [0] * 7
-        trackBonusLevel[index] = value
-        invoker.b_setTrackBonusLevel(trackBonusLevel)
+        if not 0 <= value <= 7:
+            return 'Bonus value not in range (0-7).'
+        trackBonusLevelArray = invoker.getTrackBonusLevel()
+        trackBonusLevelArray[index] = value - 1
+        invoker.b_setTrackBonusLevel(trackBonusLevelArray)
         return 'Set the bonus level of the %s track to: %d!' % (track, value)
     return 'Invalid command.'
 
