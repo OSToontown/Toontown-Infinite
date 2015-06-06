@@ -1,4 +1,6 @@
 from pandac.PandaModules import VBase3, BitMask32
+from itertools import izip
+
 GameTime = 60
 NumBarrels = 4
 BarrelStartingPositions = (VBase3(4.3, 4, 0),
@@ -50,6 +52,7 @@ LyingDownDuration = 2.0
 MAX_SCORE = 20
 MIN_SCORE = 3
 
+
 def calcScore(t):
     range = MAX_SCORE - MIN_SCORE
     score = range * (float(t) / GameTime) + MIN_SCORE
@@ -60,60 +63,21 @@ def getMaxScore():
     result = calcScore(GameTime)
     return result
 
+Zones = (1000, 2000, 3000, 4000, 5000, 9000)
 
-NumCogsTable = [{2000: 5,
-  1000: 5,
-  5000: 5,
-  4000: 5,
-  3000: 5,
-  9000: 5},
- {2000: 7,
-  1000: 7,
-  5000: 7,
-  4000: 7,
-  3000: 7,
-  9000: 7},
- {2000: 9,
-  1000: 9,
-  5000: 9,
-  4000: 9,
-  3000: 9,
-  9000: 9},
- {2000: 11,
-  1000: 11,
-  5000: 11,
-  4000: 11,
-  3000: 11,
-  9000: 11}]
-CogSpeedTable = [{2000: 6.0,
-  1000: 6.4,
-  5000: 6.8,
-  4000: 7.2,
-  3000: 7.6,
-  9000: 8.0},
- {2000: 6.0,
-  1000: 6.4,
-  5000: 6.8,
-  4000: 7.2,
-  3000: 7.6,
-  9000: 8.0},
- {2000: 6.0,
-  1000: 6.4,
-  5000: 6.8,
-  4000: 7.2,
-  3000: 7.6,
-  9000: 8.0},
- {2000: 6.0,
-  1000: 6.4,
-  5000: 6.8,
-  4000: 7.2,
-  3000: 7.6,
-  9000: 8.0}]
+NumCogsTable = [
+    {zoneId: i + zoneId / 1500 for zoneId in Zones} for i in xrange(5, 13, 2)
+]
+
+CogSpeedTable = [
+    {zoneId: speed / 10.0 + zoneId / 20000.0 for zoneId, speed in izip(Zones, xrange(60, 84, 4))} for i in xrange(4)
+]
+
+ZoneSuitLevels = {zoneId: level for zoneId, level in izip(Zones, xrange(6))}
+
 ToonSpeed = 9.0
-PerfectBonus = [8,
- 6,
- 4,
- 2]
+PerfectBonus = [i for i in xrange(8, 0, -2)]
+
 
 def calculateCogs(numPlayers, safezone):
     result = 5

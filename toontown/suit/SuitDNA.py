@@ -155,10 +155,17 @@ def getRandomSuitByDept(dept):
     deptNumber = suitDepts.index(dept)
     return suitHeadTypes[suitsPerDept * deptNumber + random.randint(0, 7)]
 
+
+def getRandomSuitByLevel(level):
+    deptNumber = random.randint(0, 3)
+    return suitHeadTypes[suitsPerDept * deptNumber + level]
+
+
 def getSuitsInDept(dept):
     start = dept * suitsPerDept
     end = start + suitsPerDept
     return suitHeadTypes[start:end]
+
 
 class SuitDNA(AvatarDNA.AvatarDNA):
 
