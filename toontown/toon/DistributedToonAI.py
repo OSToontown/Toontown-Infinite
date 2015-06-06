@@ -5037,19 +5037,6 @@ def givePies(pieType, numPies=0):
     else:
         target.b_setNumPies(ToontownGlobals.FullPies)
 
-@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
-def trackBonus(trackIndex):
-    """
-    Modify the invoker's track bonus level.
-    """
-    invoker = spellbook.getInvoker()
-    if not 0 <= trackIndex < 7:
-        return 'Invalid track index!'
-    trackBonusLevel = [0] * 7
-    trackBonusLevel[trackIndex] = 1
-    invoker.b_setTrackBonusLevel(trackBonusLevel)
-    return 'Your track bonus level has been set!'
-
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, str, int])
 def track(command, track, value=None):
     try:
@@ -5075,11 +5062,20 @@ def track(command, track, value=None):
         if value is None:
             return 'You must provide an experience value.'
         if not 0 <= value <= Experience.MaxSkill:
-            return 'Experience value not in xrange (0-%d).' % Experience.MaxSkill
+            return 'Experience value not in range (0-%d).' % Experience.MaxSkill
         experience = Experience.Experience(invoker.getExperience(), invoker)
         experience.experience[index] = value
         invoker.b_setExperience(experience.makeNetString())
         return 'Set the experience of the %s track to: %d!' % (track, value)
+    if command.lower() == 'bonus':
+        if value is None:
+            return 'You must provide a bonus value.'
+        if not 0 <= value <= 7:
+            return 'Bonus value not in range (0-7).'
+        trackBonusLevelArray = invoker.getTrackBonusLevel()
+        trackBonusLevelArray[index] = value - 1
+        invoker.b_setTrackBonusLevel(trackBonusLevelArray)
+        return 'Set the bonus level of the %s track to: %d!' % (track, value)
     return 'Invalid command.'
 
 @magicWord(category=CATEGORY_ADMINISTRATOR, types=[str, str])
