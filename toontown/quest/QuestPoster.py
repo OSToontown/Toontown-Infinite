@@ -9,18 +9,22 @@ from toontown.suit import Suit
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
-import string, types
 from toontown.toon import LaffMeter
 from toontown.toonbase.ToontownBattleGlobals import AvPropsNew
 from toontown.toontowngui.TeaserPanel import TeaserPanel
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toontowngui import TTDialog
 from otp.otpbase import OTPLocalizer
+
+import string, types
+from random import choice
+
 IMAGE_SCALE_LARGE = 0.2
 IMAGE_SCALE_SMALL = 0.15
 POSTER_WIDTH = 0.7
 TEXT_SCALE = TTLocalizer.QPtextScale
 TEXT_WORDWRAP = TTLocalizer.QPtextWordwrap
+
 
 class QuestPoster(DirectFrame):
     notify = DirectNotifyGlobal.directNotify.newCategory('QuestPoster')
@@ -128,12 +132,13 @@ class QuestPoster(DirectFrame):
         self.questFrame.setZ(0)
         self.rewardText.hide()
 
-    def createNpcToonHead(self, toNpcId):
+    def createNpcToonHead(self, toNpcId, questId=0):
         npcInfo = NPCToons.NPCToonDict[toNpcId]
         dnaList = npcInfo[2]
-        gender = npcInfo[3]
         if dnaList == 'r':
-            dnaList = NPCToons.getRandomDNA(toNpcId, gender)
+            seed = base.localAvatar.doId + questId
+            gender = 'm' if seed % 2 == 0 else 'f'
+            dnaList = NPCToons.getRandomDNA(seed, gender)
         dna = ToonDNA.ToonDNA()
         dna.newToonFromProperties(*dnaList)
         head = ToonHead.ToonHead()
@@ -342,7 +347,7 @@ class QuestPoster(DirectFrame):
                 auxTextPos.setZ(0.12)
                 lPos.setX(-0.18)
                 infoText = TTLocalizer.QuestPageDestination % (toNpcBuildingName, toNpcStreetName, toNpcLocationName)
-                rIconGeom = self.createNpcToonHead(toNpcId)
+                rIconGeom = self.createNpcToonHead(toNpcId, questId)
                 rIconGeomScale = IMAGE_SCALE_SMALL
         elif quest.getType() == Quests.RecoverItemQuest:
             frameBgColor = 'green'
@@ -395,7 +400,7 @@ class QuestPoster(DirectFrame):
         elif quest.getType() == Quests.VisitQuest:
             frameBgColor = 'brown'
             captions[0] = '%s' % toNpcName
-            lIconGeom = self.createNpcToonHead(toNpcId)
+            lIconGeom = self.createNpcToonHead(toNpcId, questId)
             lIconGeomScale = IMAGE_SCALE_SMALL
             if not fComplete:
                 infoText = TTLocalizer.QuestPageDestination % (toNpcBuildingName, toNpcStreetName, toNpcLocationName)
@@ -681,7 +686,7 @@ class QuestPoster(DirectFrame):
                 rIconGeomScale = 1
         elif quest.getType() == Quests.RescueQuest:
             frameBgColor = 'blue'
-            lIconGeom = self.createNpcToonHead(2001)
+            lIconGeom = self.createNpcToonHead(2001, questId)
             lIconGeomScale = 0.13
             if not fComplete:
                 infoText = quest.getLocationName()
@@ -689,7 +694,7 @@ class QuestPoster(DirectFrame):
                     infoText = TTLocalizer.QuestPosterAnywhere
         elif quest.getType() == Quests.RescueNewbieQuest:
             frameBgColor = 'blue'
-            rIconGeom = self.createNpcToonHead(2001)
+            rIconGeom = self.createNpcToonHead(2001, questId)
             rIconGeomScale = 0.13
             if not fComplete:
                 headlineString = TTLocalizer.QuestsNewbieQuestHeadline
@@ -874,7 +879,7 @@ class QuestPoster(DirectFrame):
             textColor = (0, 0.3, 0, 1)
             imageColor = Vec4(*self.colors['lightGreen'])
             lPos.setX(-0.18)
-            rIconGeom = self.createNpcToonHead(toNpcId)
+            rIconGeom = self.createNpcToonHead(toNpcId, questId)
             rIconGeomScale = IMAGE_SCALE_SMALL
             captions = captions[:1]
             captions.append(toNpcName)
