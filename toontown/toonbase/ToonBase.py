@@ -288,9 +288,11 @@ class ToonBase(OTPBase.OTPBase):
 
     def toggleGui(self):
         if aspect2d.isHidden():
+            base.transitions.noFade()
             aspect2d.show()
         else:
             aspect2d.hide()
+            base.transitions.fadeScreen(alpha=0.01)
 
     def takeScreenShot(self):
         if not os.path.exists(TTLocalizer.ScreenshotPath):
