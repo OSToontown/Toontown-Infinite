@@ -1,5 +1,4 @@
 from pandac.PandaModules import *
-from direct.showbase.PythonUtil import clampScalar
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
@@ -322,7 +321,7 @@ class RaceGUI:
     def update(self, time):
         placeSorter = []
         placeCount = 0
-        for key in self.racerDict:
+        for key in self.racerDict.keys():
             racer = self.racerDict[key]
             curvetime = racer.curvetime
             face = racer.face
@@ -336,7 +335,7 @@ class RaceGUI:
             mapT = (curvetime % 1 + self.race.startT / self.race.curve.getMaxT()) % 1 * self.race.curve.getMaxT()
             self.race.curve.getPoint(mapT, pt)
             self.race.curve.getPoint(mapT % self.race.curve.getMaxT(), pt)
-            lapT = clampScalar(curvetime / self.race.lapCount, 0.0, 1.0)
+            lapT = min(max(curvetime / self.race.lapCount, 0.0), 1.0)
             faceX = self.faceStartPos[0] * (1 - lapT) + self.faceEndPos[0] * lapT
             racer.update(faceX=faceX, mapspotPt=pt)
             t = time - self.race.baseTime - self.raceTimeDelta
@@ -362,7 +361,7 @@ class RaceGUI:
                         else:
                             lapNotice['text'] = TTLocalizer.KartRace_LapText % str(self.maxLapHit + 1)
                         taskMgr.doMethodLater(2, lapNotice.remove, 'removeIt', extraArgs=[])
-                self.lapLabel['text'] = str(clampScalar(self.maxLapHit + 1, 1, self.race.lapCount)) + '/' + str(self.race.lapCount)
+                self.lapLabel['text'] = str(min(max(self.maxLapHit + 1, 1), self.race.lapCount)) + '/' + str(self.race.lapCount)
 
         suffix = {1: TTLocalizer.KartRace_FirstSuffix,
          2: TTLocalizer.KartRace_SecondSuffix,
@@ -375,7 +374,7 @@ class RaceGUI:
         localRacer = self.racerDict[localAvatar.doId]
         nearDiff, farDiff = RaceGlobals.TrackDict[self.race.trackId][8]
         if not localRacer.finished and self.faceEndPos[0] - localRacer.face.getX() < nearDiff:
-            for racerId in self.racerDict:
+            for racerId in self.racerDict.keys():
                 racer = self.racerDict[racerId]
                 if not racer.enabled or racerId == localAvatar.doId or racer.face.getX() >= self.faceEndPos[0]:
                     continue
@@ -407,7 +406,7 @@ class RaceGUI:
             self.wrongWaySeq.finish()
 
     def updateRacerInfo(self, avId, curvetime = None, maxlaphit = None):
-        if avId in self.racerDict:
+        if avId in self.racerDict.keys():
             self.racerDict[avId].update(curvetime=curvetime, maxlaphit=maxlaphit)
 
     def racerEntered(self, avId):

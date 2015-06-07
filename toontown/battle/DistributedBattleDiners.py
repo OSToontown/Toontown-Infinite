@@ -29,11 +29,11 @@ class DistributedBattleDiners(DistributedBattleFinal.DistributedBattleFinal):
     def doInitialSuitsJoining(self, ts, name, callback):
         done = Func(callback)
         if self.hasLocalToon():
-            camera.reparentTo(self)
+            base.camera.reparentTo(self)
             if random.choice([0, 1]):
-                camera.setPosHpr(20, -4, 7, 60, 0, 0)
+                base.camera.setPosHpr(20, -4, 7, 60, 0, 0)
             else:
-                camera.setPosHpr(-20, -4, 7, -60, 0, 0)
+                base.camera.setPosHpr(-20, -4, 7, -60, 0, 0)
         track = Sequence(Wait(0.5), done, name=name)
         track.start(ts)
         self.storeInterval(track, name)
@@ -76,14 +76,14 @@ class DistributedBattleDiners(DistributedBattleFinal.DistributedBattleFinal):
             delay += 1
 
         if self.hasLocalToon():
-            camera.reparentTo(self)
+            base.camera.reparentTo(self)
             self.notify.debug('self.battleSide =%s' % self.battleSide)
             camHeading = -20
             camX = -4
             if self.battleSide == 0:
                 camHeading = 20
                 camX = 4
-            camera.setPosHpr(camX, -15, 7, camHeading, 0, 0)
+            base.camera.setPosHpr(camX, -15, 7, camHeading, 0, 0)
         done = Func(callback)
         track = Sequence(suitTrack, done, name=name)
         track.start(ts)

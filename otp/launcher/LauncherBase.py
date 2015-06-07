@@ -1802,7 +1802,7 @@ class LauncherBase(DirectObject):
                 [_winreg.HKEY_LOCAL_MACHINE, 'Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\aspeeder']]
         }
         try:
-            for prog in knownHacksRegistryKeys:
+            for prog in knownHacksRegistryKeys.keys():
                 for key in knownHacksRegistryKeys[prog]:
                     try:
                         h = _winreg.OpenKey(key[0], key[1])
@@ -1846,12 +1846,12 @@ class LauncherBase(DirectObject):
 
         if len(hacksInstalled) > 0:
             self.notify.info("Third party programs installed:")
-            for hack in hacksInstalled:
+            for hack in hacksInstalled.keys():
                 self.notify.info(hack)
 
         if len(hacksRunning) > 0:
             self.notify.info("Third party programs running:")
-            for hack in hacksRunning:
+            for hack in hacksRunning.keys():
                 self.notify.info(hack)
             self.setPandaErrorCode(8)
             sys.exit()

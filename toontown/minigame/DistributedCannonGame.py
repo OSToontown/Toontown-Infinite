@@ -191,7 +191,7 @@ class DistributedCannonGame(DistributedMinigame):
         del self.downButton
         del self.leftButton
         del self.rightButton
-        for avId in self.toonHeadDict:
+        for avId in self.toonHeadDict.keys():
             head = self.toonHeadDict[avId]
             head.stopBlink()
             head.stopLookAroundNow()
@@ -240,7 +240,7 @@ class DistributedCannonGame(DistributedMinigame):
         self.splash.reparentTo(render)
         self.dustCloud.reparentTo(render)
         self.__createToonModels(self.localAvId)
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         self.__oldCamFar = base.camLens.getFar()
         base.camLens.setFar(FAR_PLANE_DIST)
         self.__startIntro()
@@ -651,8 +651,8 @@ class DistributedCannonGame(DistributedMinigame):
         return Point3(self.cannonLocationDict[self.localAvId][0], CANNON_Y - 25.0, CANNON_Z + 7)
 
     def __putCameraBehindCannon(self):
-        camera.setPos(self.__getCameraPositionBehindCannon())
-        camera.setHpr(0, 0, 0)
+        base.camera.setPos(self.__getCameraPositionBehindCannon())
+        base.camera.setHpr(0, 0, 0)
 
     def __loadToonInCannon(self, avId):
         self.toonModelDict[avId].detachNode()
@@ -815,8 +815,8 @@ class DistributedCannonGame(DistributedMinigame):
             task.info['maxCamPullback'] = max(task.info['maxCamPullback'], CAMERA_PULLBACK_MIN + multiplier * (CAMERA_PULLBACK_MAX - CAMERA_PULLBACK_MIN))
             foo = foo * task.info['maxCamPullback']
             camPos = pos + Point3(foo)
-            camera.setPos(camPos)
-            camera.lookAt(pos)
+            base.camera.setPos(camPos)
+            base.camera.lookAt(pos)
         if task.info['haveWhistled'] == 0:
             if -vel[2] > WHISTLE_SPEED:
                 if t < task.info['timeOfImpact'] - 0.5:
@@ -928,20 +928,20 @@ class DistributedCannonGame(DistributedMinigame):
         taskMgr.remove(self.INTRO_TASK_NAME)
         if self.__introCameraInterval:
             self.__introCameraInterval.finish()
-        camera.wrtReparentTo(render)
+        base.camera.wrtReparentTo(render)
 
     def __spawnCameraLookAtLerp(self, targetPos, targetLookAt, duration):
-        oldPos = camera.getPos()
-        oldHpr = camera.getHpr()
-        camera.setPos(targetPos)
-        camera.lookAt(targetLookAt)
+        oldPos = base.camera.getPos()
+        oldHpr = base.camera.getHpr()
+        base.camera.setPos(targetPos)
+        base.camera.lookAt(targetLookAt)
         targetQuat = Quat()
-        targetQuat.setHpr(camera.getHpr())
-        camera.setPos(oldPos)
-        camera.setHpr(oldHpr)
+        targetQuat.setHpr(base.camera.getHpr())
+        base.camera.setPos(oldPos)
+        base.camera.setHpr(oldHpr)
         if self.__introCameraInterval:
             self.__introCameraInterval.finish()
-        self.__introCameraInterval = camera.posQuatInterval(duration, Point3(targetPos), targetQuat, blendType='easeInOut')
+        self.__introCameraInterval = base.camera.posQuatInterval(duration, Point3(targetPos), targetQuat, blendType='easeInOut')
         self.__introCameraInterval.start()
 
     def __taskLookInWater(self, task):
@@ -953,8 +953,8 @@ class DistributedCannonGame(DistributedMinigame):
         vecAwayFromCannons.normalize()
         camLoc = Point3(vecAwayFromCannons * 20) + Point3(0, 0, 20)
         camLoc = camLoc + task.data['towerWaterCenter']
-        camera.setPos(camLoc)
-        camera.lookAt(task.data['towerWaterCenter'])
+        base.camera.setPos(camLoc)
+        base.camera.lookAt(task.data['towerWaterCenter'])
         task.data['vecAwayFromCannons'] = vecAwayFromCannons
         return Task.done
 
@@ -976,21 +976,21 @@ class DistributedCannonGame(DistributedMinigame):
         lerpNode = hidden.attachNewNode('CannonGameCameraLerpNode')
         lerpNode.reparentTo(render)
         lerpNode.setPos(self.cannonLocationDict[self.localAvId] + Point3(0, 1, 0))
-        relCamPos = camera.getPos(lerpNode)
-        relCamHpr = camera.getHpr(lerpNode)
+        relCamPos = base.camera.getPos(lerpNode)
+        relCamHpr = base.camera.getHpr(lerpNode)
         startRotation = lerpNode.getHpr()
         endRotation = Point3(-180, 0, 0)
         lerpNode.setHpr(endRotation)
-        camera.setPos(self.__getCameraPositionBehindCannon())
-        endPos = camera.getPos(lerpNode)
+        base.camera.setPos(self.__getCameraPositionBehindCannon())
+        endPos = base.camera.getPos(lerpNode)
         lerpNode.setHpr(startRotation)
-        camera.reparentTo(lerpNode)
-        camera.setPos(relCamPos)
-        camera.setHpr(relCamHpr)
+        base.camera.reparentTo(lerpNode)
+        base.camera.setPos(relCamPos)
+        base.camera.setHpr(relCamHpr)
         if self.__introCameraInterval:
             self.__introCameraInterval.finish()
         self.__introCameraInterval = Parallel(
             lerpNode.hprInterval(self.T_TOONHEAD2CANNONBACK, endRotation, blendType='easeInOut'),
-            camera.posInterval(self.T_TOONHEAD2CANNONBACK, endPos, blendType='easeInOut'))
+            base.camera.posInterval(self.T_TOONHEAD2CANNONBACK, endPos, blendType='easeInOut'))
         self.__introCameraInterval.start()
         return Task.done

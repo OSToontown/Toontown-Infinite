@@ -80,7 +80,7 @@ scStructure = [
   403,
   404,
   405,
-  406,
+  {406: 14},
   407,
   408,
   409,
@@ -136,11 +136,11 @@ scStructure = [
   810],
  [OTPLocalizer.SCMenuStinky,
   {900: 3},
-  {901: 3},
+  901,
   {902: 3},
   {903: 3},
   904,
-  {905: 3},
+  905,
   907],
  [OTPLocalizer.SCMenuPlaces,
   [OTPLocalizer.SCMenuPlacesPlayground,
@@ -346,6 +346,7 @@ ceoMenuStructure = [2300,
  2311,
  2316,
  2317]
+CogGolfMenuStructure = [2318, 2319, 2320, 2321, 2322, 2323, 2324, 2325]
 
 class TTChatInputSpeedChat(DirectObject.DirectObject):
     DefaultSCColorScheme = SCColorScheme()
@@ -366,6 +367,7 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
         if self.allowWhiteListSpeedChat:
             self.addWhiteList()
         self.factoryMenu = None
+        self.CogGolfMenu = None
         self.kartRacingMenu = None
         self.cogMenu = None
         self.cfoMenu = None
@@ -463,8 +465,8 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
         scZ = -0.04
         self.speedChat.setPos(0.283, 0, scZ)
         if not self.firstTime:
-			self.speedChat.setPos(-99, -99, -99)
-			self.firstTime = 1
+            self.speedChat.setPos(-99, -99, -99)
+            self.firstTime = 1
         self.speedChat.setWhisperMode(self.whisperAvatarId != None)
         self.speedChat.enter()
         return
@@ -566,6 +568,22 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
             del self.speedChat[i]
             self.factoryMenu.destroy()
             self.factoryMenu = None
+        return
+
+    def addCogGolfMenu(self):
+        if self.CogGolfMenu == None:
+            menu = SCMenu()
+            menu.rebuildFromStructure(CogGolfMenuStructure)
+            self.CogGolfMenu = SCMenuHolder(OTPLocalizer.SCMenuCogGolf, menu=menu)
+            self.speedChat[2:2] = [self.CogGolfMenu]
+        return
+
+    def removeCogGolfMenu(self):
+        if self.CogGolfMenu:
+            i = self.speedChat.index(self.CogGolfMenu)
+            del self.speedChat[i]
+            self.CogGolfMenu.destroy()
+            self.CogGolfMenu = None
         return
 
     def addKartRacingMenu(self):

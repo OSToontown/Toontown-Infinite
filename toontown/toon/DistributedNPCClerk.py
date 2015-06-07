@@ -95,8 +95,8 @@ class DistributedNPCClerk(DistributedNPCToonBase):
                 self.accept(self.av.uniqueName('disable'), self.__handleUnexpectedExit)
             self.setupAvatars(self.av)
             if self.isLocalToon:
-                camera.wrtReparentTo(render)
-                seq = Sequence((camera.posQuatInterval(1, Vec3(-5, 9, self.getHeight() - 0.5), Vec3(-150, -2, 0), other=self, blendType='easeOut', name=self.uniqueName('lerpCamera'))))
+                base.camera.wrtReparentTo(render)
+                seq = Sequence((base.camera.posQuatInterval(1, Vec3(-5, 9, self.getHeight() - 0.5), Vec3(-150, -2, 0), other=self, blendType='easeOut', name=self.uniqueName('lerpCamera'))))
                 seq.start()
             self.setChatAbsolute(TTLocalizer.STOREOWNER_GREETING, CFSpeech | CFTimeout)
             if self.isLocalToon:

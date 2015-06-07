@@ -287,11 +287,11 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
         self.elevatorModelOut.reparentTo(elevOut)
         self.leftDoorOut.setPos(3.5, 0, 0)
         self.rightDoorOut.setPos(-3.5, 0, 0)
-        camera.reparentTo(self.elevatorModelIn)
-        camera.setH(180)
-        camera.setPos(0, 14, 4)
+        base.camera.reparentTo(self.elevatorModelIn)
+        base.camera.setH(180)
+        base.camera.setPos(0, 14, 4)
         base.playMusic(self.elevatorMusic, looping=1, volume=0.8)
-        track = Sequence(ElevatorUtils.getRideElevatorInterval(ELEVATOR_NORMAL), ElevatorUtils.getOpenInterval(self, self.leftDoorIn, self.rightDoorIn, self.openSfx, None, type=ELEVATOR_NORMAL), Func(camera.wrtReparentTo, render))
+        track = Sequence(ElevatorUtils.getRideElevatorInterval(ELEVATOR_NORMAL), ElevatorUtils.getOpenInterval(self, self.leftDoorIn, self.rightDoorIn, self.openSfx, None, type=ELEVATOR_NORMAL), Func(base.camera.wrtReparentTo, render))
         for toon in self.toons:
             track.append(Func(toon.wrtReparentTo, render))
 
@@ -325,8 +325,8 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
     def enterBattle(self, ts = 0):
         if self.elevatorOutOpen == 1:
             self.__playCloseElevatorOut(self.uniqueName('close-out-elevator'))
-            camera.setPos(0, -15, 6)
-            camera.headsUp(self.elevatorModelOut)
+            base.camera.setPos(0, -15, 6)
+            base.camera.headsUp(self.elevatorModelOut)
         return None
 
     def exitBattle(self):
@@ -344,7 +344,7 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
             suit.setH(180)
             suit.loop('neutral')
 
-        track = Sequence(Func(camera.wrtReparentTo, self.elevatorModelOut), Func(camera.setPos, Point3(0, -8, 2)), Func(camera.setHpr, Vec3(0, 10, 0)), Parallel(SoundInterval(self.openSfx), LerpPosInterval(self.leftDoorOut, ElevatorData[ELEVATOR_NORMAL]['closeTime'], Point3(0, 0, 0), startPos=ElevatorUtils.getLeftClosePoint(ELEVATOR_NORMAL), blendType='easeOut'), LerpPosInterval(self.rightDoorOut, ElevatorData[ELEVATOR_NORMAL]['closeTime'], Point3(0, 0, 0), startPos=ElevatorUtils.getRightClosePoint(ELEVATOR_NORMAL), blendType='easeOut')), Wait(SUIT_HOLD_ELEVATOR_TIME), Func(camera.wrtReparentTo, render), Func(callback))
+        track = Sequence(Func(base.camera.wrtReparentTo, self.elevatorModelOut), Func(base.camera.setPos, Point3(0, -8, 2)), Func(base.camera.setHpr, Vec3(0, 10, 0)), Parallel(SoundInterval(self.openSfx), LerpPosInterval(self.leftDoorOut, ElevatorData[ELEVATOR_NORMAL]['closeTime'], Point3(0, 0, 0), startPos=ElevatorUtils.getLeftClosePoint(ELEVATOR_NORMAL), blendType='easeOut'), LerpPosInterval(self.rightDoorOut, ElevatorData[ELEVATOR_NORMAL]['closeTime'], Point3(0, 0, 0), startPos=ElevatorUtils.getRightClosePoint(ELEVATOR_NORMAL), blendType='easeOut')), Wait(SUIT_HOLD_ELEVATOR_TIME), Func(base.camera.wrtReparentTo, render), Func(callback))
         track.start(ts)
         self.activeIntervals[name] = track
 

@@ -1,12 +1,3 @@
-daemon:
-    name: Client Agent #6
-
-general:
-    eventlogger: 127.0.0.1:7198
-    dc_files:
-        - ../dclass/otp.dc
-        - ../dclass/toon.dc
-
 uberdogs:
     - class: CentralLogger
       id: 4688
@@ -51,17 +42,3 @@ uberdogs:
     - class: GlobalPartyManager
       id: 4477
       anonymous: false
-
-messagedirector:
-    connect: 127.0.0.1:7100
-
-roles:
-    - type: clientagent
-      bind: 0.0.0.0:7799
-      version: "infinite-dev"
-      client:
-        relocate: true
-        add_interest: enabled
-      channels:
-        min: 1000006001
-        max: 1000007000

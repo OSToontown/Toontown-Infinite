@@ -534,7 +534,7 @@ class DistributedGolfGreenGame(BattleBlocker.BattleBlocker):
             self.hide()
             self.unload()
             messenger.send(self.doneEvent)
-        camera.reparentTo(base.localAvatar)
+        base.camera.reparentTo(base.localAvatar)
         base.localAvatar.startUpdateSmartCamera()
 
     def __removeGame(self):
@@ -546,7 +546,7 @@ class DistributedGolfGreenGame(BattleBlocker.BattleBlocker):
         self.stopCountDown()
         taskMgr.remove(self.timerTaskName)
         self.ignore('mouse1')
-        camera.reparentTo(base.localAvatar)
+        base.camera.reparentTo(base.localAvatar)
         base.localAvatar.startUpdateSmartCamera()
         base.cr.playGame.getPlace().fsm.request('walk')
         for sprite in self.sprites:
@@ -1304,10 +1304,10 @@ class DistributedGolfGreenGame(BattleBlocker.BattleBlocker):
         base.localAvatar.stopUpdateSmartCamera()
         basePos = self.frame.getPos(render)
         modPos = Point3(basePos[0] + 0.0, basePos[1] + 12.0, basePos[2] + 12.0)
-        camera.setPos(0, 0, 0)
-        camera.setH(0)
-        camera.setP(-70)
-        camera.reparentTo(self.focusPoint)
+        base.camera.setPos(0, 0, 0)
+        base.camera.setH(0)
+        base.camera.setP(-70)
+        base.camera.reparentTo(self.focusPoint)
         base.camLens.setMinFov(60/(4./3.))
         self.focusPoint.setPos(0, 12, 27)
         self.focusPoint.setH(180)

@@ -215,7 +215,7 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
         self.stopDropTask()
         del self.activityFSM
         del self.__textGen
-        for avId in self.toonSDs:
+        for avId in self.toonSDs.keys():
             if avId in self.toonSDs:
                 toonSD = self.toonSDs[avId]
                 toonSD.unload()
@@ -279,7 +279,7 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
 
     def takeLocalAvatarOutOfActivity(self):
         self.notify.debug('localToon has left the circle')
-        camera.reparentTo(base.localAvatar)
+        base.camera.reparentTo(base.localAvatar)
         base.localAvatar.startUpdateSmartCamera()
         base.localAvatar.enableSmartCameraViews()
         base.localAvatar.setCameraPositionByIndex(base.localAvatar.cameraIndex)
@@ -468,8 +468,8 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
         else:
             self.notify.info("Avoided crash: toontown.parties.DistributedPartyCatchActivity:632, toontown.parties.DistributedPartyCatchActivity:1198, toontown.parties.activityFSMMixins:49, direct.fsm.FSM:423, AttributeError: 'NoneType' object has no attribute 'fsm'")
         base.localAvatar.stopUpdateSmartCamera()
-        camera.reparentTo(self.treesAndFence)
-        camera.setPosHpr(0.0, -63.0, 30.0, 0.0, -20.0, 0.0)
+        base.camera.reparentTo(self.treesAndFence)
+        base.camera.setPosHpr(0.0, -63.0, 30.0, 0.0, -20.0, 0.0)
         if not hasattr(self, 'ltLegsCollNode'):
             self.createCatchCollisions()
 

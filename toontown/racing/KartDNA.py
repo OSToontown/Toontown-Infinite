@@ -519,7 +519,7 @@ def checkKartDNAValidity(dna):
         return 0
     for field in xrange(len(dna)):
         if field == KartDNA.bodyType:
-            if dna[field] not in KartDict:
+            if dna[field] not in KartDict.keys():
                 return 0
         elif field == KartDNA.bodyColor or field == KartDNA.accColor:
             accList = [InvalidEntry] + AccessoryTypeDict.get(KartDNA.bodyColor)
@@ -555,19 +555,19 @@ def getAccessoryItemList(accessoryType):
 
 
 def getKartTypeInfo(type):
-    if type in KartDict:
+    if type in KartDict.keys():
         return KartDict[type]
     return InvalidEntry
 
 
 def getAccessoryInfo(index):
-    if index in AccessoryDict:
+    if index in AccessoryDict.keys():
         return AccessoryDict[index]
     return InvalidEntry
 
 
 def getAccessoryType(accessoryId):
-    for key in AccessoryTypeDict:
+    for key in AccessoryTypeDict.keys():
         if accessoryId in AccessoryTypeDict[key]:
             return key
 

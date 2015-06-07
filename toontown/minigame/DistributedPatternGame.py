@@ -207,8 +207,8 @@ class DistributedPatternGame(DistributedMinigame):
         DistributedMinigame.onstage(self)
         self.arrowDict = {}
         self.lt = base.localAvatar
-        camera.reparentTo(render)
-        camera.setPosHpr(0.0, -14.59, 10.56, 0.0, -16.39, 0.0)
+        base.camera.reparentTo(render)
+        base.camera.setPosHpr(0.0, -14.59, 10.56, 0.0, -16.39, 0.0)
         base.camLens.setMinFov(24.66/(4./3.))
         base.setBackgroundColor(Vec4(0.984, 0.984, 0.584, 1))
         self.arrowKeys = ArrowKeys.ArrowKeys()

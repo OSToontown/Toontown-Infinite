@@ -156,7 +156,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
 
     def waitClientsChoicesTimeout(self, task):
         self.notify.debug('waitClientsChoicesTimeout: did not hear from all clients')
-        for avId in self.avatarChoices:
+        for avId in self.avatarChoices.keys():
             if self.avatarChoices[avId] == (-1, 0):
                 self.avatarChoices[avId] = (0, 0)
 
@@ -197,7 +197,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
         return (retVotes, retDir)
 
     def allAvatarsChosen(self):
-        for avId in self.avatarChoices:
+        for avId in self.avatarChoices.keys():
             choice = self.avatarChoices[avId]
             if choice[0] == -1 and not self.stateDict[avId] == EXITED:
                 return False
@@ -213,7 +213,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
 
     def giveBonusBeans(self, endingSwitch):
         noOneGotBonus = True
-        for avId in self.avIdBonuses:
+        for avId in self.avIdBonuses.keys():
             self.scoreDict[avId] = 0
             if self.avIdBonuses[avId][0] == endingSwitch and not self.stateDict[avId] == EXITED:
                 noOneGotBonus = False
@@ -221,7 +221,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
                 self.gotBonus[avId] = self.avIdBonuses[avId][1]
 
         if noOneGotBonus:
-            for avId in self.avIdBonuses:
+            for avId in self.avIdBonuses.keys():
                 self.scoreDict[avId] = 1
 
     def checkForEndGame(self):
@@ -259,7 +259,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
         from toontown.minigame import MinigameCreatorAI
         allowedGames = MinigameCreatorAI.removeUnreleasedMinigames(allowedGames)
         self.switchToMinigameDict = {}
-        for switch in TravelGameGlobals.BoardLayouts[self.boardIndex]:
+        for switch in TravelGameGlobals.BoardLayouts[self.boardIndex].keys():
             if self.isLeaf(switch):
                 if len(allowedGames) == 0:
                     allowedGames = list(ToontownGlobals.MinigamePlayerMatrix[numPlayers])
@@ -270,7 +270,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
 
         switches = []
         minigames = []
-        for key in self.switchToMinigameDict:
+        for key in self.switchToMinigameDict.keys():
             switches.append(key)
             minigames.append(self.switchToMinigameDict[key])
 
@@ -278,7 +278,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
 
     def calcBonusBeans(self):
         possibleLeaves = []
-        for switch in TravelGameGlobals.BoardLayouts[self.boardIndex]:
+        for switch in TravelGameGlobals.BoardLayouts[self.boardIndex].keys():
             if self.isLeaf(switch):
                 possibleLeaves.append(switch)
 

@@ -55,16 +55,9 @@ class ToonBase(OTPBase.OTPBase):
             self.resDict.setdefault(ratio, []).append(res)
 
         # Get the native width, height and ratio:
-        if sys.platform == 'win32':  # Use displayInfo.
-            self.nativeWidth = displayInfo.getMaximumWindowWidth()
-            self.nativeHeight = displayInfo.getMaximumWindowHeight()
-        elif sys.platform == 'darwin':
-            self.nativeWidth = 800
-            self.nativeHeight = 600
-        else:  # Use PyGTK.
-            import gtk
-            self.nativeWidth = gtk.gdk.screen_width()
-            self.nativeHeight = gtk.gdk.screen_height()
+        self.nativeWidth = self.pipe.getDisplayWidth()
+        self.nativeHeight = self.pipe.getDisplayHeight()
+
         self.nativeRatio = round(
             float(self.nativeWidth) / float(self.nativeHeight), 2)
 
@@ -129,7 +122,7 @@ class ToonBase(OTPBase.OTPBase):
         self.endlessQuietZone = False
         self.wantDynamicShadows = 0
         self.exitErrorCode = 0
-        camera.setPosHpr(0, 0, 0, 0, 0, 0)
+        base.camera.setPosHpr(0, 0, 0, 0, 0, 0)
         self.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         self.camLens.setNearFar(ToontownGlobals.DefaultCameraNear, ToontownGlobals.DefaultCameraFar)
         self.musicManager.setVolume(0.65)

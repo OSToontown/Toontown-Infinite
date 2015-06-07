@@ -58,9 +58,9 @@ class DistributedPairingGame(DistributedMinigame):
         self.gameDuration = PairingGameGlobals.EasiestGameDuration
 
     def moveCameraToTop(self):
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         p = self.cameraThreeQuarterView
-        camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
+        base.camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
 
     def getTitle(self):
         return TTLocalizer.PairingGameTitle

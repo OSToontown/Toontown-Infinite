@@ -283,9 +283,9 @@ class OZSafeZoneLoader(SafeZoneLoader):
                     lookIn = Vec3(360 + lookAt, -30, 0)
                 print 'Camera Hprs toon %s; lookIn %s; final %s' % (newHpr, lookIn, lookIn - newHpr)
                 if local == 1:
-                    camPosOriginal = camera.getPos()
-                    camHprOriginal = camera.getHpr()
-                    camParentOriginal = camera.getParent()
+                    camPosOriginal = base.camera.getPos()
+                    camHprOriginal = base.camera.getHpr()
+                    camParentOriginal = base.camera.getParent()
                     cameraPivot = holder.attachNewNode('camera pivot')
                     chooseHeading = random.choice([-10.0, 15.0, 40.0])
                     cameraPivot.setHpr(chooseHeading, -20.0, 0.0)
@@ -338,8 +338,8 @@ class OZSafeZoneLoader(SafeZoneLoader):
             self.geyserSoundNoToonInterval.start()
 
     def changeCamera(self, newParent, newPos, newHpr):
-        camera.reparentTo(newParent)
-        camera.setPosHpr(newPos, newHpr)
+        base.camera.reparentTo(newParent)
+        base.camera.setPosHpr(newPos, newHpr)
 
     def doPrint(self, thing):
         return 0

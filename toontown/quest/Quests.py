@@ -82,7 +82,7 @@ from toontown.toonbase.ToontownGlobals import FT_FullSuit, FT_Leg, FT_Arm, FT_To
 QuestRandGen = random.Random()
 
 def seedRandomGen(npcId, avId, tier, rewardHistory):
-    QuestRandGen.seed(npcId * 100 + avId + tier + len(rewardHistory))
+    QuestRandGen.seed(npcId * 100 + avId + tier + len(rewardHistory) + time.time())
 
 
 def seededRandomChoice(seq):
@@ -3461,12 +3461,12 @@ def findFinalRewardId(questId):
     return (finalRewardId, remainingSteps)
 
 
-for questId in QuestDict:
+for questId in QuestDict.keys():
     findFinalRewardId(questId)
 
 def getStartingQuests(tier = None):
     startingQuests = []
-    for questId in QuestDict:
+    for questId in QuestDict.keys():
         if isStartingQuest(questId):
             if tier is None:
                 startingQuests.append(questId)
@@ -4913,7 +4913,7 @@ def checkReward(questId, forked = 0):
 
 def assertAllQuestsValid():
     print 'checking quests...'
-    for questId in QuestDict:
+    for questId in QuestDict.keys():
         try:
             quest = getQuest(questId)
         except AssertionError, e:
@@ -4921,7 +4921,7 @@ def assertAllQuestsValid():
             print err
             raise
 
-    for questId in QuestDict:
+    for questId in QuestDict.keys():
         quest = QuestDict[questId]
         tier, start, questDesc, fromNpc, toNpc, reward, nextQuest, dialog = quest
         if start:

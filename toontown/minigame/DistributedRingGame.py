@@ -130,9 +130,9 @@ class DistributedRingGame(DistributedMinigame):
         toon.useLOD(self.TOON_LOD)
         self.__placeToon(self.localAvId)
         toon.dropShadow.hide()
-        camera.reparentTo(render)
-        camera.reparentTo(base.localAvatar)
-        camera.setPosHpr(0, self.CAMERA_Y + self.TOON_Y, 0, 0, 0, 0)
+        base.camera.reparentTo(render)
+        base.camera.reparentTo(base.localAvatar)
+        base.camera.setPosHpr(0, self.CAMERA_Y + self.TOON_Y, 0, 0, 0, 0)
         base.camLens.setMinFov(80/(4./3.))
         base.camLens.setFar(self.FAR_PLANE_DIST)
         base.setBackgroundColor(self.WATER_COLOR)
@@ -515,7 +515,7 @@ class DistributedRingGame(DistributedMinigame):
         numGroupsPerDifficulty = difficultyDistributions[safezone]
 
         def patternsAreValid(difficultyPatterns = difficultyPatterns, difficultyDistributions = difficultyDistributions):
-            for sz in difficultyPatterns:
+            for sz in difficultyPatterns.keys():
                 for pattern in difficultyPatterns[sz]:
                     for difficulty in [0, 1, 2]:
                         numGroupsPerDifficulty = difficultyDistributions[sz]

@@ -117,7 +117,7 @@ class DistributedBattleBldg(DistributedBattleBase.DistributedBattleBase):
         def setCamFov(fov):
             base.camLens.setMinFov(fov/(4./3.))
 
-        camTrack.append(Func(camera.wrtReparentTo, suitLeader))
+        camTrack.append(Func(base.camera.wrtReparentTo, suitLeader))
         camTrack.append(Func(setCamFov, self.camFOFov))
         suitHeight = suitLeader.getHeight()
         suitOffsetPnt = Point3(0, 0, suitHeight)
@@ -128,14 +128,14 @@ class DistributedBattleBldg(DistributedBattleBase.DistributedBattleBase):
         TauntCamY = 18
         TauntCamX = 0
         TauntCamHeight = random.choice((MidTauntCamHeight, 1, 11))
-        camTrack.append(Func(camera.setPos, TauntCamX, TauntCamY, TauntCamHeight))
-        camTrack.append(Func(camera.lookAt, suitLeader, suitOffsetPnt))
+        camTrack.append(Func(base.camera.setPos, TauntCamX, TauntCamY, TauntCamHeight))
+        camTrack.append(Func(base.camera.lookAt, suitLeader, suitOffsetPnt))
         camTrack.append(Wait(delay))
         camPos = Point3(0, -6, 4)
         camHpr = Vec3(0, 0, 0)
-        camTrack.append(Func(camera.reparentTo, base.localAvatar))
+        camTrack.append(Func(base.camera.reparentTo, base.localAvatar))
         camTrack.append(Func(setCamFov, ToontownGlobals.DefaultCameraFov))
-        camTrack.append(Func(camera.setPosHpr, camPos, camHpr))
+        camTrack.append(Func(base.camera.setPosHpr, camPos, camHpr))
         mtrack = Parallel(suitTrack, toonTrack, camTrack)
         done = Func(callback)
         track = Sequence(mtrack, done, name=name)
@@ -160,7 +160,7 @@ class DistributedBattleBldg(DistributedBattleBase.DistributedBattleBase):
             Emote.globalEmote.releaseAll(self.toons[0], 'dbattlebldg exitFaceOff')
         self.clearInterval(self.faceOffName)
         self._removeMembersKeep()
-        camera.wrtReparentTo(self)
+        base.camera.wrtReparentTo(self)
         base.camLens.setMinFov(self.camFov/(4./3.))
         return None
 
@@ -171,8 +171,8 @@ class DistributedBattleBldg(DistributedBattleBase.DistributedBattleBase):
 
         name = self.uniqueName('floorReward')
         track = Sequence(toonTracks, Func(callback), name=name)
-        camera.setPos(0, 0, 1)
-        camera.setHpr(180, 10, 0)
+        base.camera.setPos(0, 0, 1)
+        base.camera.setHpr(180, 10, 0)
         self.storeInterval(track, name)
         track.start(ts)
 

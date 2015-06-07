@@ -1,18 +1,22 @@
-from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
+
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import BulletinBoardWatcher
+from direct.gui import OnscreenText
+from direct.gui import DirectGui
+from direct.interval.IntervalGlobal import *
+
 from otp.otpbase import OTPGlobals
+
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.coghq import CountryClubLayout
 from toontown.coghq import DistributedCountryClubRoom
 from toontown.coghq import CountryClubRoom
+from toontown.coghq import CountryClubRoomSpecs
 from toontown.coghq import FactoryCameraViews
-from direct.gui import OnscreenText
-from direct.task.Task import Task
-from direct.interval.IntervalGlobal import *
+
 
 class DistributedCountryClub(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCountryClub')
@@ -24,7 +28,9 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
         DistributedObject.DistributedObject.__init__(self, cr)
         self.lastCamEnterRoom = 0
         self.titleColor = (1, 1, 1, 1)
-        self.titleText = OnscreenText.OnscreenText('', fg=self.titleColor, shadow=(0, 0, 0, 1), font=ToontownGlobals.getSignFont(), pos=(0, -0.5), scale=0.1, drawOrder=0, mayChange=1)
+        self.titleText = OnscreenText.OnscreenText('', fg=self.titleColor, shadow=(0, 0, 0, 1),
+                                                   font=ToontownGlobals.getSignFont(), pos=(0, -0.5), scale=0.1,
+                                                   drawOrder=0, mayChange=1)
         self.titleSequence = None
         return
 
@@ -44,7 +50,7 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
         base.localAvatar.setPosHpr(0, 0, 0, 0, 0, 0)
         self.accept('SOSPanelEnter', self.handleSOSPanel)
         self.factoryViews = FactoryCameraViews.FactoryCameraViews(self)
-        base.localAvatar.chatMgr.chatInputSpeedChat.addFactoryMenu()
+        base.localAvatar.chatMgr.chatInputSpeedChat.addCogGolfMenu()
         self.__setupHighSky()
         return
 
@@ -93,7 +99,9 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
 
     def setRoomDoIds(self, roomDoIds):
         self.roomDoIds = roomDoIds
-        self.roomWatcher = BulletinBoardWatcher.BulletinBoardWatcher('roomWatcher-%s' % self.doId, [ DistributedCountryClubRoom.getCountryClubRoomReadyPostName(doId) for doId in self.roomDoIds ], self.gotAllRooms)
+        self.roomWatcher = BulletinBoardWatcher.BulletinBoardWatcher('roomWatcher-%s' % self.doId, [
+            DistributedCountryClubRoom.getCountryClubRoomReadyPostName(doId) for doId in self.roomDoIds],
+                                                                     self.gotAllRooms)
 
     def gotAllRooms(self):
         self.notify.debug('countryClub %s: got all rooms' % self.doId)
@@ -102,8 +110,25 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
             self.roomWatcher = None
         self.geom = render.attachNewNode('countryClub%s' % self.doId)
         for doId in self.roomDoIds:
-            self.rooms.append(base.cr.doId2do[doId])
-            self.rooms[-1].setCountryClub(self)
+            room = base.cr.doId2do.get(doId)
+            if room is None:
+                continue
+            room.setCountryClub(self)
+            roomName = CountryClubRoomSpecs.BossbotCountryClubRoomId2RoomName[room.roomId]
+            if roomName == 'BossbotCountryClubKartRoom_Battle00':
+                floorNum = self.floorNum
+                signOrigin = room.getGeom().find('**/sign_origin')
+                floorName = TTLocalizer.CountryClubFloorNum2Name[floorNum + 1]
+                text = TextEncoder.upper(floorName)
+                font = ToontownGlobals.getSuitFont()
+                scale = TTLocalizer.BCHQLsignText
+                fg = (0, 0, 0, 1)
+                signText = DirectGui.OnscreenText(
+                    text=text, font=font, scale=scale, fg=fg,
+                    parent=signOrigin)
+                signText.setPosHpr(signOrigin, -0.675, 0, -0.9, -90, 0, 0)
+                signText.setDepthWrite(0)
+            self.rooms.append(room)
 
         self.notify.info('countryClubId %s, floor %s, %s' % (self.countryClubId, self.floorNum, self.rooms[0].avIdList))
         rng = self.layout.getRng()
@@ -125,7 +150,7 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
                 self.allRooms.append(hallway)
                 self.listenForFloorEvents(hallway)
 
-        def handleCameraRayFloorCollision(collEntry, self = self):
+        def handleCameraRayFloorCollision(collEntry, self=self):
             name = collEntry.getIntoNode().getName()
             self.notify.debug('camera floor ray collided with: %s' % name)
             prefix = CountryClubRoom.CountryClubRoom.FloorCollPrefix
@@ -161,7 +186,7 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
         roomNum = room.getRoomNum()
         floorCollName = room.getFloorCollName()
 
-        def handleZoneEnter(collisionEntry, self = self, roomNum = roomNum):
+        def handleZoneEnter(collisionEntry, self=self, roomNum=roomNum):
             self.toonEnterRoom(roomNum)
             floorNode = collisionEntry.getIntoNode()
             if floorNode.hasTag('ouch'):
@@ -171,7 +196,7 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
 
         self.accept('enter%s' % floorCollName, handleZoneEnter)
 
-        def handleZoneExit(collisionEntry, self = self, roomNum = roomNum):
+        def handleZoneExit(collisionEntry, self=self, roomNum=roomNum):
             floorNode = collisionEntry.getIntoNode()
             if floorNode.hasTag('ouch'):
                 self.allRooms[roomNum].stopOuch()
@@ -202,14 +227,11 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
             minVis = roomNum - 1
             maxVis = roomNum + 1
         for i, room in enumerate(self.allRooms):
+            # Temporary fix for greying
             if i < minVis or i > maxVis:
-                if not room.getGeom().isEmpty():
-                    room.getGeom().stash()
-            elif i <= blockRoomsAboveThisNumber:
-                if not room.getGeom().isEmpty():
-                    room.getGeom().unstash()
-            elif not room.getGeom().isEmpty():
                 room.getGeom().stash()
+            else:
+                room.getGeom().unstash()
 
         self.lastCamEnterRoom = roomNum
 
@@ -267,7 +289,7 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
         DistributedObject.DistributedObject.delete(self)
         self.ignore('SOSPanelEnter')
         bboard.remove('countryClub')
-        base.localAvatar.chatMgr.chatInputSpeedChat.removeFactoryMenu()
+        base.localAvatar.chatMgr.chatInputSpeedChat.removeCogGolfMenu()
         self.factoryViews.delete()
         del self.factoryViews
 
@@ -308,7 +330,7 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
             name = base.cr.doId2do[avId].getName()
             self.showInfoText(TTLocalizer.CountryClubToonEnterElevator % name)
 
-    def showInfoText(self, text = 'hello world'):
+    def showInfoText(self, text='hello world'):
         description = text
         if description and description != '':
             self.titleText.setText(description)
@@ -318,7 +340,10 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
             if self.titleSequence:
                 self.titleSequence.finish()
             self.titleSequence = None
-            self.titleSequence = Sequence(Func(self.showTitleText), Wait(3.1), LerpColorScaleInterval(self.titleText, duration=0.5, colorScale=Vec4(1, 1, 1, 0.0)), Func(self.hideTitleText))
+            self.titleSequence = Sequence(Func(self.showTitleText), Wait(3.1),
+                                          LerpColorScaleInterval(self.titleText, duration=0.5,
+                                                                 colorScale=Vec4(1, 1, 1, 0.0)),
+                                          Func(self.hideTitleText))
             self.titleSequence.start()
         return
 

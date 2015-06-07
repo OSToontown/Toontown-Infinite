@@ -658,7 +658,7 @@ class InGameEditor(AppShell):
                 idDict[eType] = self.level.entType2ids.get(eType, [])
 
         else:
-            for eType in self.level.entType2ids:
+            for eType in self.level.entType2ids.keys():
                 idDict[eType] = self.level.entType2ids.get(eType, [])
 
         typeKeys = idDict.keys()

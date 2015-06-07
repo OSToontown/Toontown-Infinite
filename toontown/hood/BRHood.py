@@ -20,3 +20,17 @@ class BRHood(ToonHood):
       ToontownGlobals.WACKY_WINTER_DECORATIONS: ['phase_8/dna/winter_storage_BR.pdna'],
       ToontownGlobals.HALLOWEEN_PROPS: ['phase_8/dna/halloween_props_storage_BR.pdna'],
       ToontownGlobals.SPOOKY_PROPS: ['phase_8/dna/halloween_props_storage_BR.pdna']}
+
+    def load(self):
+        ToonHood.load(self)
+
+        self.fog = Fog('BRFog')
+
+    def setFog(self):
+        if base.wantFog:
+            self.fog.setColor(0.9, 0.9, 0.9)
+            self.fog.setExpDensity(0.012)
+            render.clearFog()
+            render.setFog(self.fog)
+            self.sky.clearFog()
+            self.sky.setFog(self.fog)

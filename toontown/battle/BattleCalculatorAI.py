@@ -395,7 +395,7 @@ class BattleCalculatorAI:
 
     def __clearTrapCreator(self, creatorId, suitId = None):
         if suitId == None:
-            for currTrap in self.traps:
+            for currTrap in self.traps.keys():
                 if creatorId == self.traps[currTrap][1]:
                     self.traps[currTrap][1] = 0
 
@@ -815,7 +815,7 @@ class BattleCalculatorAI:
             self.notify.debug('Processing kbBonuses: ' + repr(self.kbBonuses))
         tgtPos = 0
         for currTgt in bonusList:
-            for currAtkType in currTgt:
+            for currAtkType in currTgt.keys():
                 if len(currTgt[currAtkType]) > 1 or not hp and len(currTgt[currAtkType]) > 0:
                     totalDmgs = 0
                     for currDmg in currTgt[currAtkType]:
@@ -1092,11 +1092,11 @@ class BattleCalculatorAI:
         suitId = attack[SUIT_ID_COL]
         if suitId in self.SuitAttackers and random.randint(0, 99) < 75:
             totalDamage = 0
-            for currToon in self.SuitAttackers[suitId]:
+            for currToon in self.SuitAttackers[suitId].keys():
                 totalDamage += self.SuitAttackers[suitId][currToon]
 
             dmgs = []
-            for currToon in self.SuitAttackers[suitId]:
+            for currToon in self.SuitAttackers[suitId].keys():
                 dmgs.append(self.SuitAttackers[suitId][currToon] / totalDamage * 100)
 
             dmgIdx = SuitBattleGlobals.pickFromFreqList(dmgs)
@@ -1236,7 +1236,7 @@ class BattleCalculatorAI:
 
     def __printSuitAtkStats(self):
         self.notify.debug('Suit Atk Stats:')
-        for currTgt in self.suitAtkStats:
+        for currTgt in self.suitAtkStats.keys():
             if currTgt not in self.battle.activeToons:
                 continue
             tgtPos = self.battle.activeToons.index(currTgt)
@@ -1297,7 +1297,7 @@ class BattleCalculatorAI:
             self.notify.debug('__updateLureTimeouts()')
             self.notify.debug('Lured suits: ' + str(self.currentlyLuredSuits))
         noLongerLured = []
-        for currLuredSuit in self.currentlyLuredSuits:
+        for currLuredSuit in self.currentlyLuredSuits.keys():
             self.__incLuredCurrRound(currLuredSuit)
             if self.__luredMaxRoundsReached(currLuredSuit) or self.__luredWakeupTime(currLuredSuit):
                 noLongerLured.append(currLuredSuit)
@@ -1411,7 +1411,7 @@ class BattleCalculatorAI:
             del self.suitAtkStats[toonId]
         if not self.CLEAR_SUIT_ATTACKERS:
             oldSuitIds = []
-            for s in self.SuitAttackers:
+            for s in self.SuitAttackers.keys():
                 if toonId in self.SuitAttackers[s]:
                     del self.SuitAttackers[s][toonId]
                     if len(self.SuitAttackers[s]) == 0:
@@ -1436,8 +1436,8 @@ class BattleCalculatorAI:
             self.notify.debug('updateActiveToons()')
         if not self.CLEAR_SUIT_ATTACKERS:
             oldSuitIds = []
-            for s in self.SuitAttackers:
-                for t in self.SuitAttackers[s]:
+            for s in self.SuitAttackers.keys():
+                for t in self.SuitAttackers[s].keys():
                     if t not in self.battle.activeToons:
                         del self.SuitAttackers[s][t]
                         if len(self.SuitAttackers[s]) == 0:
@@ -1446,7 +1446,7 @@ class BattleCalculatorAI:
             for oldSuitId in oldSuitIds:
                 del self.SuitAttackers[oldSuitId]
 
-        for trap in self.traps:
+        for trap in self.traps.keys():
             if self.traps[trap][1] not in self.battle.activeToons:
                 self.notify.debug('Trap for toon ' + str(self.traps[trap][1]) + ' will no longer give exp')
                 self.traps[trap][1] = 0

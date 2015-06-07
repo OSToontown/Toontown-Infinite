@@ -764,9 +764,9 @@ QuestDialogDict = {160: {GREETING: '',
  2204: {QUEST: "Welcome aboard, matey.\x07Argh! Those rapscallion Cogs smashed my monocle and I can't sort me change without it.\x07Be a good landlubber and take this prescription to _toNpcName_ and fetch me a new one._where_",
         GREETING: '',
         LEAVING: ''},
- 2205: {QUEST: "What's this?\x07Oh, I'd love to fill this prescription but the Cogs have been pilfering my supplies.\x07If you can get me the eyeglass frames off a flunky I can probably help you out.",
+ 2205: {QUEST: "What's this?\x07Oh, I'd love to fill this prescription but the Cogs have been pilfering my supplies.\x07If you can get me the eyeglass frames off a Flunky I can probably help you out.",
         LEAVING: '',
-        INCOMPLETE_PROGRESS: 'Sorry. No flunky frames, no monocle.'},
+        INCOMPLETE_PROGRESS: 'Sorry. No Flunky frames, no monocle.'},
  2206: {QUEST: 'Excellent!\x07Just a second...\x07Your prescription is filled. Please take this monocle straight to Captain Carl._where_',
         GREETING: '',
         LEAVING: '',
@@ -1174,11 +1174,11 @@ QuestDialogDict = {160: {GREETING: '',
  5234: {GREETING: '',
         QUEST: 'Aha, you are back.\x07Before we begin, we must eat.\x07Bring us some lumpy cheese for our broth.\x07Lumpy cheese can only be gathered from Big Cheese Cogs.',
         LEAVING: '',
-        INCOMPLETE_PROGRESS: 'We still need lumpy cheese'},
+        INCOMPLETE_PROGRESS: 'We still need lumpy cheese!'},
  5278: {GREETING: '',
         QUEST: 'Aha, you are back.\x07Before we begin, we must eat.\x07Bring us some caviar for our broth.\x07Caviar can only be gathered from Mr. Hollywood Cogs.',
         LEAVING: '',
-        INCOMPLETE_PROGRESS: 'We still need caviar'},
+        INCOMPLETE_PROGRESS: 'We still need caviar!'},
  5235: {GREETING: '',
         QUEST: 'A simple man eats with a simple spoon.\x07A Cog took my simple spoon, so I simply can not eat.\x07Return my spoon to me.  I think a Robber Baron took it.',
         LEAVING: '',
@@ -1196,11 +1196,11 @@ QuestDialogDict = {160: {GREETING: '',
         INCOMPLETE_PROGRESS: 'You have not yet obtained dessert.',
         QUEST: "Oh, that is certainly a talking toad.  Give him to me.\x07What's that you say, toad?\x07Uh huh.\x07Uh huh...\x07The toad has spoken.  We need dessert.\x07Bring us some ice cream cones from _toNpcName_.\x07The toad likes red bean flavored ice cream for some reason._where_"},
  5238: {GREETING: '',
-        QUEST: "So the wizard sent you.  I'm sad to say we're fresh out of red bean ice cream cones.\x07You see, a bunch of Cogs came in and just took them.\x07They said they were for Mr. Hollywood, or some such nonsense.\x07I'd sure appreciate if you could round them back up for me.",
+        QUEST: "So the wizard sent you. I'm sad to say we're fresh out of red bean ice cream cones.\x07You see, a bunch of Cogs came in and just took them.\x07They said they were for Mr. Hollywood, or some such nonsense.\x07I'd sure appreciate if you could round them back up for me.",
         LEAVING: '',
         INCOMPLETE_PROGRESS: 'Have you found all my ice cream cones yet?'},
  5280: {GREETING: '',
-        QUEST: "So the wizard sent you.  I'm sad to say we're fresh out of red bean ice cream cones.\x07You see, a bunch of Cogs came in and just took them.\x07They said they were for The Big Cheese, or some such nonsense.\x07I'd sure appreciate if you could round them back up for me.",
+        QUEST: "So the wizard sent you. I'm sad to say we're fresh out of red bean ice cream cones.\x07You see, a bunch of Cogs came in and just took them.\x07They said they were for The Big Cheese, or some such nonsense.\x07I'd sure appreciate if you could round them back up for me.",
         LEAVING: '',
         INCOMPLETE_PROGRESS: 'Have you found all my ice cream cones yet?'},
  5239: {QUEST: "Thanks for bringing back my ice cream cones!\x07Here's one for Lil Oldman.",
@@ -1244,19 +1244,19 @@ QuestDialogDict = {160: {GREETING: '',
  5253: {GREETING: '',
         QUEST: "Yeah, that's my microphone all right.\x07Thanks for getting it for me, but...\x07I really need my keyboard so I can tickle the ivories.\x07I think one of those Corporate Raiders got my keyboard.",
         LEAVING: '',
-        INCOMPLETE_PROGRESS: 'No luck finding my keboard?'},
+        INCOMPLETE_PROGRESS: 'No luck finding my keyboard?'},
  5273: {GREETING: '',
         QUEST: "Yeah, that's my microphone all right.\x07Thanks for getting it for me, but...\x07I really need my keyboard so I can tickle the ivories.\x07I think one of those Minglers got my keyboard.",
         LEAVING: '',
-        INCOMPLETE_PROGRESS: 'No luck finding my keboard?'},
+        INCOMPLETE_PROGRESS: 'No luck finding my keyboard?'},
  5274: {GREETING: '',
         QUEST: "Yeah, that's my microphone all right.\x07Thanks for getting it for me, but...\x07I really need my keyboard so I can tickle the ivories.\x07I think one of those Loan Sharks got my keyboard.",
         LEAVING: '',
-        INCOMPLETE_PROGRESS: 'No luck finding my keboard?'},
+        INCOMPLETE_PROGRESS: 'No luck finding my keyboard?'},
  5275: {GREETING: '',
         QUEST: "Yeah, that's my microphone all right.\x07Thanks for getting it for me, but...\x07I really need my keyboard so I can tickle the ivories.\x07I think one of those Legal Eagles got my keyboard.",
         LEAVING: '',
-        INCOMPLETE_PROGRESS: 'No luck finding my keboard?'},
+        INCOMPLETE_PROGRESS: 'No luck finding my keyboard?'},
  5254: {GREETING: '',
         QUEST: "All right!  Now I'm in business.\x07If only they hadn't taken my platform shoes...\x07Those shoes probably ended up with a Mr. Hollywood, if I had to guess.",
         LEAVING: '',
@@ -1412,7 +1412,7 @@ QuestDialogDict = {160: {GREETING: '',
  6255: {GREETING: '',
         LEAVING: '',
         QUEST: "All-right! The Zamboni I ordered!\x07Now, if only there weren't so many Cogs around, I might have some time to use it.\x07Be a sport and take care of a few of those Cashbots for me, would you?",
-        INCOMPLETE_PROGRESS: 'Those Cashbots are tough, hunh? They make it hard to test my Zamboni.'},
+        INCOMPLETE_PROGRESS: 'Those Cashbots are tough, huh? They make it hard to test my Zamboni.'},
  6256: {GREETING: '',
         LEAVING: '',
         QUEST: "Excellent! Now I can go try out my Zamboni.\x07Tell Zari that I'll be in next week to place my next order, please.",
@@ -5505,7 +5505,7 @@ NameTooLong = 'That name is too long. Please try again.'
 ToonAlreadyExists = 'You already have a toon named %s!'
 NameAlreadyInUse = 'That name is already used!'
 EmptyNameError = 'You must enter a name first.'
-NameError = 'Sorry.  That name will not work.'
+NameError = 'Sorry. That name will not work.'
 NCTooShort = 'That name is too short.'
 NCNoDigits = 'Your name cannot contain numbers.'
 NCNeedLetters = 'Each word in your name must contain some letters.'
@@ -5636,6 +5636,7 @@ QuestScript150_3 = 'Once you have made a friend, come back here.'
 QuestScript150_4 = 'Some tasks are too difficult to do alone!'
 MissingKeySanityCheck = 'Ignore me'
 SellbotBossName = 'Senior V. P.'
+SellbotBossArea = 'Sellbot Towers\nRooftop'
 CashbotBossName = 'C. F. O.'
 LawbotBossName = 'Chief Justice'
 BossCogNameWithDept = '%(name)s\n%(dept)s'
@@ -5945,7 +5946,7 @@ AccessoryNamePrefix = {0: 'hat unisex ',
  11: 'shoes girl '}
 AwardManagerAccessoryNames = {}
 AccessoryTypeNames = {}
-for accessoryId in CatalogAccessoryItemGlobals.AccessoryTypes:
+for accessoryId in CatalogAccessoryItemGlobals.AccessoryTypes.keys():
     accessoryInfo = CatalogAccessoryItemGlobals.AccessoryTypes[accessoryId]
     if accessoryInfo[0] % 4 == 0:
         accessoryStyleDescription = HatStylesDescriptions
@@ -8958,8 +8959,8 @@ LawbotBossTaunts = ['%s, I find you in contempt of court!',
 LawbotBossAreaAttackTaunt = "You're all in contempt of court!"
 WitnessToonName = 'Bumpy Bumblebehr'
 WitnessToonPrepareBattleTwo = "Oh no! They're putting only Cogs on the jury!\x07Quick, use the cannons and shoot some Toon jurors into the jury chairs.\x07We need %d to get a balanced scale."
-WitnessToonNoJuror = 'Oh oh, no Toon jurors. This will be a tough trial.'
-WitnessToonOneJuror = 'Cool! There is 1 Toon in the jury!'
+WitnessToonNoJuror = 'Uh oh, no Toon jurors. This will be a tough trial.'
+WitnessToonOneJuror = 'Yikes! There is 1 Toon in the jury!'
 WitnessToonSomeJurors = 'Cool! There are %d Toons in the jury!'
 WitnessToonAllJurors = 'Awesome! All the jurors are Toons!'
 WitnessToonPrepareBattleThree = 'Hurry, touch the witness stand to get evidence.\x07Press the Delete key to throw the evidence at the lawyers, or at the defense pan.'
@@ -9439,6 +9440,10 @@ IdesOfMarchStart = 'Toons go GREEN!'
 LogoutForced = 'You have done something wrong\n and are being logged out automatically,\n additionally your account may be frozen.\n Try going on a walk outside, it is fun.'
 CountryClubToonEnterElevator = '%s \nhas jumped in the golf kart.'
 CountryClubBossConfrontedMsg = '%s is battling the Club President!'
+CountryClubFloorNum2Name = [
+    'First Hole', 'Second Hole', 'Third Hole', 'Fourth Hole', 'Fifth Hole',
+    'Sixth Hole', 'Seventh Hole', 'Eighth Hole', 'Ninth Hole'
+]
 ElevatorBlockedRoom = 'All challenges must be defeated first.'
 MolesLeft = 'Moles Left: %d'
 MolesInstruction = 'Mole Stomp!\nJump on the red moles!'
@@ -9816,7 +9821,7 @@ YangGoodbye = 'Okay, then. See you later!'
 buffIdStrings = {
   0: ('Your movement speed will be slightly increased for the next %d %s.',
       'Reward: Increased movement speed'),
-  1: ('Your gag accuracy will be slight increased for the next %d %s.',
+  1: ('Your gag accuracy will be slightly increased for the next %d %s.',
       'Reward: Increased gag accuracy')
 }
 

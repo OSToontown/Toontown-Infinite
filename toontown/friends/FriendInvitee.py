@@ -28,7 +28,9 @@ class FriendInvitee(ToonHeadDialog.ToonHeadDialog):
             style = TTDialog.TwoChoice
             buttonTextList = [OTPLocalizer.FriendInviteeOK, OTPLocalizer.FriendInviteeNo]
             command = self.__handleButton
-        optiondefs = (('dialogName', 'FriendInvitee', None),
+        optiondefs = (('image', DGG.getDefaultDialogGeom(), None),
+         ('relief', None, None),
+         ('dialogName', 'FriendInvitee', None),
          ('text', text, None),
          ('style', style, None),
          ('buttonTextList', buttonTextList, None),

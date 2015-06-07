@@ -58,13 +58,13 @@ uberdogs:
 roles:
     - type: clientagent
       bind: 0.0.0.0:7199
-      version: "infinite-dev"
+      version: "dev"
       client:
        relocate: true
        add_interest: enabled
       channels:
-        min: 1000000000
-        max: 1000001000
+        min: 2000000000
+        max: 2000999999
 
     - type: stateserver
       control: 4002

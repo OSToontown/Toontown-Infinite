@@ -2,7 +2,7 @@ from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import StateData
-from direct.showbase.PythonUtil import PriorityCallbacks
+from toontown.util.PriorityCallbacks import PriorityCallbacks
 from toontown.safezone import PublicWalk
 from toontown.launcher import DownloadForceAcknowledge
 import TrialerForceAcknowledge
@@ -623,7 +623,7 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         if callback == None:
             callback = self.__diedDone
         base.localAvatar.laffMeter.start()
-        camera.wrtReparentTo(render)
+        base.camera.wrtReparentTo(render)
         base.localAvatar.b_setAnimState('Died', 1, callback, [requestStatus])
         base.localAvatar.obscureMoveFurnitureButton(1)
         return
@@ -720,10 +720,26 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
                 base.localAvatar.b_teleportGreeting(avId)
             else:
                 friend = base.cr.identifyAvatar(avId)
-                if friend != None:
+                if friend is None:
                     teleportDebug(requestStatus, 'friend not here, giving up')
-                    base.localAvatar.setSystemMessage(avId, OTPLocalizer.WhisperTargetLeftVisit % (friend.getName(),))
+                    base.localAvatar.setSystemMessage(avId,
+                                                      OTPLocalizer.WhisperTargetLeftVisit % (friend.getName(),))
                     friend.d_teleportGiveup(base.localAvatar.doId)
+                else:
+                    def doTeleport(task):
+                        if friend.getDoId() in base.cr.doId2do:
+                            friendAv = base.cr.doId2do.get(friend.getDoId())
+                        else:
+                            teleportDebug(requestStatus, 'friend not here, giving up')
+                            base.localAvatar.setSystemMessage(avId,
+                                                              OTPLocalizer.WhisperTargetLeftVisit % (friend.getName(),))
+                            friend.d_teleportGiveup(base.localAvatar.doId)
+                            return task.done
+                        base.localAvatar.gotoNode(friendAv)
+                        base.localAvatar.b_teleportGreeting(friend.getDoId())
+                        return task.done
+                    self.acceptOnce('generate-%d' % friend.getDoId(),
+                                    lambda x: taskMgr.doMethodLater(1, doTeleport, uniqueName('doTeleport')))
         base.transitions.irisIn()
         self.nextState = requestStatus.get('nextState', 'walk')
         base.localAvatar.attachCamera()

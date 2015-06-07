@@ -74,7 +74,7 @@ def map3dToAspect2d(node, point):
 
 def invertTable(table):
     index = {}
-    for key in table:
+    for key in table.keys():
         value = table[key]
         if value not in index:
             index[value] = key
@@ -189,7 +189,7 @@ class DistributedTravelGame(DistributedMinigame):
         maxPoint = Point3(0, 0, 0)
         turnTable.calcTightBounds(minPoint, maxPoint)
         self.fullLength = maxPoint[0]
-        for key in TravelGameGlobals.BoardLayouts[self.boardIndex]:
+        for key in TravelGameGlobals.BoardLayouts[self.boardIndex].keys():
             info = TravelGameGlobals.BoardLayouts[self.boardIndex][key]
             switchModel = turnTable.find('**/turntable1').copyTo(render)
             switchModel.setPos(*info['pos'])
@@ -221,7 +221,7 @@ class DistributedTravelGame(DistributedMinigame):
         trainTrack = self.loadTrainTrack(startX, rootY, rootX, rootY)
         self.extraTrainTracks.append(trainTrack)
         tunnelX = None
-        for key in TravelGameGlobals.BoardLayouts[self.boardIndex]:
+        for key in TravelGameGlobals.BoardLayouts[self.boardIndex].keys():
             if self.isLeaf(key):
                 info = TravelGameGlobals.BoardLayouts[self.boardIndex][key]
                 switchX, switchY, switchZ = info['pos']
@@ -327,17 +327,17 @@ class DistributedTravelGame(DistributedMinigame):
         del self.entryTunnel
         self.trolleyCar.removeNode()
         del self.trolleyCar
-        for key in self.trainSwitches:
+        for key in self.trainSwitches.keys():
             self.trainSwitches[key].removeNode()
             del self.trainSwitches[key]
 
         self.trainSwitches = {}
-        for key in self.tunnels:
+        for key in self.tunnels.keys():
             self.tunnels[key].removeNode()
             del self.tunnels[key]
 
         self.tunnels = {}
-        for key in self.trainTracks:
+        for key in self.trainTracks.keys():
             self.trainTracks[key].removeNode()
             del self.trainTracks[key]
 
@@ -380,14 +380,14 @@ class DistributedTravelGame(DistributedMinigame):
         del self.music
 
     def moveCameraToTop(self):
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         p = self.cameraTopView
-        camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
+        base.camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
 
     def moveCameraToTrolley(self):
-        camera.reparentTo(self.trolleyCar)
-        camera.setPos(-25, 0, 7.5)
-        camera.setHpr(-90, 0, 0)
+        base.camera.reparentTo(self.trolleyCar)
+        base.camera.setPos(-25, 0, 7.5)
+        base.camera.setHpr(-90, 0, 0)
 
     def onstage(self):
         self.notify.debug('onstage')
@@ -397,10 +397,10 @@ class DistributedTravelGame(DistributedMinigame):
         self.sky.reparentTo(render)
         self.moveCameraToTop()
         self.trolleyCar.reparentTo(render)
-        for key in self.trainSwitches:
+        for key in self.trainSwitches.keys():
             self.trainSwitches[key].reparentTo(render)
 
-        for key in self.trainTracks:
+        for key in self.trainTracks.keys():
             self.trainTracks[key].reparentTo(render)
 
         for trainTrack in self.extraTrainTracks:
@@ -421,10 +421,10 @@ class DistributedTravelGame(DistributedMinigame):
         self.trolleyCar.hide()
         self.gui.hide()
         self.hideMinigamesAndBonuses()
-        for key in self.trainSwitches:
+        for key in self.trainSwitches.keys():
             self.trainSwitches[key].hide()
 
-        for key in self.trainTracks:
+        for key in self.trainTracks.keys():
             self.trainTracks[key].hide()
 
         for trainTrack in self.extraTrainTracks:
@@ -575,7 +575,7 @@ class DistributedTravelGame(DistributedMinigame):
 
     def enterMoveTrolley(self):
         self.notify.debug('enterMoveTrolley')
-        camera.wrtReparentTo(render)
+        base.camera.wrtReparentTo(render)
         keyAngle = round(self.TrolleyMoveDuration) * 360
         dist = Vec3(self.trainSwitches[self.destSwitch].getPos() - self.trainSwitches[self.currentSwitch].getPos()).length()
         wheelAngle = dist / (2.0 * math.pi * 0.95) * 360
@@ -609,8 +609,8 @@ class DistributedTravelGame(DistributedMinigame):
         def focusOnTrolley(t, self = self):
             pos = self.trolleyCar.getPos()
             pos.setZ(pos.getZ() + 7.5)
-            camera.lookAt(pos)
-            self.lastFocusHpr = camera.getHpr()
+            base.camera.lookAt(pos)
+            self.lastFocusHpr = base.camera.getHpr()
 
         setRightHprTime = 0
         if self.FlyCameraUp:
@@ -622,9 +622,9 @@ class DistributedTravelGame(DistributedMinigame):
         if self.FlyCameraUp:
             if self.FocusOnTrolleyWhileMovingUp:
                 camIval1.append(LerpPosInterval(camera, duration - setRightHprTime, finalPos, name='cameraMove'))
-                camIval2 = Sequence(LerpHprInterval(camera, setRightHprTime, finalHpr, name='cameraHpr'))
+                camIval2 = Sequence(LerpHprInterval(base.camera, setRightHprTime, finalHpr, name='cameraHpr'))
             else:
-                camIval2 = Sequence(LerpPosHprInterval(camera, setRightHprTime, finalPos, finalHpr, blendType='easeIn', name='cameraHpr'))
+                camIval2 = Sequence(LerpPosHprInterval(base.camera, setRightHprTime, finalPos, finalHpr, blendType='easeIn', name='cameraHpr'))
             camIval = Sequence(camIval1, camIval2)
         else:
             camIval = Sequence(camIval1)
@@ -658,7 +658,7 @@ class DistributedTravelGame(DistributedMinigame):
         localAvatarWon = False
         localAvatarLost = False
         noWinner = True
-        for avId in self.avIdBonuses:
+        for avId in self.avIdBonuses.keys():
             name = ''
             avatar = self.getAvatar(avId)
             if avatar:
@@ -894,13 +894,13 @@ class DistributedTravelGame(DistributedMinigame):
 
     def loadMinigameIcons(self):
         self.mg_icons = loader.loadModel('phase_4/models/minigames/mg_icons')
-        for switch in self.switchToMinigameDict:
+        for switch in self.switchToMinigameDict.keys():
             minigame = self.switchToMinigameDict[switch]
             switchPos = self.trainSwitches[switch].getPos()
             labelPos = map3dToAspect2d(render, switchPos)
             useText = True
             iconName = None
-            if minigame in IconDict:
+            if minigame in IconDict.keys():
                 iconName = IconDict[minigame]
             icon = None
             if self.mg_icons:
@@ -953,7 +953,7 @@ class DistributedTravelGame(DistributedMinigame):
 
     def loadBonuses(self):
         self.switchToBonusLabelDict = {}
-        for avId in self.avIdBonuses:
+        for avId in self.avIdBonuses.keys():
             if avId == self.localAvId:
                 switch = self.avIdBonuses[avId][0]
                 beans = self.avIdBonuses[avId][1]

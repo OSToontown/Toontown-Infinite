@@ -20,7 +20,7 @@ class CogdoMazeLocalPlayer(CogdoMazePlayer):
         self.game = game
         self.maze = self.game.maze
         self._guiMgr = guiMgr
-        self.cameraMgr = CogdoMazeCameraManager(self.toon, self.maze, camera, render)
+        self.cameraMgr = CogdoMazeCameraManager(self.toon, self.maze, base.camera, render)
         self._proximityRadius = self.maze.cellWidth * Globals.CameraRemoteToonRadius
         orthoDrive = OrthoDrive(Globals.ToonRunSpeed, maxFrameMove=self.maze.cellWidth / 2, customCollisionCallback=self.maze.doOrthoCollisions, wantSound=True)
         self.orthoWalk = OrthoWalk(orthoDrive)

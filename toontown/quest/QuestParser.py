@@ -35,7 +35,7 @@ FLOAT = re.compile(r'[+-]?\d+[.]\d*([e][+-]\d+)?')
 
 def init():
     globalVarDict.update({'render': render,
-     'camera': camera,
+     'camera': base.camera,
      'hidden': hidden,
      'aspect2d': aspect2d,
      'localToon': base.localAvatar,

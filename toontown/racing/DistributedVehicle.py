@@ -428,7 +428,7 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
         sides = {0: 'right',
          1: 'left'}
         if side == None:
-            for x in sides:
+            for x in sides.keys():
                 self.sparks[x].effect.getParticlesNamed('particles-1').setBirthRate(1000)
                 taskMgr.doMethodLater(0.75, self.sparks[x].stop, 'stopSparks-' + sides[x], extraArgs=[])
 
@@ -499,8 +499,8 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
             self.toon.setShear(0, 0, 0)
         NametagGlobals.setForceOnscreenChat(True)
         if self.localVehicle:
-            camera.reparentTo(self.cameraNode)
-            camera.setPosHpr(0, -33, 16, 0, -10, 0)
+            base.camera.reparentTo(self.cameraNode)
+            base.camera.setPosHpr(0, -33, 16, 0, -10, 0)
             self.physicsMgr.attachPhysicalNode(self.node())
             self.__enableControlInterface()
             self.__createPieWindshield()
@@ -519,9 +519,9 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
             self.__disableControlInterface()
             self.physicsMgr.removePhysicalNode(self.node())
             self.cleanupParticles()
-            camera.reparentTo(localAvatar)
-            camera.setPos(localAvatar.cameraPositions[0][0])
-            camera.setHpr(0, 0, 0)
+            base.camera.reparentTo(localAvatar)
+            base.camera.setPos(localAvatar.cameraPositions[0][0])
+            base.camera.setHpr(0, 0, 0)
             self.engineSfxTrack.finish()
             self.engineSfxTrack = self.generateEngineStopTrack()
         else:
@@ -872,7 +872,7 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
         pitch = -self.getP() + 5
         accelBase = self.accelerationBase
         pitch += accelBase
-        pitch = clampScalar(pitch, accelBase - 5, accelBase + 5)
+        pitch = min(max(pitch, accelBase - 5), accelBase + 5)
         self.accelerationMult = pitch * 2
         if self.groundType == 'ice':
             self.accelerationMult *= iceAccelFactor
@@ -922,7 +922,7 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
             curSpeed = curVelocity.length()
             speedFactor = min(curSpeed, 150) / 162.0
             self.leanAmount = (self.leanAmount + leanIncrement) * speedFactor
-            self.leanAmount = clampScalar(self.leanAmount, -10, 10)
+            self.leanAmount = min(max(self.leanAmount, -10), 10)
 
         self.cWallTrav.traverse(render)
         self.curSpeed = curSpeed
@@ -1046,17 +1046,17 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode, Kart.Kart,
         right = (rf + rr) / 2
         left = (lf + lr) / 2
         rollVal = right - left
-        rollVal = clampScalar(rollVal, -1, 1)
+        rollVal = min(max(rollVal, -1), 1)
         curRoll = self.getR()
         newRoll = curRoll + rollVal * 2.0
         self.setR(newRoll)
         if not self.stopped:
-            camera.setR(-newRoll)
+            base.camera.setR(-newRoll)
         front = (rf + lf) / 2
         rear = (rr + lr) / 2
         center = (front + rear) / 2
         pitchVal = front - rear
-        pitchVal = clampScalar(pitchVal, -1, 1)
+        pitchVal = min(max(pitchVal, -1), 1)
         curPitch = self.getP()
         newPitch = curPitch - pitchVal * 2.0
         self.setP((newPitch + curPitch) / 2.0)

@@ -368,21 +368,21 @@ class DistributedMoleField(DistributedNodePathEntity, MoleFieldBase.MoleFieldBas
             cameraTrack = Sequence()
         else:
             base.localAvatar.stopUpdateSmartCamera()
-            self.camParentHold = camera.getParent()
+            self.camParentHold = base.camera.getParent()
             self.camParent = base.localAvatar.attachNewNode('iCamParent')
             self.camParent.setPos(self.camParentHold.getPos())
             self.camParent.setHpr(self.camParentHold.getHpr())
-            camera.reparentTo(self.camParent)
+            base.camera.reparentTo(self.camParent)
             self.camParent.reparentTo(parentNode)
-            startCamPos = camera.getPos()
-            destCamPos = camera.getPos()
+            startCamPos = base.camera.getPos()
+            destCamPos = base.camera.getPos()
             zenith = trajectory.getPos(flyDur / 2.0)[2]
             destCamPos.setZ(zenith * 1.3)
             destCamPos.setY(destCamPos[1] * 0.3)
 
             def camTask(task, zenith = zenith, flyNode = toon, startCamPos = startCamPos, camOffset = destCamPos - startCamPos):
                 u = flyNode.getZ() / zenith
-                camera.lookAt(toon)
+                base.camera.lookAt(toon)
                 return Task.cont
 
             camTaskName = 'mazeToonFlyCam-' + `avId`
@@ -391,9 +391,9 @@ class DistributedMoleField(DistributedNodePathEntity, MoleFieldBase.MoleFieldBas
             def cleanupCamTask(self = self, toon = toon, camTaskName = camTaskName, startCamPos = startCamPos):
                 taskMgr.remove(camTaskName)
                 self.camParent.reparentTo(toon)
-                camera.setPos(startCamPos)
-                camera.lookAt(toon)
-                camera.reparentTo(self.camParentHold)
+                base.camera.setPos(startCamPos)
+                base.camera.lookAt(toon)
+                base.camera.reparentTo(self.camParentHold)
                 base.localAvatar.startUpdateSmartCamera()
                 self.setUpCamera()
 

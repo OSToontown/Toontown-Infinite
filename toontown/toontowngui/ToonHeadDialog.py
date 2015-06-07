@@ -3,6 +3,7 @@ from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
 import TTDialog
 from toontown.toon import ToonHead
+from direct.gui.DirectGui import DGG
 
 class ToonHeadDialog(TTDialog.TTDialog):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonHeadDialog')
@@ -22,7 +23,9 @@ class ToonHeadDialog(TTDialog.TTDialog):
          ('geom_scale', 0.35, None),
          ('geom_pos', (-0.25, 0, 0), None),
          ('text_wordwrap', 9, None),
-         ('fadeScreen', 0, None))
+         ('fadeScreen', 0, None),
+         ('image', DGG.getDefaultDialogGeom(), None),
+         ('relief', None, None))
         self.defineoptions(kw, optiondefs)
         TTDialog.TTDialog.__init__(self, style=self['style'])
         self.initialiseoptions(ToonHeadDialog)

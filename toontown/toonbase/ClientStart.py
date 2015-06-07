@@ -19,7 +19,7 @@ from panda3d.core import loadPrcFile
 
 if __debug__:
     loadPrcFile('config/general.prc')
-    loadPrcFile('config/release/dev.prc')
+    loadPrcFile('config/distribution/dev.prc')
 
 
 from direct.directnotify.DirectNotifyGlobal import directNotify
@@ -117,7 +117,7 @@ backgroundNodePath.setScale(render2d, VBase3(1))
 backgroundNodePath.find('**/fg').hide()
 logo = OnscreenImage(
     image='phase_3/maps/toontown-logo.png',
-    scale=(1 / (4.0/3.0), 1, 1 / (4.0/3.0)),
+    scale=(0.9625 / (4.0/3.0), 1, 0.83 / (4.0/3.0)),
     pos=backgroundNodePath.find('**/fg').getPos())
 logo.setTransparency(TransparencyAttrib.MAlpha)
 logo.setBin('fixed', 20)
@@ -131,8 +131,7 @@ import TTLocalizer
 from otp.otpbase import OTPGlobals
 OTPGlobals.setDefaultProductPrefix(TTLocalizer.ProductPrefix)
 if base.musicManagerIsValid:
-    themeList = ('phase_3/audio/bgm/tti_theme.ogg', 'phase_3/audio/bgm/tti_theme_2.ogg')
-    music = base.loadMusic(random.choice(themeList))
+    music = base.loadMusic('phase_3/audio/bgm/tti_theme.ogg')
     if music:
         music.setLoop(1)
         music.setVolume(0.9)
@@ -179,7 +178,7 @@ __builtin__.loader = base.loader
 autoRun = ConfigVariableBool('toontown-auto-run', 1)
 if autoRun:
     try:
-        run()
+        base.run()
     except SystemExit:
         raise
     except:

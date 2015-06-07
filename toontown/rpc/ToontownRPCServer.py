@@ -107,7 +107,7 @@ class ToontownRPCServer:
 
             # Otherwise, discard the faulty sockets, and wait for the next poll
             # iteration:
-            for socket in self.connections:
+            for socket in self.connections.keys():
                 try:
                     socket.fileno()
                     socket.getpeername()

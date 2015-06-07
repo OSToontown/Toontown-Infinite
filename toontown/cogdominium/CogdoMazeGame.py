@@ -93,7 +93,7 @@ class CogdoMazeGame(DirectObject):
         return
 
     def _initAudio(self):
-        self._audioMgr = CogdoGameAudioManager(Globals.MusicFiles, Globals.SfxFiles, camera, cutoff=Globals.AudioCutoff)
+        self._audioMgr = CogdoGameAudioManager(Globals.MusicFiles, Globals.SfxFiles, base.camera, cutoff=Globals.AudioCutoff)
         self._quakeSfx1 = self._audioMgr.createSfx('quake')
         self._quakeSfx2 = self._audioMgr.createSfx('quake')
 
@@ -128,7 +128,7 @@ class CogdoMazeGame(DirectObject):
             suit.destroy()
 
         del self.suits
-        for id in self.drops:
+        for id in self.drops.keys():
             self.cleanupDrop(id)
 
         self.__stopUpdateTask()
@@ -401,7 +401,7 @@ class CogdoMazeGame(DirectObject):
         return drop.getDropIval()
 
     def cleanupDrop(self, id):
-        if id in self.drops:
+        if id in self.drops.keys():
             drop = self.drops[id]
             drop.destroy()
             del self.drops[id]
@@ -470,7 +470,7 @@ class CogdoMazeGame(DirectObject):
         self.distGame.b_toonHitByGag(playerId)
 
     def toonHitByGag(self, toonId, hitToon, elapsedTime = 0.0):
-        if toonId not in self.toonId2Player or hitToon not in self.toonId2Player:
+        if toonId not in self.toonId2Player.keys() or hitToon not in self.toonId2Player.keys():
             return
         player = self.toonId2Player[hitToon]
         player.hitByGag()
@@ -483,7 +483,7 @@ class CogdoMazeGame(DirectObject):
     def suitHitByGag(self, toonId, suitType, suitNum, elapsedTime = 0.0):
         if suitType == Globals.SuitTypes.Boss:
             self.guiMgr.showBossHit(suitNum)
-        if suitNum in self.suitsById:
+        if suitNum in self.suitsById.keys():
             suit = self.suitsById[suitNum]
             suit.hitByGag()
 
@@ -568,13 +568,13 @@ class CogdoMazeGame(DirectObject):
             for player in self.players:
                 player.removeGag()
 
-        elif toonId in self.toonId2Player:
+        elif toonId in self.toonId2Player.keys():
             player = self.toonId2Player[toonId]
             player.removeGag()
 
     def handleToonDisconnected(self, toonId):
         if toonId == self.localPlayer.toon.doId:
             pass
-        elif toonId in self.toonId2Player:
+        elif toonId in self.toonId2Player.keys():
             player = self.toonId2Player[toonId]
             self._removePlayer(player)

@@ -1161,7 +1161,7 @@ def getMaxClosets():
 
 def getAllClosets():
     list = []
-    for closetId in ClosetToClothes:
+    for closetId in ClosetToClothes.keys():
         list.append(CatalogFurnitureItem(closetId))
 
     return list

@@ -195,8 +195,8 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
         self.grabTrack = self.makeToonGrabInterval(toon)
         if avId == localAvatar.doId:
             self.boss.toCraneMode()
-            camera.reparentTo(self.root)
-            camera.setPosHpr(0, -10, 3, 0, 0, 0)
+            base.camera.reparentTo(self.root)
+            base.camera.setPosHpr(0, -10, 3, 0, 0, 0)
             localAvatar.setPos(self.root, self.toonGolfOffsetPos)
             localAvatar.setHpr(self.root, self.toonGolfOffsetHpr)
             localAvatar.sendCurrentPosition()
@@ -224,9 +224,9 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
         if self.avId == localAvatar.doId:
             self.__disableControlInterface()
             if not self.goingToReward:
-                camera.reparentTo(base.localAvatar)
-                camera.setPos(base.localAvatar.cameraPositions[0][0])
-                camera.setHpr(0, 0, 0)
+                base.camera.reparentTo(base.localAvatar)
+                base.camera.setPos(base.localAvatar.cameraPositions[0][0])
+                base.camera.setHpr(0, 0, 0)
         self.stopAdjustClubTask()
         self.releaseTrack.start()
         self.enableControlKey()

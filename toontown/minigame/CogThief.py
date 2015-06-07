@@ -11,6 +11,7 @@ from toontown.battle.BattleProps import globalPropPool
 from toontown.battle.BattleSounds import globalBattleSoundCache
 CTGG = CogThiefGameGlobals
 
+
 class CogThief(DirectObject):
     notify = directNotify.newCategory('CogThief')
     DefaultSpeedWalkAnim = 4.0
@@ -396,7 +397,7 @@ class CogThief(DirectObject):
 
     def seeFriends(self):
         self.clearVisibleList()
-        for cogIndex in self.game.cogInfo:
+        for cogIndex in self.game.cogInfo.keys():
             if cogIndex == self.cogIndex:
                 continue
             if self.sameGoal(cogIndex):

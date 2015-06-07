@@ -1,8 +1,8 @@
 from direct.fsm.FSM import FSM
 from toontown.toonbase import ToontownGlobals
 
-class OperationFSM(FSM):
 
+class OperationFSM(FSM):
     def __init__(self, air, bankMgr):
         FSM.__init__(self, 'OperationFSM')
         self.air = air
@@ -12,8 +12,8 @@ class OperationFSM(FSM):
         if self.target:
             del self.bankMgr.avId2fsm[self.target]
 
-class BankRetrieveFSM(OperationFSM):
 
+class BankRetrieveFSM(OperationFSM):
     def enterStart(self, avId, DISLid):
         self.target = avId
         self.DISLid = DISLid
@@ -36,8 +36,8 @@ class BankRetrieveFSM(OperationFSM):
         messenger.send('bankDone-%s' % self.target)
         OperationFSM.enterOff(self)
 
-class BankUpdateFSM(OperationFSM):
 
+class BankUpdateFSM(OperationFSM):
     def enterStart(self, avId, DISLid, money):
         self.target = avId
 
@@ -60,8 +60,8 @@ class BankUpdateFSM(OperationFSM):
         av.b_setBankMoney(money)
         self.demand('Off')
 
-class BankManagerAI:
 
+class BankManagerAI:
     def __init__(self, air):
         self.air = air
         self.avId2fsm = {}

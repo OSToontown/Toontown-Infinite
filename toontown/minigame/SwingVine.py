@@ -448,7 +448,7 @@ class SwingVine(NodePath):
 
     def updateAttachedToons(self):
         curve = self.rope.ropeNode.getCurve().evaluate()
-        for avId in self.attachedToons:
+        for avId in self.attachedToons.keys():
             self.doubleCheckOffset(avId)
             t = self.attachedToons[avId][0]
             newPoint = Vec3(0, 0, 0)
@@ -653,5 +653,5 @@ class SwingVine(NodePath):
     def updateSwingAnims(self):
         if self.unloading:
             return
-        for avId in self.attachedToons:
+        for avId in self.attachedToons.keys():
             self.setupSwingAnim(avId)

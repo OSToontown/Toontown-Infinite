@@ -1,7 +1,10 @@
-from direct.task.Task import Task
 import math
+
+from direct.task.Task import Task
 from panda3d.core import BillboardEffect, Vec3, Point3, PGButton, VBase4
 from panda3d.core import DepthWriteAttrib
+from direct.interval.IntervalGlobal import Sequence, Parallel
+from direct.interval.IntervalGlobal import LerpScaleInterval, Func
 
 from toontown.chat.ChatBalloon import ChatBalloon
 from toontown.nametag import NametagGlobals
@@ -23,8 +26,14 @@ class Nametag3d(Nametag, Clickable3d):
         self.billboardOffset = 3
         self.doBillboardEffect()
 
+        self.chatBalloonAnimTrack = None
+
     def destroy(self):
         self.ignoreAll()
+
+        if self.chatBalloonAnimTrack is not None:
+            self.chatBalloonAnimTrack.finish()
+            self.chatBalloonAnimTrack = None
 
         Nametag.destroy(self)
         Clickable3d.destroy(self)
@@ -56,7 +65,7 @@ class Nametag3d(Nametag, Clickable3d):
 
     def updateClickRegion(self):
         if self.chatBalloon is not None:
-            left = self.chatBalloon.center[0] - (self.chatBalloon.width/2)
+            left = self.chatBalloon.center[0] - (self.chatBalloon.width / 2)
             right = left + self.chatBalloon.width
 
             # Calculate the bottom of the region based on constants.
@@ -66,13 +75,13 @@ class Nametag3d(Nametag, Clickable3d):
 
             self.setClickRegionFrame(left, right, bottom, top)
         elif self.panel is not None:
-            centerX = (self.textNode.getLeft()+self.textNode.getRight()) / 2.0
-            centerY = (self.textNode.getBottom()+self.textNode.getTop()) / 2.0
+            centerX = (self.textNode.getLeft() + self.textNode.getRight()) / 2.0
+            centerY = (self.textNode.getBottom() + self.textNode.getTop()) / 2.0
 
-            left = centerX - (self.panelWidth/2.0)
-            right = centerX + (self.panelWidth/2.0)
-            bottom = centerY - (self.panelHeight/2.0)
-            top = centerY + (self.panelHeight/2.0)
+            left = centerX - (self.panelWidth / 2.0)
+            right = centerX + (self.panelWidth / 2.0)
+            bottom = centerY - (self.panelHeight / 2.0)
+            top = centerY + (self.panelHeight / 2.0)
 
             self.setClickRegionFrame(left, right, bottom, top)
 
@@ -169,11 +178,25 @@ class Nametag3d(Nametag, Clickable3d):
         self.panel.setTransparency(background[3] < 1)
 
         # Reposition the panel:
-        x = (self.textNode.getLeft()+self.textNode.getRight()) / 2.0
-        z = (self.textNode.getBottom()+self.textNode.getTop()) / 2.0
+        x = (self.textNode.getLeft() + self.textNode.getRight()) / 2.0
+        z = (self.textNode.getBottom() + self.textNode.getTop()) / 2.0
         self.panel.setPos(x, 0, z)
 
         # Resize the panel:
         self.panelWidth = self.textNode.getWidth() + self.PANEL_X_PADDING
         self.panelHeight = self.textNode.getHeight() + self.PANEL_Z_PADDING
         self.panel.setScale(self.panelWidth, 1, self.panelHeight)
+
+    def animateChatBalloon(self):
+        if self.chatBalloonAnimTrack is not None:
+            self.chatBalloonAnimTrack.finish()
+            self.chatBalloonAnimTrack = None
+
+        self.chatBalloonAnimTrack = Sequence(
+            Parallel(
+                LerpScaleInterval(self.chatBalloon, 0.25, 1.25, startScale=0, blendType='easeIn'),
+                Func(self.contents.show)
+            ),
+            LerpScaleInterval(self.chatBalloon, 0.125, 1, startScale=1.25, blendType='easeOut')
+        )
+        self.chatBalloonAnimTrack.start()

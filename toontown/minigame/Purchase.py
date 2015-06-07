@@ -293,9 +293,9 @@ class Purchase(PurchaseBase):
         self.toonsKeep = []
         self.counters = []
         self.totalCounters = []
-        camera.reparentTo(render)
-        camera.setPos(0, 16.0, 2.0)
-        camera.lookAt(0, 0, 0.75)
+        base.camera.reparentTo(render)
+        base.camera.setPos(0, 16.0, 2.0)
+        base.camera.lookAt(0, 0, 0.75)
         base.transitions.irisIn(0.4)
         base.camLens.setMinFov(60/(4./3.))
         base.setBackgroundColor(Vec4(0, 0.6, 1, 1))

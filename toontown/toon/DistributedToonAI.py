@@ -338,7 +338,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         try:
             styleStr = stylesDict.keys()[stylesDict.values().index([idx, textureIdx, colorIdx])]
             accessoryItemId = 0
-            for itemId in CatalogAccessoryItem.AccessoryTypes:
+            for itemId in CatalogAccessoryItem.AccessoryTypes.keys():
                 if styleStr == CatalogAccessoryItem.AccessoryTypes[itemId][CatalogAccessoryItem.ATString]:
                     accessoryItemId = itemId
                     break
@@ -594,7 +594,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def d_setNPCFriendsDict(self, NPCFriendsDict):
         NPCFriendsList = []
-        for friend in NPCFriendsDict:
+        for friend in NPCFriendsDict.keys():
             NPCFriendsList.append((friend, NPCFriendsDict[friend]))
 
         self.sendUpdate('setNPCFriendsDict', [NPCFriendsList])
@@ -3144,7 +3144,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         type = SuitDNA.getSuitType(suitName)
         level, type, track = sp.pickLevelTypeAndTrack(None, type, track)
         building.suitTakeOver(track, level, None)
-        self.notify.warning('cogTakeOver %s %s %d %d' % (track,
+        self.notify.debug('cogTakeOver %s %s %d %d' % (track,
          level,
          building.block,
          self.zoneId))
@@ -4343,7 +4343,7 @@ def maxHp(maxHp):
     """
     if not 15 <= maxHp <= ToontownGlobals.MaxHpLimit:
         return 'HP must be in range (15-%d).' % ToontownGlobals.MaxHpLimit
-    invoker = spellbook.getTarget()
+    invoker = spellbook.getInvoker()
     invoker.b_setHp(maxHp)
     invoker.b_setMaxHp(maxHp)
     invoker.toonUp(maxHp - invoker.getHp())
@@ -5037,19 +5037,6 @@ def givePies(pieType, numPies=0):
     else:
         target.b_setNumPies(ToontownGlobals.FullPies)
 
-@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
-def trackBonus(trackIndex):
-    """
-    Modify the invoker's track bonus level.
-    """
-    invoker = spellbook.getInvoker()
-    if not 0 <= trackIndex < 7:
-        return 'Invalid track index!'
-    trackBonusLevel = [0] * 7
-    trackBonusLevel[trackIndex] = 1
-    invoker.b_setTrackBonusLevel(trackBonusLevel)
-    return 'Your track bonus level has been set!'
-
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, str, int])
 def track(command, track, value=None):
     try:
@@ -5075,11 +5062,20 @@ def track(command, track, value=None):
         if value is None:
             return 'You must provide an experience value.'
         if not 0 <= value <= Experience.MaxSkill:
-            return 'Experience value not in xrange (0-%d).' % Experience.MaxSkill
+            return 'Experience value not in range (0-%d).' % Experience.MaxSkill
         experience = Experience.Experience(invoker.getExperience(), invoker)
         experience.experience[index] = value
         invoker.b_setExperience(experience.makeNetString())
         return 'Set the experience of the %s track to: %d!' % (track, value)
+    if command.lower() == 'bonus':
+        if value is None:
+            return 'You must provide a bonus value.'
+        if not 0 <= value <= 7:
+            return 'Bonus value not in range (0-7).'
+        trackBonusLevelArray = invoker.getTrackBonusLevel()
+        trackBonusLevelArray[index] = value - 1
+        invoker.b_setTrackBonusLevel(trackBonusLevelArray)
+        return 'Set the bonus level of the %s track to: %d!' % (track, value)
     return 'Invalid command.'
 
 @magicWord(category=CATEGORY_ADMINISTRATOR, types=[str, str])
@@ -5172,3 +5168,9 @@ def immortal():
     invoker = spellbook.getInvoker()
     invoker.setImmortalMode(not invoker.immortalMode)
     return 'Immortal Mode: %s' % ('ON' if invoker.immortalMode else 'OFF')
+    
+@magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
+def gagPouch(value):
+    invoker = spellbook.getInvoker()
+    invoker.b_setMaxCarry(value)
+    return 'Gag pouch set.'

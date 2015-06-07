@@ -424,7 +424,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
         pass
 
     def onDoorCloseFinish(self):
-        for avId in self.boardedAvIds:
+        for avId in self.boardedAvIds.keys():
             av = self.cr.doId2do.get(avId)
             if av is not None:
                 if av.getParent().compareTo(self.getElevatorModel()) == 0:

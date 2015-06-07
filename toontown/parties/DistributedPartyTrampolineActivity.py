@@ -373,7 +373,7 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
     def acquireToon(self):
         self.toon.disableSmartCameraViews()
         self.toon.stopUpdateSmartCamera()
-        camera.wrtReparentTo(render)
+        base.camera.wrtReparentTo(render)
         self.toon.dropShadow.reparentTo(hidden)
         self.toon.startPosHprBroadcast(period=0.2)
         self.toonAcceleration = 0.0
@@ -412,7 +412,7 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
         self.toon.dropShadow.setAlphaScale(1.0)
         self.toon.dropShadow.setScale(1.0)
         self.b_requestAnim('Off')
-        camera.reparentTo(base.localAvatar)
+        base.camera.reparentTo(base.localAvatar)
         base.localAvatar.startUpdateSmartCamera()
         base.localAvatar.enableSmartCameraViews()
         base.localAvatar.setCameraPositionByIndex(base.localAvatar.cameraIndex)

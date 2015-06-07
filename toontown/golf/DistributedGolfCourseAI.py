@@ -299,7 +299,7 @@ class DistributedGolfCourseAI(DistributedObjectAI.DistributedObjectAI, FSM):
                 allAvatarsInCourse()
 
         self.__barrier = ToonBarrier('WaitReadyCourse', self.uniqueName('WaitReadyCourse'), self.avIdList, READY_TIMEOUT, allAvatarsInCourse, handleTimeout)
-        for avId in self.avStateDict:
+        for avId in self.avStateDict.keys():
             if self.avStateDict[avId] == READY:
                 self.__barrier.clear(avId)
 
@@ -334,7 +334,7 @@ class DistributedGolfCourseAI(DistributedObjectAI.DistributedObjectAI, FSM):
 
         stillPlaying = self.getStillPlayingAvIds()
         self.__barrier = ToonBarrier('WaitReadyHole', self.uniqueName('WaitReadyHole'), stillPlaying, READY_TIMEOUT, allAvatarsInHole, handleTimeout)
-        for avId in self.avStateDict:
+        for avId in self.avStateDict.keys():
             if self.avStateDict[avId] == ONHOLE:
                 self.__barrier.clear(avId)
 
