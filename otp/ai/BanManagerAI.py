@@ -20,9 +20,6 @@ class BanFSM(FSM):
         self.accountId = None
         self.avName = None
 
-    def performBan(self, bannedUntil):
-        self.air.webRpc.banUser(self.accountId, bannedUntil, self.comment)
-
     def ejectPlayer(self):
         av = self.air.doId2do.get(self.avId)
         if not av:
@@ -49,12 +46,13 @@ class BanFSM(FSM):
         date = datetime.date.today()
         if simbase.config.GetBool('want-bans', True):
             if self.duration == 0:
-                bannedUntil = "0000-00-00" # Terminated.
+                bannedUntil = '0000-00-00'  # Terminated.
             else:
-                bannedUntil = date + datetime.timedelta(days=self.duration)
+                bannedUntil = str(date +
+                                  datetime.timedelta(hours=self.duration))
 
             self.duration = None
-            self.performBan(bannedUntil)
+            self.air.webRpc.banUser(self.accountId, bannedUntil, self.comment)
 
     def getAvatarDetails(self):
         av = self.air.doId2do.get(self.avId)
@@ -132,7 +130,7 @@ def kick(reason='No reason specified'):
 
 
 @magicWord(category=CATEGORY_MODERATOR, types=[str, int])
-def ban(reason, duration):
+def ban(duration, reason):
     """
     Ban the target from the game server.
     """
