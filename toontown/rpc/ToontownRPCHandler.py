@@ -364,6 +364,11 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
         """
         if reason not in ('hacking', 'language', 'other'):
             return False
+
+        avatarDetails = self.rpc_getAvatarDetails(userId)
+        if avatarDetails is None:
+            return False
+
         self.air.writeServerEvent('ban', userId, duration, reason)
         if duration > 0:
             now = datetime.date.today()
@@ -371,7 +376,7 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
         else:
             release = '0000-00-00'  # Permanent ban.
         self.air.webRpc.banUser(userId, release, reason)
-        self.rpc_kickUser(userId, 152, reason)
+        self.rpc_kickUser(userId, 152, avatarDetails['name'])
         return True
 
     @rpcmethod(accessLevel=MODERATOR)
