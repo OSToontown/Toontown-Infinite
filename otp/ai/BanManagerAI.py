@@ -129,7 +129,7 @@ def kick(reason='No reason specified'):
     return "Kicked %s from the game server!" % target.getName()
 
 
-@magicWord(category=CATEGORY_MODERATOR, types=[str, int])
+@magicWord(category=CATEGORY_MODERATOR, types=[int, str])
 def ban(duration, reason):
     """
     Ban the target from the game server.
