@@ -370,9 +370,7 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
             release = str(now + datetime.timedelta(hours=duration))
         else:
             release = '0000-00-00'  # Permanent ban.
-        # TODO: Use the webRpc to ban users
-        # executeHttpRequest('accounts/ban/', Id=userId, Release=release,
-        #                   Reason=reason)
+        self.air.webRpc.banUser(userId, release, reason)
         self.rpc_kickUser(userId, 152, reason)
         return True
 

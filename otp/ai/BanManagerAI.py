@@ -21,10 +21,7 @@ class BanFSM(FSM):
         self.avName = None
 
     def performBan(self, bannedUntil):
-        # TODO: Use the webRpc to ban users
-        # executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
-        #                   Reason=self.comment)
-        pass
+        self.air.webRpc.banUser(self.accountId, bannedUntil, self.comment)
 
     def ejectPlayer(self):
         av = self.air.doId2do.get(self.avId)
