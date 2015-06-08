@@ -48,7 +48,7 @@ class BanFSM(FSM):
             if self.duration == 0:
                 bannedUntil = '0000-00-00'  # Terminated.
             else:
-                bannedUntil = date + datetime.timedelta(days=self.duration)
+                bannedUntil = str(date + datetime.timedelta(days=self.duration))
 
             self.duration = None
             self.air.webRpc.banUser(self.accountId, bannedUntil, self.comment)
