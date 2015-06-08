@@ -1,8 +1,6 @@
-import datetime
 from direct.distributed.MsgTypes import CLIENTAGENT_EJECT
 from direct.distributed.PyDatagram import PyDatagram
 from direct.stdpy import threading2
-import re
 
 from otp.distributed import OtpDoGlobals
 from toontown.distributed.ShardStatusReceiver import ShardStatusReceiver
@@ -10,6 +8,10 @@ from toontown.rpc.ToontownRPCHandlerBase import *
 from toontown.suit.SuitInvasionGlobals import INVASION_TYPE_NORMAL
 from toontown.toon import ToonDNA
 from toontown.toonbase import TTLocalizer
+
+import datetime
+import time
+import re
 
 
 class ToontownRPCHandler(ToontownRPCHandlerBase):
@@ -370,13 +372,14 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
             return False
 
         self.air.writeServerEvent('ban', userId, duration, reason)
-        if duration > 0:
+
+        if duration != 0:
             now = datetime.date.today()
-            release = str(now + datetime.timedelta(hours=duration))
-        else:
-            release = '0000-00-00'  # Permanent ban.
-        self.air.webRpc.banUser(userId, release, reason)
+            duration = time.mktime((now + datetime.timedelta(days=duration)).timetuple())
+
+        self.air.webRpc.banUser(userId, duration, reason)
         self.rpc_kickUser(userId, 152, avatarDetails['name'])
+
         return True
 
     @rpcmethod(accessLevel=MODERATOR)
