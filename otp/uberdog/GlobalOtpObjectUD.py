@@ -8,7 +8,7 @@ class GlobalOtpObjectUD(DistributedObjectGlobalUD):
 
     def announceGenerate(self):
         DistributedObjectGlobalUD.announceGenerate(self)
-        self.sender2Mgrs = {}
+        self.senders2Mgrs = {}
 
     def _makeAvMsg(self, field, values, recipient):
         return self.air.dclassesByName['DistributedToonUD'].getFieldByName(field).aiFormatUpdate(

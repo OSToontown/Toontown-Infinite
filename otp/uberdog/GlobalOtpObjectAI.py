@@ -19,7 +19,7 @@ class GlobalOtpObjectAI(DistributedObjectGlobalAI):
         taskMgr.doMethodLater(HEARTBEAT_INTERVAL * 2, self.reportUdLost, self.uniqueName('noResponseTask'))
 
     def startHeartbeat(self):
-        taskMgr.remove('noResponseTask')
+        taskMgr.remove(self.uniqueName('noResponseTask'))
         self.uberdogUp = True
         taskMgr.doMethodLater(HEARTBEAT_INTERVAL, self.heartbeat, self.uniqueName('heartbeatTask'))
 
@@ -30,11 +30,11 @@ class GlobalOtpObjectAI(DistributedObjectGlobalAI):
 
     def heartbeatResponse(self):
         self.uberdogUp = True
-        taskMgr.remove('heartbeatLostTask')
+        taskMgr.remove(self.uniqueName('heartbeatLostTask'))
 
     def reportUdLost(self, task):
         self.notify.warning('Connection to the Uberdog was lost!')
         self.uberdogUp = False
-        if task.name == 'noResponseTask':
+        if task.name == self.uniqueName('noResponseTask'):
             self.startHeartbeat()
             return Task.done
