@@ -410,7 +410,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
             suitFlatten = Sequence(
                 Parallel(
                     LerpHprInterval(node, 2, Vec3(0.0, 0.0, 0.0), blendType='easeInOut'),
-                    LerpScaleInterval(node, 2, VBase3(1, 0.05, 1), blendType='easeInOut')
+                    LerpScaleInterval(node, 2, VBase3(1, 1, 0.05), blendType='easeInOut')
                 )
             )
             gotHitSound = globalBattleSoundCache.getSound('AA_drop_boat_cog.ogg')
