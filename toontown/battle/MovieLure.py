@@ -174,7 +174,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 if revived != 0:
                     suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
                 elif died != 0:
-                    if not (trapProp.getName() == 'tnt' and suit.maxHP <= 30):
+                    if not (trapProp.getName() == 'tnt' and suit.maxHP <= 42):
                         suitTrack.append(MovieUtil.createSuitDeathTrack(suit, toon, battle, npcs))
                 tracks.append(suitTrack)
                 tracks.append(lerpSuit(suit, suitDelay + 0.55 + shakeTotalDuration, suitMoveDuration, reachPos, battle, trapProp))
@@ -231,7 +231,7 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                 if revived != 0:
                     suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
                 elif died != 0:
-                    if not (trapProp.getName() == 'tnt' and suit.maxHP <= 30):
+                    if not (trapProp.getName() == 'tnt' and suit.maxHP <= 42):
                         suitTrack.append(MovieUtil.createSuitDeathTrack(suit, toon, battle, npcs))
                 tracks.append(suitTrack)
                 tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
@@ -413,7 +413,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
                 ActorInterval(suit, 'flail', startTime=0.9),
                 LerpPosInterval(suit, 0.3, flyPos),
             ))
-        if suit.maxHP <= 30:
+        if suit.maxHP <= 42:
             suitTrack.append(midairSuitExplodeTrack(suit, battle))
             damageTrack = Sequence(Wait(2.4), Func(suit.showHpText, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
             explosionSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
@@ -444,7 +444,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
 
         result.append(Parallel(tntTrack, suitTrack, damageTrack, explosionTrack, soundTrack))
 
-        if suit.maxHP <= 30:
+        if suit.maxHP <= 42:
             suit.battleTrapProp = trapProp
             result.append(Func(battle.removeTrap, suit, True))
             return result
@@ -706,7 +706,7 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                 if revived != 0:
                     suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
                 elif died != 0:
-                    if not (trapProp.getName() == 'tnt' and suit.maxHP <= 30):
+                    if not (trapProp.getName() == 'tnt' and suit.maxHP <= 42):
                         suitTrack.append(MovieUtil.createSuitDeathTrack(suit, toon, battle, npcs))
                 tracks.append(suitTrack)
                 tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
