@@ -26,6 +26,7 @@ from otp.uberdog import SpeedchatRelay/UD
 from otp.distributed import CentralLogger/AI/UD
 from otp.status import StatusDatabase/UD
 from otp.avatar import AvatarHandle
+from otp.uberdog import GlobalOtpObject/AI/UD
 
 typedef uint8 bool;
 
@@ -488,4 +489,12 @@ dclass StatusDatabase : DistributedObject {
 
 dclass CallbackObject {
   callback(uint32, bool, uint8);
+};
+
+dclass DistributedObjectGlobal : DistributedObject {
+};
+
+dclass GlobalOtpObject: DistributedObjectGlobal {
+  heartbeat(uint32 channel);
+  heartbeatResponse() airecv;
 };
