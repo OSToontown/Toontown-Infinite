@@ -119,7 +119,8 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
             if revived != 0:
                 suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle))
             if died != 0:
-                suitTrack.append(MovieUtil.createSuitDeathTrack(suit, toon, battle))
+                if not (trapProp.getName() == 'tnt' and suit.maxHP <= 42):
+                    suitTrack.append(MovieUtil.createSuitDeathTrack(suit, toon, battle))
             tracks.append(suitTrack)
     else:
         tracks.append(Sequence(Wait(3.7), Func(MovieUtil.indicateMissed, suit)))
