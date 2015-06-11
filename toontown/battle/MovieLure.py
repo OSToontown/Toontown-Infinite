@@ -404,16 +404,26 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
             ActorInterval(suit, 'neutral', duration=0.4),
             ActorInterval(suit, 'flail', startTime=0.6, endTime=0.7),
             Wait(0.2),
-            Parallel(
-                base.camera.posHprInterval(
+            )
+        if base.localAvatar in battle.activeToons:
+            suitTrack.append(Parallel(
+                 base.camera.posHprInterval(
                     0.3, Point3(oldCamera[0], oldCamera[1], oldCamera[2]), Point3(0, 30, 0), blendType='easeInOut'
-                ),
-                Func(battle.movie.needRestoreColor),
-                Func(suit.setColorScale, Vec4(0.2, 0.2, 0.2, 1)),
-                Func(trapProp.reparentTo, hidden),
-                ActorInterval(suit, 'flail', startTime=0.9),
-                LerpPosInterval(suit, 0.3, flyPos),
-            ))
+                    ),
+                 Func(battle.movie.needRestoreColor),
+                 Func(suit.setColorScale, Vec4(0.2, 0.2, 0.2, 1)),
+                 Func(trapProp.reparentTo, hidden),
+                 ActorInterval(suit, 'flail', startTime=0.9),
+                 LerpPosInterval(suit, 0.3, flyPos),
+                 ))
+        else:
+            suitTrack.append(Parallel(
+                 Func(battle.movie.needRestoreColor),
+                 Func(suit.setColorScale, Vec4(0.2, 0.2, 0.2, 1)),
+                 Func(trapProp.reparentTo, hidden),
+                 ActorInterval(suit, 'flail', startTime=0.9),
+                 LerpPosInterval(suit, 0.3, flyPos),
+                 ))
         if suit.maxHP <= 42:
             suitTrack.append(midairSuitExplodeTrack(suit, battle))
             damageTrack = Sequence(Wait(2.4), Func(suit.showHpText, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
@@ -423,15 +433,21 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
                 SoundInterval(explosionSound, duration=0.6, node=suit)
             )
         else:
-            suitTrack.append(
-                Parallel(
-                    base.camera.posHprInterval(
-                        0.4, Point3(*oldCamera), Point3(*oldHPR), blendType='easeInOut'
-                    ),
-                    ActorInterval(suit, 'slip-backward', playRate=1),
-                    LerpPosInterval(suit, 0.7, dropPos),
+            if base.localAvatar in battle.activeToons:
+                suitTrack.append(Parallel(
+                         base.camera.posHprInterval(
+                            0.4, Point3(*oldCamera), Point3(*oldHPR), blendType='easeInOut'
+                         ),
+                         ActorInterval(suit, 'slip-backward', playRate=1),
+                         LerpPosInterval(suit, 0.7, dropPos),
+                    )
                 )
-            )
+            else:
+                suitTrack.append(Parallel(
+                          ActorInterval(suit, 'slip-backward', playRate=1),
+                          LerpPosInterval(suit, 0.7, dropPos),
+                          )
+                )
             suitTrack.append(Func(suit.clearColorScale))
             suitTrack.append(Func(trapProp.sparksEffect.cleanup))
             suitTrack.append(Func(battle.movie.clearRestoreColor))
