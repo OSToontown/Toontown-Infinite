@@ -51,10 +51,17 @@ from toontown.tutorial.TutorialManagerAI import TutorialManagerAI
 from toontown.uberdog.DistributedPartyManagerAI import DistributedPartyManagerAI
 
 
+if config.GetBool('want-web-rpc', False):
+    from toontown.rpc.ToontownRPCClient import ToontownRPCClient
+
+
+
 class ToontownAIRepository(ToontownInternalRepository):
     def __init__(self, baseChannel, stateServerChannel, districtName):
         ToontownInternalRepository.__init__(
             self, baseChannel, stateServerChannel, dcSuffix='AI')
+
+        self.webRpc = None
 
         self.districtName = districtName
 
@@ -169,6 +176,10 @@ class ToontownAIRepository(ToontownInternalRepository):
             self.cogHeadquarters.append(BossbotHQAI.BossbotHQAI(self))
 
     def handleConnected(self):
+        if config.GetBool('want-web-rpc', False):
+            endpoint = config.GetString('web-rpc-endpoint', 'http://localhost:8000/rpc')
+            self.webRpc = ToontownRPCClient(endpoint)
+
         self.districtId = self.allocateChannel()
         self.notify.info('Creating ToontownDistrictAI(%d)...' % self.districtId)
         self.distributedDistrict = ToontownDistrictAI(self)

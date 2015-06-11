@@ -73,6 +73,10 @@ class ToontownLoadingScreen:
     def begin(self, range, label, gui, tipCategory, zoneId):
         self.waitBar['range'] = range
         self.title['text'] = label
+        if ToontownGlobals.BossbotHQ <= zoneId <= ToontownGlobals.LawbotHQ:
+            self.title['text_font'] = ToontownGlobals.getSuitFont()
+        else:
+            self.title['text_font'] = ToontownGlobals.getSignFont()
         loadingScreenTex = self.zone2picture.get(ZoneUtil.getBranchZone(zoneId), self.defaultTex)
         self.background = loader.loadTexture(loadingScreenTex)
         self.__count = 0

@@ -6,6 +6,7 @@ from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.showbase import RandomNumGen
 from direct.task import Task
+from toontown.suit.SuitDNA import getRandomSuitByLevel
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownTimer
@@ -19,6 +20,7 @@ from toontown.minigame import Trajectory
 from toontown.minigame import MinigameGlobals
 from toontown.minigame import CogThiefWalk
 CTGG = CogThiefGameGlobals
+
 
 class DistributedCogThiefGame(DistributedMinigame):
     notify = directNotify.newCategory('DistributedCogThiefGame')
@@ -362,10 +364,11 @@ class DistributedCogThiefGame(DistributedMinigame):
         return
 
     def loadCogs(self):
-        suitTypes = ['ds',
-         'ac',
-         'bc',
-         'ms']
+        zoneId = self.getSafezoneId()
+        suitTypes = \
+            [getRandomSuitByLevel(CTGG.ZoneSuitLevels[zoneId] - 1) for _ in xrange(4)] +\
+            [getRandomSuitByLevel(CTGG.ZoneSuitLevels[zoneId]) for _ in xrange(4)] +\
+            [getRandomSuitByLevel(CTGG.ZoneSuitLevels[zoneId] + 1) for _ in xrange(4)]
         for suitIndex in xrange(self.getNumCogs()):
             st = self.randomNumGen.choice(suitTypes)
             suit = CogThief.CogThief(suitIndex, st, self, self.getCogSpeed())

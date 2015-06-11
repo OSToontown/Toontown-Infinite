@@ -1,10 +1,12 @@
 from direct.directnotify import DirectNotifyGlobal
-import datetime
 from direct.fsm.FSM import FSM
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import *
 from otp.ai.MagicWordGlobal import *
 from direct.showbase.DirectObject import DirectObject
+
+import datetime
+import time
 
 
 class BanFSM(FSM):
@@ -19,12 +21,6 @@ class BanFSM(FSM):
         self.DISLid = None
         self.accountId = None
         self.avName = None
-
-    def performBan(self, bannedUntil):
-        # TODO: Use the webRpc to ban users
-        # executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
-        #                   Reason=self.comment)
-        pass
 
     def ejectPlayer(self):
         av = self.air.doId2do.get(self.avId)
@@ -49,15 +45,12 @@ class BanFSM(FSM):
         if not self.accountId:
             return
 
-        date = datetime.date.today()
         if simbase.config.GetBool('want-bans', True):
-            if self.duration == 0:
-                bannedUntil = "0000-00-00" # Terminated.
-            else:
-                bannedUntil = date + datetime.timedelta(days=self.duration)
+            if self.duration != 0:
+                now = datetime.date.now()
+                self.duration = time.mktime((now + datetime.timedelta(days=self.duration)).timetuple())
 
-            self.duration = None
-            self.performBan(bannedUntil)
+            self.air.webRpc.banUser(self.accountId, self.duration, self.comment)
 
     def getAvatarDetails(self):
         av = self.air.doId2do.get(self.avId)
@@ -134,8 +127,8 @@ def kick(reason='No reason specified'):
     return "Kicked %s from the game server!" % target.getName()
 
 
-@magicWord(category=CATEGORY_MODERATOR, types=[str, int])
-def ban(reason, duration):
+@magicWord(category=CATEGORY_MODERATOR, types=[int, str])
+def ban(duration, reason):
     """
     Ban the target from the game server.
     """

@@ -406,8 +406,20 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
         suitTrack.append(updateHealthBar)
         suitGettingHit = Parallel(suitReact)
         if level == UBER_GAG_LEVEL_INDEX:
+            node = suit.getGeomNode().getChild(0)
+            suitFlatten = Sequence(
+                Parallel(
+                    LerpHprInterval(node, 2, Vec3(0.0, 0.0, 0.0), blendType='easeInOut'),
+                    LerpScaleInterval(node, 2, VBase3(1, 1, 0.05), blendType='easeInOut')
+                )
+            )
             gotHitSound = globalBattleSoundCache.getSound('AA_drop_boat_cog.ogg')
+
             suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
+            suitGettingHit.append(suitFlatten)
+            suitGettingHit.append(Sequence(
+                Wait(2.7), LerpScaleInterval(node, 2, VBase3(1, 1, 1), blendType='easeInOut'))
+            )
         suitTrack.append(suitGettingHit)
         bonusTrack = None
         if hpbonus > 0:

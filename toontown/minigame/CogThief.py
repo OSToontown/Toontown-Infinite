@@ -11,6 +11,7 @@ from toontown.battle.BattleProps import globalPropPool
 from toontown.battle.BattleSounds import globalBattleSoundCache
 CTGG = CogThiefGameGlobals
 
+
 class CogThief(DirectObject):
     notify = directNotify.newCategory('CogThief')
     DefaultSpeedWalkAnim = 4.0

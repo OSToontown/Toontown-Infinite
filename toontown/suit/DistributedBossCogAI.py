@@ -73,13 +73,16 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
 
     def avatarNearExit(self):
         avId = self.air.getAvatarIdFromSender()
-        try:
+        if avId in self.nearToons:
             self.nearToons.remove(avId)
-        except:
-            pass
 
     def __handleUnexpectedExit(self, avId):
         self.removeToon(avId)
+
+        # Check if the toon ran during a battle:
+        if self.state not in ('Victory', 'Reward', 'Off', 'Introduction',
+                              'Elevator', 'WaitForToons'):
+            self.air.cogSuitMgr.removeParts(avId, self.deptIndex)
 
     def addToon(self, avId):
         if avId not in self.looseToons and avId not in self.involvedToons:
@@ -89,10 +92,10 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
 
     def removeToon(self, avId):
         av = self.air.doId2do.get(avId)
-        if not av is None:
+        if av is not None:
             if av.getHp() <= 0:
                 if avId not in self.punishedToons:
-                    self.air.cogSuitMgr.removeParts(av, self.deptIndex)
+                    self.air.cogSuitMgr.removeParts(avId, self.deptIndex)
                     self.punishedToons.append(avId)
 
         if avId in self.looseToons:

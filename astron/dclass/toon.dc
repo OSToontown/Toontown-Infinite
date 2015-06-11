@@ -3241,9 +3241,6 @@ dclass DistributedPartyManager : DistributedObject {
   receiveId(uint64 ids[]) airecv;
 };
 
-dclass DistributedObjectGlobal : DistributedObject {
-};
-
 dclass GlobalPartyManager : DistributedObjectGlobal {
     partyManagerAIHello(uint32 channel);
     queryParty(uint32 hostId);
