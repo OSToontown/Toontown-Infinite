@@ -98,11 +98,12 @@ class GardenManagerAI:
 
         self.updateGardenData()
 
-    def treeFinished(self, plotIndex):
-        tree = self.plots[plotIndex]
-        tree.generateWithRequired(self.house.zoneId)
-        tree.setMovie(GardenGlobals.MOVIE_FINISHPLANTING, self.air.getAvatarIdFromSender())
-        self.givePlantingSkill(self.air.getAvatarIdFromSender(), tree.gagLevel)
+    def plantingFinished(self, plotIndex):
+        plot = self.plots[plotIndex]
+        plot.generateWithRequired(self.house.zoneId)
+        plot.setMovie(GardenGlobals.MOVIE_FINISHPLANTING, self.air.getAvatarIdFromSender())
+        if isinstance(plot, DistributedGagTreeAI):
+            self.givePlantingSkill(self.air.getAvatarIdFromSender(), plot.gagLevel)
 
     def constructStatuary(self, plotIndex, typeIndex):
         dg = PyDatagram()
@@ -118,8 +119,7 @@ class GardenManagerAI:
 
         plot = occupier2Class[occupier](self.air, self, self.house.housePos)
         plot.construct(gardenData)
-        plot.generateWithRequired(self.house.zoneId)
-        plot.setMovie(GardenGlobals.MOVIE_FINISHPLANTING, self.air.getAvatarIdFromSender())
+
         self.plots[plotIndex] = plot
 
         self.updateGardenData()
@@ -133,7 +133,6 @@ class GardenManagerAI:
         plot = occupier2Class[GardenGlobals.ToonStatuaryPlot](self.air, self, self.house.housePos)
         plot.construct(gardenData)
         plot.generateWithRequired(self.house.zoneId)
-        plot.setMovie(GardenGlobals.MOVIE_FINISHPLANTING, self.air.getAvatarIdFromSender())
         self.plots[plotIndex] = plot
 
         self.updateGardenData()

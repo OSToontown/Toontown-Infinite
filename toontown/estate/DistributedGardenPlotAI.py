@@ -28,7 +28,7 @@ class DistributedGardenPlotAI(DistributedLawnDecorAI):
     def movieDone(self):
         if self.movie == GardenGlobals.MOVIE_PLANT:
             self.setMovie(GardenGlobals.MOVIE_FINISHREMOVING, self.air.getAvatarIdFromSender())
-            self.gardenManager.treeFinished(self.plotIndex)
+            self.gardenManager.plantingFinished(self.plotIndex)
             self.requestDelete()
         DistributedLawnDecorAI.movieDone(self)
 
