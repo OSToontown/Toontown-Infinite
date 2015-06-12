@@ -132,7 +132,7 @@ class GardenManagerAI:
         gardenData = PyDatagramIterator(dg)
         plot = occupier2Class[GardenGlobals.ToonStatuaryPlot](self.air, self, self.house.housePos)
         plot.construct(gardenData)
-        plot.generateWithRequired(self.house.zoneId)
+
         self.plots[plotIndex] = plot
 
         self.updateGardenData()
