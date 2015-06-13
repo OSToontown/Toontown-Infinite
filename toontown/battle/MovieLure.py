@@ -398,22 +398,20 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
         dropPos = suit.getPos()
         oldCamera = base.camera.getPos()
         oldHPR = base.camera.getHpr()
-        suitTrack = Sequence(
-            ActorInterval(suit, 'flail', duration=0.7),
-            ActorInterval(suit, 'flail', startTime=0.7, endTime=0.0),
-            ActorInterval(suit, 'neutral', duration=0.4),
-            ActorInterval(suit, 'flail', startTime=0.6, endTime=0.7),
-            Wait(0.2),
-            )
+        
+        # Cog looks down and up
+        suitTrack = Sequence(ActorInterval(suit, 'flail', duration=0.7))
+        suitTrack.append(ActorInterval(suit, 'flail', startTime=0.7, endTime=0.0))
+        suitTrack.append(ActorInterval(suit, 'neutral', duration=0.4))
+        suitTrack.append(ActorInterval(suit, 'flail', startTime=0.6, endTime=0.7))
+        
         if base.localAvatar in battle.activeToons:
-            suitTrack.append(Parallel(
-                 base.camera.posHprInterval(
-                    0.3, Point3(oldCamera[0], oldCamera[1], oldCamera[2]), Point3(0, 30, 0), blendType='easeInOut'
-                    ),
+            suitTrack.append(Parallel(base.camera.posHprInterval(
+                             0.4, Point3(oldCamera[0], oldCamera[1], oldCamera[2]), Point3(0, 30, 0), blendType='easeInOut'),
                  Func(battle.movie.needRestoreColor),
                  Func(suit.setColorScale, Vec4(0.2, 0.2, 0.2, 1)),
                  Func(trapProp.reparentTo, hidden),
-                 ActorInterval(suit, 'flail', startTime=0.9),
+                 ActorInterval(suit, 'flail', startTime=0.9, duration=0.4, endTime=1.3),
                  LerpPosInterval(suit, 0.3, flyPos),
                  ))
         else:
@@ -435,9 +433,11 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
         else:
             if base.localAvatar in battle.activeToons:
                 suitTrack.append(Parallel(
-                         base.camera.posHprInterval(
-                            0.4, Point3(*oldCamera), Point3(*oldHPR), blendType='easeInOut'
-                         ),
+                         Sequence(
+                                  Wait(0.3), 
+                                  base.camera.posHprInterval(
+                                              0.5, Point3(*oldCamera), Point3(*oldHPR), blendType='easeInOut')
+                                  ),
                          ActorInterval(suit, 'slip-backward', playRate=1),
                          LerpPosInterval(suit, 0.7, dropPos),
                     )
@@ -458,7 +458,6 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
                 SoundInterval(globalBattleSoundCache.getSound('TL_dynamite.ogg'), duration=2.0, node=suit),
                 SoundInterval(explosionSound, duration=0.6, node=suit)
             )
-
         result.append(Parallel(tntTrack, suitTrack, damageTrack, explosionTrack, soundTrack))
 
         if suit.maxHP <= 42:
