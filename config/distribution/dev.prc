@@ -1,6 +1,9 @@
 # Distribution:
 distribution dev
 
+# Audio:
+audio-library-name p3openal_audio
+
 # Art assets:
 model-path ../resources
 
