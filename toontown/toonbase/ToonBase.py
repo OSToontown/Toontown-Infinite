@@ -63,9 +63,9 @@ class ToonBase(OTPBase.OTPBase):
                         ratio = ratios.pop()
                         if (float(ratio[0])/float(ratio[1])) < (float(self.nativeRatio[0])/float(self.nativeRatio[1])):
                             resolutions = ToontownGlobals.CommonDisplayResolutions[ratio]
-                            if resolutions[0][0] >= (self.nativeWidth - 200):
+                            if resolutions[0][0] >= (self.nativeWidth - 125):
                                 continue
-                            if resolutions[0][1] >= (self.nativeHeight - 200):
+                            if resolutions[0][1] >= (self.nativeHeight - 125):
                                 continue
                             break
 
