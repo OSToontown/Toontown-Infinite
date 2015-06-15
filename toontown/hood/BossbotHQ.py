@@ -1,3 +1,4 @@
+from panda3d.core import Fog
 from toontown.coghq.BossbotCogHQLoader import BossbotCogHQLoader
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer

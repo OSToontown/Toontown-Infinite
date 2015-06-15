@@ -1,3 +1,4 @@
+from panda3d.core import Fog
 from toontown.safezone.BRSafeZoneLoader import BRSafeZoneLoader
 from toontown.town.BRTownLoader import BRTownLoader
 from toontown.toonbase import ToontownGlobals
