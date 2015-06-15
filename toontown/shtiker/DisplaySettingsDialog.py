@@ -382,6 +382,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
                 self.notify.warning('OPEN MAIN WINDOW FAILED')
                 return 0
             self.notify.info('OPEN MAIN WINDOW PASSED')
+            base.disableShowbaseMouse()
             base.graphicsEngine.renderFrame()
             base.graphicsEngine.renderFrame()
             base.graphicsEngine.openWindows()
