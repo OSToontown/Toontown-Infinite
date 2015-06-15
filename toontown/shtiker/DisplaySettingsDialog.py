@@ -45,16 +45,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
         self.anyChanged = 0
         self.apiChanged = 0
 
-        if len(base.resDict[base.nativeRatio]) > 1:
-            # We have resolutions that match our native ratio and fit it:
-            self.screenSizes = sorted(base.resDict[base.nativeRatio])
-        else:
-            # Okay, we don't have any resolutions that match our native ratio
-            # and fit it (besides the native resolution itself, of course).
-            # Let's just use the second largest ratio's resolutions:
-            ratios = sorted(base.resDict.keys(), reverse=False)
-            nativeIndex = ratios.index(base.nativeRatio)
-            self.screenSizes = sorted(base.resDict[ratios[nativeIndex - 1]])
+        self.screenSizes = ToontownGlobals.CommonDisplayResolutions[base.nativeRatio]
 
         guiButton = loader.loadModel('phase_3/models/gui/quit_button.bam')
         gui = loader.loadModel('phase_3.5/models/gui/friendslist_gui.bam')
@@ -306,18 +297,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
             if fullscreen:
                 width, height = (base.nativeWidth, base.nativeHeight)
             elif self.current_properties.getFullscreen():
-                if len(base.resDict[base.nativeRatio]) > 1:
-                    # We have resolutions that match our native ratio and fit
-                    # it! Let's use one:
-                    width, height = sorted(base.resDict[base.nativeRatio])[0]
-                else:
-                    # Okay, we don't have any resolutions that match our native
-                    # ratio and fit it (besides the native resolution itself,
-                    # of course). Let's just use one of the second largest
-                    # ratio's resolutions:
-                    ratios = sorted(base.resDict.keys(), reverse=False)
-                    nativeIndex = ratios.index(base.nativeRatio)
-                    width, height = sorted(base.resDict[ratios[nativeIndex - 1]])[0]
+                width, height = self.screenSizes[self.screenSizeIndex]
             properties.setSize(width, height)
             properties.setFullscreen(fullscreen)
             properties.setParentWindow(0)
@@ -402,7 +382,6 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
                 self.notify.warning('OPEN MAIN WINDOW FAILED')
                 return 0
             self.notify.info('OPEN MAIN WINDOW PASSED')
-            base.disableShowbaseMouse()
             base.graphicsEngine.renderFrame()
             base.graphicsEngine.renderFrame()
             base.graphicsEngine.openWindows()
