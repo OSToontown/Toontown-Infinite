@@ -68,6 +68,8 @@ class ToonBase(OTPBase.OTPBase):
                             if resolutions[0][1] >= (self.nativeHeight - 125):
                                 continue
                             break
+                    else:
+                        resolutions = ToontownGlobals.CommonDisplayResolutions[(4, 3)]
 
                 res = resolutions[0]
 
