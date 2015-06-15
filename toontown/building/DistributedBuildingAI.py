@@ -82,8 +82,10 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         if hasattr(self, 'door'):
             self.door.requestDelete()
             del self.door
+        if hasattr(self, 'insideDoor'):
             self.insideDoor.requestDelete()
             del self.insideDoor
+        if hasattr(self, 'knockKnock'):
             self.knockKnock.requestDelete()
             del self.knockKnock
         if hasattr(self, 'elevator'):
@@ -423,10 +425,13 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         if hasattr(self, 'interior'):
             self.interior.requestDelete()
             del self.interior
+        if hasattr(self, 'door'):
             self.door.requestDelete()
             del self.door
+        if hasattr(self, 'insideDoor'):
             self.insideDoor.requestDelete()
             del self.insideDoor
+        if hasattr(self, 'knockKnock'):
             self.knockKnock.requestDelete()
             del self.knockKnock
 
@@ -478,10 +483,13 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         if hasattr(self, 'interior'):
             self.interior.requestDelete()
             del self.interior
+        if hasattr(self, 'door'):
             self.door.requestDelete()
             del self.door
+        if hasattr(self, 'insideDoor'):
             self.insideDoor.requestDelete()
             del self.insideDoor
+        if hasattr(self, 'knockKnock'):
             self.knockKnock.requestDelete()
             del self.knockKnock
 
