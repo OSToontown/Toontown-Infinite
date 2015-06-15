@@ -49,17 +49,13 @@ class ToonBase(OTPBase.OTPBase):
         # Next, separate the resolutions by their ratio:
         self.resDict = {}
         for res in self.resList:
-            width = float(res[0])
-            height = float(res[1])
-            ratio = round(width / height, 2)
+            ratio = int((float(res[0])/float(res[1])) * 100000) / 100000.0
             self.resDict.setdefault(ratio, []).append(res)
 
         # Get the native width, height and ratio:
         self.nativeWidth = self.pipe.getDisplayWidth()
         self.nativeHeight = self.pipe.getDisplayHeight()
-
-        self.nativeRatio = round(
-            float(self.nativeWidth) / float(self.nativeHeight), 2)
+        self.nativeRatio = int((float(self.nativeWidth)/float(self.nativeHeight)) * 100000) / 100000.0
 
         # Finally, choose the best resolution if we're either fullscreen, or
         # don't have one defined in our preferences:
@@ -76,9 +72,8 @@ class ToonBase(OTPBase.OTPBase):
                 res = sorted(self.resDict[self.nativeRatio])[0]
             else:
                 # Okay, we don't have any resolutions that match our native
-                # ratio and fit it (besides the native resolution itself, of
-                # course). Let's just use one of the second largest ratio's
-                # resolutions:
+                # ratio and fit it. Let's just use one of the second largest
+                # ratio's resolutions:
                 ratios = sorted(self.resDict.keys(), reverse=False)
                 nativeIndex = ratios.index(self.nativeRatio)
                 res = sorted(self.resDict[ratios[nativeIndex - 1]])[0]
