@@ -68,8 +68,9 @@ class ToonBase(OTPBase.OTPBase):
             if fullscreen:
                 # If we're fullscreen, we want to fit the entire screen:
                 res = (self.nativeWidth, self.nativeHeight)
-            elif self.nativeRatio in self.resDict and len(
-                    self.resDict[self.nativeRatio]) > 1:
+            elif self.nativeRatio not in self.resDict:
+                res = (800, 600)
+            elif len(self.resDict[self.nativeRatio]) > 1:
                 # We have resolutions that match our native ratio and fit it!
                 # Let's use one:
                 res = sorted(self.resDict[self.nativeRatio])[0]
