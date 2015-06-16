@@ -2,6 +2,7 @@ from toontown.toontowngui import TTDialog
 from direct.gui.DirectGui import DirectButton, DirectLabel
 from direct.fsm import ClassicFSM, State
 from toontown.toonbase.ToontownGlobals import OptionsPageHotkey
+from panda3d.core import TextNode
     
 class ControlRemap:
 
@@ -249,7 +250,7 @@ class ControlRemap:
             text_scale=options_text_scale,
             text_wordwrap=16,
             pos=(
-                leftMargin + 1.25,
+                leftMargin + 1.2,
                 0,
                 textStartHeight - 0.3))                 
                 
