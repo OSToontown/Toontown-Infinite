@@ -126,9 +126,9 @@ class DistributedNPCTailor(DistributedNPCToonBase):
             self.oldStyle.makeFromNetString(style.makeNetString())
             self.setupAvatars(self.av)
             if self.isLocalToon:
-                #camera.wrtReparentTo(render)
-                #camera.lerpPosHpr(-5, 9, self.getHeight() - 0.5, -150, -2, 0, 1, other=self, blendType='easeOut', task=self.uniqueName('lerpCamera'))
-                self.cameraWork = camera.posHprInterval(2, Point3(-5, 9, self.getHeight() - 0.5), Point3(-150, -2, 0), blendType='easeOut')
+                #base.camera.wrtReparentTo(render)
+                #base.camera.lerpPosHpr(-5, 9, self.getHeight() - 0.5, -150, -2, 0, 1, other=self, blendType='easeOut', task=self.uniqueName('lerpCamera'))
+                self.cameraWork = base.camera.posHprInterval(2, Point3(-5, 9, self.getHeight() - 0.5), Point3(-150, -2, 0), blendType='easeOut')
                 self.cameraWork.start()
             if self.browsing == 0:
                 if self.roomAvailable == 0:
@@ -141,31 +141,8 @@ class DistributedNPCTailor(DistributedNPCToonBase):
                 self.setChatAbsolute(TTLocalizer.STOREOWNER_BROWSING, CFSpeech | CFTimeout)
             if self.isLocalToon:
                 taskMgr.doMethodLater(3.0, self.popupPurchaseGUI, self.uniqueName('popupPurchaseGUI'))
-                print '-----------Starting tailor interaction-----------'
-                print 'avid: %s, gender: %s' % (self.av.doId, self.av.style.gender)
-                print 'current top = %s,%s,%s,%s and  bot = %s,%s,' % (self.av.style.topTex,
-                 self.av.style.topTexColor,
-                 self.av.style.sleeveTex,
-                 self.av.style.sleeveTexColor,
-                 self.av.style.botTex,
-                 self.av.style.botTexColor)
-                print 'topsList = %s' % self.av.getClothesTopsList()
-                print 'bottomsList = %s' % self.av.getClothesBottomsList()
-                print '-------------------------------------------------'
         elif mode == NPCToons.PURCHASE_MOVIE_COMPLETE:
             self.setChatAbsolute(TTLocalizer.STOREOWNER_GOODBYE, CFSpeech | CFTimeout)
-            if self.av and self.isLocalToon:
-                print '-----------ending tailor interaction-----------'
-                print 'avid: %s, gender: %s' % (self.av.doId, self.av.style.gender)
-                print 'current top = %s,%s,%s,%s and  bot = %s,%s,' % (self.av.style.topTex,
-                 self.av.style.topTexColor,
-                 self.av.style.sleeveTex,
-                 self.av.style.sleeveTexColor,
-                 self.av.style.botTex,
-                 self.av.style.botTexColor)
-                print 'topsList = %s' % self.av.getClothesTopsList()
-                print 'bottomsList = %s' % self.av.getClothesBottomsList()
-                print '-------------------------------------------------'
             self.resetTailor()
         elif mode == NPCToons.PURCHASE_MOVIE_NO_MONEY:
             self.notify.warning('PURCHASE_MOVIE_NO_MONEY should not be called')
@@ -188,7 +165,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
         else:
             self.button = None
         self.cancelButton = DirectButton(relief=None, image=(self.gui.find('**/CrtAtoon_Btn2_UP'), self.gui.find('**/CrtAtoon_Btn2_DOWN'), self.gui.find('**/CrtAtoon_Btn2_RLLVR')), pos=(0.15, 0, -0.85), command=self.__handleCancel, text=('', TTLocalizer.MakeAToonCancel, TTLocalizer.MakeAToonCancel), text_font=ToontownGlobals.getInterfaceFont(), text_scale=0.08, text_pos=(0, -0.03), text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1))
-        camera.setPosHpr(base.localAvatar, -4.16, 8.25, 2.47, -152.89, 0.0, 0.0)
+        base.camera.setPosHpr(base.localAvatar, -4.16, 8.25, 2.47, -152.89, 0.0, 0.0)
         self.counter = render.find('**/*mo1_TI_counter')
         self.counter.hide()
         self.hide()
@@ -281,7 +258,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
         self.d_setDNA(self.oldStyle.makeNetString(), 1)
         self.popupInfo.reparentTo(hidden)
 
-    def d_setDNA(self, dnaString, finished, whichItems = ClosetGlobals.SHIRT | ClosetGlobals.SHORTS):
+    def d_setDNA(self, dnaString, finished, whichItems=ClosetGlobals.SHIRT | ClosetGlobals.SHORTS):
         self.sendUpdate('setDNA', [dnaString, finished, whichItems])
 
     def setCustomerDNA(self, avId, dnaString):

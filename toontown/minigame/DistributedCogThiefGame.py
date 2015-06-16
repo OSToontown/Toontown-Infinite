@@ -6,6 +6,7 @@ from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.showbase import RandomNumGen
 from direct.task import Task
+from toontown.suit.SuitDNA import getRandomSuitByLevel
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownTimer
@@ -19,6 +20,7 @@ from toontown.minigame import Trajectory
 from toontown.minigame import MinigameGlobals
 from toontown.minigame import CogThiefWalk
 CTGG = CogThiefGameGlobals
+
 
 class DistributedCogThiefGame(DistributedMinigame):
     notify = directNotify.newCategory('DistributedCogThiefGame')
@@ -272,12 +274,12 @@ class DistributedCogThiefGame(DistributedMinigame):
         self.notify.debug('enterPlay')
         self.startGameWalk()
         self.spawnUpdateSuitsTask()
-        self.accept('control', self.controlKeyPressed)
+        self.accept(base.JUMP, self.controlKeyPressed)
         self.pieHandler = CollisionHandlerEvent()
         self.pieHandler.setInPattern('pieHit-%fn')
 
     def exitPlay(self):
-        self.ignore('control')
+        self.ignore(base.JUMP)
         if self.resultIval and self.resultIval.isPlaying():
             self.resultIval.finish()
             self.resultIval = None
@@ -318,11 +320,11 @@ class DistributedCogThiefGame(DistributedMinigame):
             toon.setHpr(0, 0, 0)
 
     def moveCameraToTop(self):
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         p = self.cameraTopView
-        camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
+        base.camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
         base.camLens.setMinFov(46/(4./3.))
-        camera.setZ(camera.getZ() + base.config.GetFloat('cog-thief-z-camera-adjust', 0.0))
+        base.camera.setZ(base.camera.getZ() + base.config.GetFloat('cog-thief-z-camera-adjust', 0.0))
 
     def destroyGameWalk(self):
         self.notify.debug('destroyOrthoWalk')
@@ -362,10 +364,11 @@ class DistributedCogThiefGame(DistributedMinigame):
         return
 
     def loadCogs(self):
-        suitTypes = ['ds',
-         'ac',
-         'bc',
-         'ms']
+        zoneId = self.getSafezoneId()
+        suitTypes = \
+            [getRandomSuitByLevel(CTGG.ZoneSuitLevels[zoneId] - 1) for _ in xrange(4)] +\
+            [getRandomSuitByLevel(CTGG.ZoneSuitLevels[zoneId]) for _ in xrange(4)] +\
+            [getRandomSuitByLevel(CTGG.ZoneSuitLevels[zoneId] + 1) for _ in xrange(4)]
         for suitIndex in xrange(self.getNumCogs()):
             st = self.randomNumGen.choice(suitTypes)
             suit = CogThief.CogThief(suitIndex, st, self, self.getCogSpeed())

@@ -2,11 +2,6 @@ from ElevatorConstants import *
 from toontown.toonbase import ToontownGlobals
 
 
-try:
-    config = base.config
-except:
-    config = simbase.config
-
 SuitBuildingInfo = (((1, 1),
   (1, 3),
   (4, 4),

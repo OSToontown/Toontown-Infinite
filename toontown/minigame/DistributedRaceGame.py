@@ -365,9 +365,9 @@ class DistributedRaceGame(DistributedMinigame):
         DistributedMinigame.onstage(self)
         base.playMusic(self.music, looping=1, volume=0.8)
         self.raceBoard.reparentTo(render)
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         p = self.cameraTopView
-        camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
+        base.camera.setPosHpr(p[0], p[1], p[2], p[3], p[4], p[5])
         base.transitions.irisIn(0.4)
         base.setBackgroundColor(0.1875, 0.7929, 0)
 
@@ -679,8 +679,8 @@ class DistributedRaceGame(DistributedMinigame):
 
         bestPosIdx = min(RaceGameGlobals.NumberToWin, bestPosIdx)
         localToonPosition = self.avatarPositions[self.localAvId]
-        savedCamPos = camera.getPos()
-        savedCamHpr = camera.getHpr()
+        savedCamPos = base.camera.getPos()
+        savedCamHpr = base.camera.getHpr()
         pos1_idx = min(RaceGameGlobals.NumberToWin - 4, localToonPosition)
         pos1 = self.posHprArray[self.localAvLane][pos1_idx]
         bestPosLookAtIdx = bestPosIdx + 1
@@ -701,15 +701,15 @@ class DistributedRaceGame(DistributedMinigame):
         race_fraction = bestPosIdx / float(RaceGameGlobals.NumberToWin)
         CamHeight = 10.0 * race_fraction + (1.0 - race_fraction) * 22.0
         CamPos = Vec3(camposX, camposY, pos2[2] + CamHeight)
-        camera.setPos(CamPos)
+        base.camera.setPos(CamPos)
         camera_lookat_idx = min(RaceGameGlobals.NumberToWin - 6, localToonPosition)
         posLookAt = self.posHprArray[self.localAvLane][camera_lookat_idx]
-        camera.lookAt(posLookAt[0], posLookAt[1], posLookAt[2])
+        base.camera.lookAt(posLookAt[0], posLookAt[1], posLookAt[2])
         CamQuat = Quat()
-        CamQuat.setHpr(camera.getHpr())
-        camera.setPos(savedCamPos)
-        camera.setHpr(savedCamHpr)
-        camera.posQuatInterval(0.75, CamPos, CamQuat).start()
+        CamQuat.setHpr(base.camera.getHpr())
+        base.camera.setPos(savedCamPos)
+        base.camera.setHpr(savedCamHpr)
+        base.camera.posQuatInterval(0.75, CamPos, CamQuat).start()
 
     def getWalkDuration(self, squares_walked):
         walkDuration = abs(squares_walked / 1.2)

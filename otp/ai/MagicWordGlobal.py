@@ -2,9 +2,11 @@ from direct.showbase import PythonUtil
 
 class MagicError(Exception): pass
 
+
 def ensureAccess(access, msg='Insufficient access'):
     if spellbook.getInvokerAccess() < access:
         raise MagicError(msg)
+
 
 class Spellbook:
     """
@@ -40,15 +42,15 @@ class Spellbook:
             self.currentTarget = None
 
     def doWord(self, wordName, args):
-        word = self.words.get(wordName.lower())   # look it up by its lower case value
+        wordName = wordName.lower()
+        word = self.words.get(wordName)
 
         if not word:
             if process == 'ai':
-                wname = wordName.lower()
                 for key in self.words:
                     if self.words.get(key).access <= self.getInvokerAccess():
-                        if wname in key:
-                            return 'Did you mean %s' % (self.words.get(key).name)
+                        if wordName in key:
+                            return 'Did you mean %s' % self.words.get(key).name
             if not word:
                 return
 
@@ -72,6 +74,16 @@ class Spellbook:
             return 0
         return self.currentInvoker.getAdminAccess()
 
+    def getTargets(self, word):
+        if word == "":
+            return
+        word = self.words.get(word.split()[0].lower())
+        if word is None:
+            return []
+
+        return word.targets
+
+
 spellbook = Spellbook()
 
 
@@ -80,6 +92,7 @@ class MagicWordCategory:
     def __init__(self, name, defaultAccess=600):
         self.name = name
         self.defaultAccess = defaultAccess
+
 
 CATEGORY_UNKNOWN = MagicWordCategory('Unknown')
 CATEGORY_USER = MagicWordCategory('Community manager', defaultAccess=100)
@@ -94,10 +107,11 @@ MINIMUM_MAGICWORD_ACCESS = CATEGORY_COMMUNITY_MANAGER.defaultAccess
 
 
 class MagicWord:
-    def __init__(self, name, func, types, access, doc):
+    def __init__(self, name, func, types, targets, access, doc):
         self.name = name
         self.func = func
         self.types = types
+        self.targets = targets
         self.access = access
         self.doc = doc
 
@@ -132,10 +146,12 @@ class MagicWordDecorator:
     object process the Magic Word's construction.
     """
 
-    def __init__(self, name=None, types=[str], access=None, category=CATEGORY_UNKNOWN):
+    def __init__(self, name=None, types=[str], targets=['DistributedToonAI'], access=None, category=CATEGORY_UNKNOWN):
         self.name = name
         self.types = types
         self.category = category
+        self.targets = targets
+
         if access is not None:
             self.access = access
         else:
@@ -150,7 +166,7 @@ class MagicWordDecorator:
         if name is None:
             name = mw.func_name
 
-        word = MagicWord(name, mw, self.types, self.access, mw.__doc__)
+        word = MagicWord(name, mw, self.types, self.targets, self.access, mw.__doc__)
         spellbook.addWord(word)
 
         return mw

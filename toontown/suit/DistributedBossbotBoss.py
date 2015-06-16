@@ -273,12 +273,12 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         waiterCamPos = Point3(rToonStartPos)
         waiterCamPos += Point3(-5, -10, 5)
         waiterCamHpr = Point3(-30, 0, 0)
-        track = Sequence(Func(camera.reparentTo, render), Func(camera.setPosHpr, *elevCamPosHpr), Func(rToon.setChatAbsolute, TTL.BossbotRTWelcome, CFSpeech), LerpPosHprInterval(camera, 3, closeUpRTCamPos, closeUpRTCamHpr), Func(rToon.setChatAbsolute, TTL.BossbotRTRemoveSuit, CFSpeech), Wait(3), Func(self.clearChat), self.loseCogSuits(self.toonsA + self.toonsB, render, (loseSuitCamPos[0],
+        track = Sequence(Func(base.camera.reparentTo, render), Func(base.camera.setPosHpr, *elevCamPosHpr), Func(rToon.setChatAbsolute, TTL.BossbotRTWelcome, CFSpeech), LerpPosHprInterval(base.camera, 3, closeUpRTCamPos, closeUpRTCamHpr), Func(rToon.setChatAbsolute, TTL.BossbotRTRemoveSuit, CFSpeech), Wait(3), Func(self.clearChat), self.loseCogSuits(self.toonsA + self.toonsB, render, (loseSuitCamPos[0],
          loseSuitCamPos[1],
          loseSuitCamPos[2],
          loseSuitCamHpr[0],
          loseSuitCamHpr[1],
-         loseSuitCamHpr[2])), self.toonNormalEyes(self.involvedToons), Wait(2), Func(camera.setPosHpr, closeUpRTCamPos, closeUpRTCamHpr), Func(rToon.setChatAbsolute, TTL.BossbotRTFightWaiter, CFSpeech), Wait(1), LerpHprInterval(camera, 2, Point3(-15, 5, 0)), Sequence(Func(rToon.suit.loop, 'walk'), rToon.hprInterval(1, VBase3(270, 0, 0)), rToon.posInterval(2.5, rToonEndPos), Func(rToon.suit.loop, 'neutral')), Wait(3), Func(rToon.clearChat), Func(self.__hideResistanceToon))
+         loseSuitCamHpr[2])), self.toonNormalEyes(self.involvedToons), Wait(2), Func(base.camera.setPosHpr, closeUpRTCamPos, closeUpRTCamHpr), Func(rToon.setChatAbsolute, TTL.BossbotRTFightWaiter, CFSpeech), Wait(1), LerpHprInterval(base.camera, 2, Point3(-15, 5, 0)), Sequence(Func(rToon.suit.loop, 'walk'), rToon.hprInterval(1, VBase3(270, 0, 0)), rToon.posInterval(2.5, rToonEndPos), Func(rToon.suit.loop, 'neutral')), Wait(3), Func(rToon.clearChat), Func(self.__hideResistanceToon))
         return track
 
     def enterFrolic(self):
@@ -330,9 +330,9 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             return rNode.getPos(render)
 
         track = Sequence(
-            Func(camera.reparentTo, render),
-            Func(camera.setPos, rToon, 0, 22, 6),
-            Func(camera.setHpr, 0, 0, 0),
+            Func(base.camera.reparentTo, render),
+            Func(base.camera.setPos, rToon, 0, 22, 6),
+            Func(base.camera.setHpr, 0, 0, 0),
             Func(rToon.setChatAbsolute, TTL.BossbotRTWearWaiter, CFSpeech),
             Wait(3.0),
             self.wearCogSuits(self.toonsA + self.toonsB, render, None, waiter=True),
@@ -346,7 +346,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             Wait(3.0),
             Parallel(
                 LerpHprInterval(self.banquetDoor, 2, Point3(0, 0, 0)),
-                LerpPosHprInterval(camera, 2, getCamRTPos, Point3(10, -8, 0))),
+                LerpPosHprInterval(base.camera, 2, getCamRTPos, Point3(10, -8, 0))),
             Func(self.setPos, bossEndPos),
             Func(self.clearChat),
             Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood1, CFSpeech),
@@ -385,7 +385,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
             retval.append(Sequence(Wait(delay), Func(toon.wrtReparentTo, render), Func(toWalk, toon), Func(toon.headsUp, 0, 0, 0), LerpPosInterval(toon, 3, Point3(0, 0, 0)), Func(toon.headsUp, destPos), LerpPosInterval(toon, 3, destPos), LerpHprInterval(toon, 1, Point3(0, 0, 0)), Func(toNeutral, toon)))
             if toon == base.localAvatar:
-                retval.append(Sequence(Wait(delay), Func(camera.reparentTo, toon), Func(camera.setPos, toon.cameraPositions[0][0]), Func(camera.setHpr, 0, 0, 0)))
+                retval.append(Sequence(Wait(delay), Func(base.camera.reparentTo, toon), Func(base.camera.setPos, toon.cameraPositions[0][0]), Func(base.camera.setHpr, 0, 0, 0)))
             delay += 1.0
             index += 1
 
@@ -562,21 +562,21 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def makePrepareBattleThreeMovie(self):
         loseSuitCamAngle = (0, 19, 6, -180, -5, 0)
         track = Sequence(
-            Func(camera.reparentTo, self),
-            Func(camera.setPos, Point3(0, -45, 5)),
-            Func(camera.setHpr, Point3(0, 14, 0)),
+            Func(base.camera.reparentTo, self),
+            Func(base.camera.setPos, Point3(0, -45, 5)),
+            Func(base.camera.setHpr, Point3(0, 14, 0)),
             Func(self.setChatAbsolute, TTL.BossbotPhase3Speech1, CFSpeech),
             Wait(3.0),
             Func(self.setChatAbsolute, TTL.BossbotPhase3Speech2, CFSpeech),
             Wait(3.0),
-            Func(camera.setPosHpr, base.localAvatar, *loseSuitCamAngle),
+            Func(base.camera.setPosHpr, base.localAvatar, *loseSuitCamAngle),
             Wait(1.0),
             self.loseCogSuits(self.toonsA + self.toonsB, base.localAvatar, loseSuitCamAngle),
             self.toonNormalEyes(self.involvedToons),
             Wait(2),
-            Func(camera.reparentTo, self),
-            Func(camera.setPos, Point3(0, -45, 5)),
-            Func(camera.setHpr, Point3(0, 14, 0)),
+            Func(base.camera.reparentTo, self),
+            Func(base.camera.setPos, Point3(0, -45, 5)),
+            Func(base.camera.setHpr, Point3(0, 14, 0)),
             Func(self.setChatAbsolute, TTL.BossbotPhase3Speech3, CFSpeech),
             Wait(3.0),
             Func(self.clearChat))
@@ -633,18 +633,18 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             Func(self.__showResistanceToon, True),
             Func(rToon.setPos, Point3(0, -5, 0)),
             Func(rToon.setHpr, Point3(0, 0, 0)),
-            Func(camera.reparentTo, rToon),
-            Func(camera.setPos, Point3(0, 13, 3 + offsetZ)),
-            Func(camera.setHpr, Point3(-180, 0, 0)),
+            Func(base.camera.reparentTo, rToon),
+            Func(base.camera.setPos, Point3(0, 13, 3 + offsetZ)),
+            Func(base.camera.setHpr, Point3(-180, 0, 0)),
             Func(self.banquetDoor.setH, 90),
             Func(rToon.setChatAbsolute, TTL.BossbotRTPhase4Speech1, CFSpeech),
             Wait(4.0),
             Func(rToon.setChatAbsolute, TTL.BossbotRTPhase4Speech2, CFSpeech),
             Wait(4.0),
             Func(self.__hideResistanceToon),
-            Func(camera.reparentTo, self),
-            Func(camera.setPos, Point3(0, -45, 5)),
-            Func(camera.setHpr, Point3(0, 14, 0)),
+            Func(base.camera.reparentTo, self),
+            Func(base.camera.setPos, Point3(0, -45, 5)),
+            Func(base.camera.setHpr, Point3(0, 14, 0)),
             Func(self.setChatAbsolute, TTL.BossbotPhase4Speech1, CFSpeech),
             Func(self.banquetDoor.setH, 0),
             Wait(3.0),
@@ -740,9 +740,9 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         newHpr.setX(newHpr.getX() + 180)
         bossTrack = Sequence(
             Func(self.show),
-            Func(camera.reparentTo, self),
-            Func(camera.setPos, Point3(0, -35, 25)),
-            Func(camera.setHpr, Point3(0, -20, 0)),
+            Func(base.camera.reparentTo, self),
+            Func(base.camera.setPos, Point3(0, -35, 25)),
+            Func(base.camera.setHpr, Point3(0, -20, 0)),
             Func(self.setChatAbsolute, TTL.BossbotRewardSpeech1, CFSpeech),
             Wait(3.0),
             Func(self.setChatAbsolute, TTL.BossbotRewardSpeech2, CFSpeech),
@@ -811,9 +811,9 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.resistanceToon.setPosHpr(*ToontownGlobals.BossbotRTEpiloguePosHpr)
         self.resistanceToon.loop('Sit')
         self.__arrangeToonsAroundResistanceToonForReward()
-        camera.reparentTo(render)
-        camera.setPos(self.resistanceToon, -9, 12, 6)
-        camera.lookAt(self.resistanceToon, 0, 0, 3)
+        base.camera.reparentTo(render)
+        base.camera.setPos(self.resistanceToon, -9, 12, 6)
+        base.camera.lookAt(self.resistanceToon, 0, 0, 3)
         intervalName = 'EpilogueMovie'
         seq = Sequence(self.makeEpilogueMovie(), name=intervalName)
         seq.start()
@@ -1163,7 +1163,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             (zapTrack.append(Func(toon.setPosHpr, pos, hpr)),)
         toonTrack = Parallel()
         if shake and toon == localAvatar:
-            toonTrack.append(Sequence(Func(camera.setZ, camera, 1), Wait(0.15), Func(camera.setZ, camera, -2), Wait(0.15), Func(camera.setZ, camera, 1)))
+            toonTrack.append(Sequence(Func(base.camera.setZ, base.camera, 1), Wait(0.15), Func(base.camera.setZ, base.camera, -2), Wait(0.15), Func(base.camera.setZ, base.camera, 1)))
         if fling:
             if self.isToonRoaming(toon.doId):
                 toonTrack += [ActorInterval(toon, 'slip-backward')]
@@ -1218,9 +1218,9 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             if origin == None:
                 origin = self
             if self.isToonRoaming(toon.doId):
-                camera.wrtReparentTo(render)
+                base.camera.wrtReparentTo(render)
                 toon.headsUp(origin)
-                camera.wrtReparentTo(toon)
+                base.camera.wrtReparentTo(toon)
         bossRelativePos = toon.getPos(self.getGeomNode())
         bp2d = Vec2(bossRelativePos[0], bossRelativePos[1])
         bp2d.normalize()

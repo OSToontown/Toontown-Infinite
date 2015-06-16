@@ -97,7 +97,7 @@ class MakeAToon(StateData.StateData):
             self.notify.info('QA-REGRESSION: MAKEATOON: Starting Make A Toon')
         base.camLens.setMinFov(ToontownGlobals.MakeAToonCameraFov/(4./3.))
         base.playMusic(self.music, looping=1, volume=self.musicVolume)
-        camera.setPosHpr(-5.7, -12.3501, 2.15, -24.8499, 2.73, 0)
+        base.camera.setPosHpr(-5.7, -12.3501, 2.15, -24.8499, 2.73, 0)
         if self.warp:
             if self.toon.style.torso[1] == 's':
                 self.toon.gender = 's'
@@ -668,7 +668,7 @@ class MakeAToon(StateData.StateData):
         self.pickerTrav = CollisionTraverser('MousePickerTraverser')
         self.pickerTrav.setRespectPrevTransform(True)
         self.pickerNode = CollisionNode('mouseRay')
-        self.pickerNP = camera.attachNewNode(self.pickerNode)
+        self.pickerNP = base.camera.attachNewNode(self.pickerNode)
         self.pickerNode.setFromCollideMask(GeomNode.getDefaultCollideMask())
         self.pickerRay = CollisionRay()
         self.pickerNode.addSolid(self.pickerRay)

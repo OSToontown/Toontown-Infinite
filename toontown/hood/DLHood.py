@@ -19,3 +19,13 @@ class DLHood(ToonHood):
       ToontownGlobals.WACKY_WINTER_DECORATIONS: ['phase_8/dna/winter_storage_DL.pdna'],
       ToontownGlobals.HALLOWEEN_PROPS: ['phase_8/dna/halloween_props_storage_DL.pdna'],
       ToontownGlobals.SPOOKY_PROPS: ['phase_8/dna/halloween_props_storage_DL.pdna']}
+
+    def enter(self, requestStatus):
+        ToonHood.enter(self, requestStatus)
+
+        base.camLens.setNearFar(ToontownGlobals.DreamlandCameraNear, ToontownGlobals.DreamlandCameraFar)
+
+    def exit(self):
+        base.camLens.setNearFar(ToontownGlobals.DefaultCameraNear, ToontownGlobals.DefaultCameraFar)
+
+        ToonHood.exit(self)

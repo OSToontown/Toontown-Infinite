@@ -398,7 +398,7 @@ class DistributedCashbotBossCrane(DistributedObject.DistributedObject, FSM.FSM):
             text_pos=(0, -0.07), text_fg=VBase4(1, 1, 1, 1), pos=(-0.25, 0, 0.175),
             command=self.__exitCrane)
         self.accept('escape', self.__exitCrane)
-        self.accept('control', self.__controlPressed)
+        self.accept(base.JUMP, self.__controlPressed)
         self.accept('control-up', self.__controlReleased)
         self.accept('InputState-forward', self.__upArrow)
         self.accept('InputState-reverse', self.__downArrow)
@@ -420,7 +420,7 @@ class DistributedCashbotBossCrane(DistributedObject.DistributedObject, FSM.FSM):
         self.__cleanupCraneAdvice()
         self.__cleanupMagnetAdvice()
         self.ignore('escape')
-        self.ignore('control')
+        self.ignore(base.JUMP)
         self.ignore('control-up')
         self.ignore('InputState-forward')
         self.ignore('InputState-reverse')
@@ -823,8 +823,8 @@ class DistributedCashbotBossCrane(DistributedObject.DistributedObject, FSM.FSM):
         self.grabTrack = self.makeToonGrabInterval(toon)
         if avId == localAvatar.doId:
             self.boss.toCraneMode()
-            camera.reparentTo(self.hinge)
-            camera.setPosHpr(0, -20, -5, 0, -20, 0)
+            base.camera.reparentTo(self.hinge)
+            base.camera.setPosHpr(0, -20, -5, 0, -20, 0)
             self.tube.stash()
             localAvatar.setPosHpr(self.controls, 0, 0, 0, 0, 0, 0)
             localAvatar.sendCurrentPosition()
@@ -854,9 +854,9 @@ class DistributedCashbotBossCrane(DistributedObject.DistributedObject, FSM.FSM):
             self.__disableControlInterface()
             self.__deactivatePhysics()
             self.tube.unstash()
-            camera.reparentTo(base.localAvatar)
-            camera.setPos(base.localAvatar.cameraPositions[0][0])
-            camera.setHpr(0, 0, 0)
+            base.camera.reparentTo(base.localAvatar)
+            base.camera.setPos(base.localAvatar.cameraPositions[0][0])
+            base.camera.setHpr(0, 0, 0)
             if self.cr:
                 place = self.cr.playGame.getPlace()
                 if place and hasattr(place, 'fsm'):

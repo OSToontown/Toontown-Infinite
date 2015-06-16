@@ -245,6 +245,7 @@ TPstartFrame = 0.12
 TPendFrame = 0.12
 SBpageTab = 0.75
 OPoptionsTab = 0.07
+OPmoreOptionsTab = 0.06
 OPCodesInstructionPanelTextPos = (0, -0.01)
 OPCodesInstructionPanelTextWordWrap = 6
 OPCodesResultPanelTextPos = (0, 0.35)

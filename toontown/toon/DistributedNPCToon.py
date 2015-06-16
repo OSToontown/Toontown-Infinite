@@ -84,11 +84,11 @@ class DistributedNPCToon(DistributedNPCToonBase):
             self.nametag3d.clearBin()
 
     def setupCamera(self, mode):
-        camera.wrtReparentTo(render)
+        base.camera.wrtReparentTo(render)
         if mode == NPCToons.QUEST_MOVIE_QUEST_CHOICE or mode == NPCToons.QUEST_MOVIE_TRACK_CHOICE:
-            camera.posQuatInterval(1, (5, 9, self.getHeight() - 0.5), (155, -2, 0), other=self, blendType='easeOut').start()
+            base.camera.posQuatInterval(1, (5, 9, self.getHeight() - 0.5), (155, -2, 0), other=self, blendType='easeOut').start()
         else:
-            camera.posQuatInterval(1, (-5, 9, self.getHeight() - 0.5), (-150, -2, 0), other=self, blendType='easeOut').start()
+            base.camera.posQuatInterval(1, (-5, 9, self.getHeight() - 0.5), (-150, -2, 0), other=self, blendType='easeOut').start()
 
     def setMovie(self, mode, npcId, avId, quests, timestamp):
         isLocalToon = avId == base.localAvatar.doId

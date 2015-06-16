@@ -1,8 +1,6 @@
-import datetime
 from direct.distributed.MsgTypes import CLIENTAGENT_EJECT
 from direct.distributed.PyDatagram import PyDatagram
 from direct.stdpy import threading2
-import re
 
 from otp.distributed import OtpDoGlobals
 from toontown.distributed.ShardStatusReceiver import ShardStatusReceiver
@@ -10,7 +8,10 @@ from toontown.rpc.ToontownRPCHandlerBase import *
 from toontown.suit.SuitInvasionGlobals import INVASION_TYPE_NORMAL
 from toontown.toon import ToonDNA
 from toontown.toonbase import TTLocalizer
-from toontown.uberdog.ClientServicesManagerUD import executeHttpRequest
+
+import datetime
+import time
+import re
 
 
 class ToontownRPCHandler(ToontownRPCHandlerBase):
@@ -365,15 +366,20 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
         """
         if reason not in ('hacking', 'language', 'other'):
             return False
+
+        avatarDetails = self.rpc_getAvatarDetails(userId)
+        if avatarDetails is None:
+            return False
+
         self.air.writeServerEvent('ban', userId, duration, reason)
-        if duration > 0:
+
+        if duration != 0:
             now = datetime.date.today()
-            release = str(now + datetime.timedelta(hours=duration))
-        else:
-            release = '0000-00-00'  # Permanent ban.
-        executeHttpRequest('accounts/ban/', Id=userId, Release=release,
-                           Reason=reason)
-        self.rpc_kickUser(userId, 152, reason)
+            duration = time.mktime((now + datetime.timedelta(days=duration)).timetuple())
+
+        self.air.webRpc.banUser(userId, duration, reason)
+        self.rpc_kickUser(userId, 152, avatarDetails['name'])
+
         return True
 
     @rpcmethod(accessLevel=MODERATOR)
@@ -732,3 +738,62 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
                 be terminated.
         """
         self.air.netMessenger.send('stopInvasion', [shardId])
+
+    # --- NAME REVIEW ---
+
+    @rpcmethod(accessLevel=MODERATOR)
+    def rpc_approveName(self, avId):
+        """
+        Summary:
+            Approve [avId]'s name.
+
+        Parameters:
+            [int avId] = The ID of the avatar.
+
+        Example response:
+            On success: True
+            On failure: False
+        """
+        dclassName, fields = self.rpc_queryObject(avId)
+        if dclassName != 'DistributedToon':
+            return False
+
+        self.air.dbInterface.updateObject(
+            self.air.dbId,
+            avId,
+            self.air.dclassesByName['DistributedToonUD'],
+            {'WishNameState': ('APPROVED',),
+             'setName': (fields['WishName'][0],)})
+        self.rpc_setField(avId, 'DistributedToonUD', 'setName', [fields['WishName'][0]])
+
+        self.rpc_messageAvatar(avId, 'Your name has been approved by the Toon Council!')
+
+        return True
+
+    @rpcmethod(accessLevel=MODERATOR)
+    def rpc_denyName(self, avId):
+        """
+        Summary:
+            Deny [avId]'s name.
+
+        Parameters:
+            [int avId] = The ID of the avatar.
+
+        Example response:
+            On success: True
+            On failure: False
+        """
+        dclassName, fields = self.rpc_queryObject(avId)
+        if dclassName != 'DistributedToon':
+            return False
+
+        self.air.dbInterface.updateObject(
+            self.air.dbId,
+            avId,
+            self.air.dclassesByName['DistributedToonUD'],
+            {'WishNameState': ('REJECTED',)})
+
+        self.rpc_messageAvatar(avId, 'The Toon Council has rejected your name. \
+                                      Please go back to the Pick-A-Toon screen and choose a new one.')
+
+        return True

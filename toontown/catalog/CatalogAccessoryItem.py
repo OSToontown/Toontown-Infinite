@@ -35,24 +35,10 @@ class CatalogAccessoryItem(CatalogItem.CatalogItem):
             return forBoys
 
     def forBoysOnly(self):
-        article = AccessoryTypes[self.accessoryType][ATArticle]
-        if article in [ABoysHat,
-         ABoysGlasses,
-         ABoysBackpack,
-         ABoysShoes]:
-            return 1
-        else:
-            return 0
+        return 0
 
     def forGirlsOnly(self):
-        article = AccessoryTypes[self.accessoryType][ATArticle]
-        if article in [AGirlsHat,
-         AGirlsGlasses,
-         AGirlsBackpack,
-         AGirlsShoes]:
-            return 1
-        else:
-            return 0
+        return 0
 
     def getPurchaseLimit(self):
         return 1

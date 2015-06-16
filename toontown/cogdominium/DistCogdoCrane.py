@@ -392,7 +392,7 @@ class DistCogdoCrane(DistributedObject.DistributedObject, FSM.FSM):
 
     def __enableControlInterface(self):
         gui = loader.loadModel('phase_3.5/models/gui/avatar_panel_gui')
-        self.accept('control', self.__controlPressed)
+        self.accept(base.JUMP, self.__controlPressed)
         self.accept('control-up', self.__controlReleased)
         self.accept('InputState-forward', self.__upArrow)
         self.accept('InputState-reverse', self.__downArrow)
@@ -410,7 +410,7 @@ class DistCogdoCrane(DistributedObject.DistributedObject, FSM.FSM):
         self.__cleanupCraneAdvice()
         self.__cleanupMagnetAdvice()
         self.ignore('escape')
-        self.ignore('control')
+        self.ignore(base.JUMP)
         self.ignore('control-up')
         self.ignore('InputState-forward')
         self.ignore('InputState-reverse')
@@ -794,8 +794,8 @@ class DistCogdoCrane(DistributedObject.DistributedObject, FSM.FSM):
         self.grabTrack = self.makeToonGrabInterval(toon)
         if avId == localAvatar.doId:
             self.craneGame.toCraneMode()
-            camera.reparentTo(self.hinge)
-            camera.setPosHpr(0, -20, -5, 0, -20, 0)
+            base.camera.reparentTo(self.hinge)
+            base.camera.setPosHpr(0, -20, -5, 0, -20, 0)
             self.tube.stash()
             localAvatar.setPosHpr(self.controls, 0, 0, 0, 0, 0, 0)
             localAvatar.sendCurrentPosition()
@@ -823,9 +823,9 @@ class DistCogdoCrane(DistributedObject.DistributedObject, FSM.FSM):
             self.__disableControlInterface()
             self.__deactivatePhysics()
             self.tube.unstash()
-            camera.reparentTo(base.localAvatar)
-            camera.setPos(base.localAvatar.cameraPositions[0][0])
-            camera.setHpr(0, 0, 0)
+            base.camera.reparentTo(base.localAvatar)
+            base.camera.setPos(base.localAvatar.cameraPositions[0][0])
+            base.camera.setHpr(0, 0, 0)
         self.__straightenCable()
 
     def enterFree(self):

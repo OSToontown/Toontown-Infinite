@@ -62,11 +62,11 @@ class DistributedCannon(DistributedObject.DistributedObject):
     HIT_GROUND = 0
     HIT_TOWER = 1
     HIT_WATER = 2
-    FIRE_KEY = 'control'
-    UP_KEY = 'arrow_up'
-    DOWN_KEY = 'arrow_down'
-    LEFT_KEY = 'arrow_left'
-    RIGHT_KEY = 'arrow_right'
+    FIRE_KEY = base.JUMP
+    UP_KEY = base.MOVE_UP
+    DOWN_KEY = base.MOVE_DOWN
+    LEFT_KEY = base.MOVE_LEFT
+    RIGHT_KEY = base.MOVE_RIGHT
     BUMPER_KEY = 'delete'
     BUMPER_KEY2 = 'insert'
     INTRO_TASK_NAME = 'CannonGameIntro'
@@ -262,8 +262,8 @@ class DistributedCannon(DistributedObject.DistributedObject):
                 base.setCellsActive([base.rightCells[1]], 0)
                 self.localToonShooting = 1
                 self.__makeGui()
-                camera.reparentTo(self.barrel)
-                camera.setPos(0.5, -2, 2.5)
+                base.camera.reparentTo(self.barrel)
+                base.camera.setPos(0.5, -2, 2.5)
                 self.curPinballScore = 0
                 self.curPinballMultiplier = 1
                 self.incrementPinballInfo(0, 0)
@@ -741,8 +741,8 @@ class DistributedCannon(DistributedObject.DistributedObject):
         return Point3(self.cannonLocationDict[self.localAvId][0], CANNON_Y - 5.0, CANNON_Z + 7)
 
     def __putCameraBehindCannon(self):
-        camera.setPos(self.__getCameraPositionBehindCannon())
-        camera.setHpr(0, 0, 0)
+        base.camera.setPos(self.__getCameraPositionBehindCannon())
+        base.camera.setHpr(0, 0, 0)
 
     def __loadToonInCannon(self):
         self.toonModel.reparentTo(hidden)
@@ -824,9 +824,9 @@ class DistributedCannon(DistributedObject.DistributedObject):
         info['haveWhistled'] = 0
         info['maxCamPullback'] = CAMERA_PULLBACK_MIN
         if self.localToonShooting:
-            camera.reparentTo(self.av)
-            camera.setP(45.0)
-            camera.setZ(-10.0)
+            base.camera.reparentTo(self.av)
+            base.camera.setP(45.0)
+            base.camera.setZ(-10.0)
         self.flyColSphere = CollisionSphere(0, 0, self.av.getHeight() / 2.0, 1.0)
         self.flyColNode = CollisionNode(self.uniqueName('flySphere'))
         self.flyColNode.setCollideMask(ToontownGlobals.WallBitmask | ToontownGlobals.FloorBitmask)
@@ -1003,7 +1003,7 @@ class DistributedCannon(DistributedObject.DistributedObject):
             return
 
         if self.localToonShooting:
-            camera.wrtReparentTo(render)
+            base.camera.wrtReparentTo(render)
 
         if self.dropShadow:
             self.dropShadow.reparentTo(hidden)
@@ -1306,18 +1306,18 @@ class DistributedCannon(DistributedObject.DistributedObject):
         hpr = task.info['toon'].getHpr(render)
         if self.localToonShooting:
             if view == 0:
-                camera.wrtReparentTo(render)
-                camera.lookAt(lookAt)
+                base.camera.wrtReparentTo(render)
+                base.camera.lookAt(lookAt)
             elif view == 1:
-                camera.reparentTo(render)
-                camera.setPos(render, 100, 100, 35.25)
-                camera.lookAt(render, lookAt)
+                base.camera.reparentTo(render)
+                base.camera.setPos(render, 100, 100, 35.25)
+                base.camera.lookAt(render, lookAt)
             elif view == 2:
                 if hpr[1] > -90:
-                    camera.setPos(0, 0, -30)
-                    if camera.getZ() < lookAt[2]:
-                        camera.setZ(render, lookAt[2] + 10)
-                    camera.lookAt(Point3(0, 0, 0))
+                    base.camera.setPos(0, 0, -30)
+                    if base.camera.getZ() < lookAt[2]:
+                        base.camera.setZ(render, lookAt[2] + 10)
+                    base.camera.lookAt(Point3(0, 0, 0))
             self.__pickupTreasures(t)
         return Task.cont
 
@@ -1354,7 +1354,7 @@ class DistributedCannon(DistributedObject.DistributedObject):
                 self.notify.debug('toon setting position to %s' % pos)
                 if pos:
                     base.localAvatar.setPos(pos)
-                camera.reparentTo(avatar)
+                base.camera.reparentTo(avatar)
             self.b_setLanded()
 
     def setActiveState(self, active):

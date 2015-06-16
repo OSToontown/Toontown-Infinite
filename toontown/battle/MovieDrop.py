@@ -406,12 +406,24 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
         suitTrack.append(updateHealthBar)
         suitGettingHit = Parallel(suitReact)
         if level == UBER_GAG_LEVEL_INDEX:
+            node = suit.getGeomNode().getChild(0)
+            suitFlatten = Sequence(
+                Parallel(
+                    LerpHprInterval(node, 2, Vec3(0.0, 0.0, 0.0), blendType='easeInOut'),
+                    LerpScaleInterval(node, 2, VBase3(1, 1, 0.05), blendType='easeInOut')
+                )
+            )
             gotHitSound = globalBattleSoundCache.getSound('AA_drop_boat_cog.ogg')
+
             suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
+            suitGettingHit.append(suitFlatten)
+            suitGettingHit.append(Sequence(
+                Wait(2.7), LerpScaleInterval(node, 2, VBase3(1, 1, 1), blendType='easeInOut'))
+            )
         suitTrack.append(suitGettingHit)
         bonusTrack = None
         if hpbonus > 0:
-            bonusTrack = Sequence(Wait(delay + tObjectAppears + 0.75), Func(suit.showHpText, -hpbonus, 1, openEnded=0))
+            bonusTrack = Sequence(Wait(delay + tObjectAppears + 0.75), Func(suit.showHpText, -hpbonus, 1, openEnded=0), Func(suit.updateHealthBar, hpbonus))
         if revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, toon, battle, npcs))
         elif died != 0:

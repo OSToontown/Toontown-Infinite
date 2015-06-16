@@ -1,4 +1,5 @@
 from pandac.PandaModules import *
+from panda3d.core import Fog
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
@@ -110,7 +111,7 @@ class DistributedRace(DistributedObject.DistributedObject):
         musicFile = self.BGM_BaseDir + RaceGlobals.TrackDict[self.trackId][7]
         self.raceMusic = base.loadMusic(musicFile)
         base.playMusic(self.raceMusic, looping=1, volume=0.8)
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         if self.trackId in (RaceGlobals.RT_Urban_1,
          RaceGlobals.RT_Urban_1_rev,
          RaceGlobals.RT_Urban_2,
@@ -601,9 +602,9 @@ class DistributedRace(DistributedObject.DistributedObject):
         taskMgr.doMethodLater(2, self.stopDriving, taskName, extraArgs=[])
         self.miscTaskNames.append(taskName)
         self.finished = True
-        camera.reparentTo(render)
-        camera.setPos(self.localKart.getPos(render) + Vec3(0, 0, 10))
-        camera.setH(self.localKart.getH(render) + 180)
+        base.camera.reparentTo(render)
+        base.camera.setPos(self.localKart.getPos(render) + Vec3(0, 0, 10))
+        base.camera.setH(self.localKart.getH(render) + 180)
         self.gui.disableRaceMode()
         self.gui.enableResultMode()
         localAvatar.reparentTo(hidden)
@@ -614,14 +615,14 @@ class DistributedRace(DistributedObject.DistributedObject):
 
     def stopDriving(self):
         kart = base.cr.doId2do.get(self.kartMap.get(localAvatar.doId, None), None)
-        cpos = camera.getPos()
-        chpr = camera.getHpr()
+        cpos = base.camera.getPos()
+        chpr = base.camera.getHpr()
         localAvatar.reparentTo(hidden)
         self.localKart.reparentTo(hidden)
         self.localKart.stopSmooth()
         self.localKart.stopPosHprBroadcast()
-        camera.setPos(cpos)
-        camera.setHpr(chpr)
+        base.camera.setPos(cpos)
+        base.camera.setHpr(chpr)
         return
 
     def enterLeave(self):

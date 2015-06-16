@@ -188,7 +188,7 @@ class DistributedStage(DistributedObject.DistributedObject):
     def camEnterRoom(self, roomNum):
         self.notify.debug('camEnterRoom: %s' % roomNum)
         self.notify.info('CAMENTERROOM doID%s num%s' % (self.doId, roomNum))
-        self.notify.info('av: %s, cam: %s' % (localAvatar.getPos(), camera.getPos()))
+        self.notify.info('av: %s, cam: %s' % (localAvatar.getPos(), base.camera.getPos()))
         if roomNum % 2 == 1:
             minVis = roomNum - 2
             maxVis = roomNum + 2

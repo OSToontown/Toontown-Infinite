@@ -14,7 +14,7 @@ accountServerEndpoint = ConfigVariableString(
     'https://toontowninfinite.com/api/').getValue()
 request = requests.post(
     accountServerEndpoint + 'login/',
-    data={'n': username, 'p': password, 'dist': distribution})
+    data={'username': username, 'password': password, 'distribution': distribution})
 
 try:
     response = json.loads(request.text)
@@ -22,9 +22,9 @@ except ValueError:
     print "Couldn't verify account credentials."
 else:
     if not response['success']:
-        print response['reason']
+        print response['result']
     else:
-        os.environ['TTI_PLAYCOOKIE'] = response['token']
+        os.environ['TTI_PLAYCOOKIE'] = response['cookie']
 
         # Start the game:
         import toontown.toonbase.ClientStart

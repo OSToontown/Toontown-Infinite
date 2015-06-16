@@ -53,7 +53,6 @@ class DistributedTrolley(DistributedObject.DistributedObject):
         enterFog.setLinearFallback(70.0, 999.0, 1000.0)
         self.trolleyEnterFog = self.trolleyStation.attachNewNode(enterFog)
         self.trolleyEnterFogNode = enterFog
-        self.trolleyCar.setFogOff()
         self.keys = self.trolleyCar.findAllMatches('**/key')
         self.numKeys = self.keys.getNumPaths()
         self.keyInit = []

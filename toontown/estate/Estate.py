@@ -1,4 +1,5 @@
 from pandac.PandaModules import *
+from panda3d.core import Fog
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToonBaseGlobal import *
 from toontown.toonbase.ToontownGlobals import *
@@ -313,7 +314,7 @@ class Estate(Place.Place):
             self.notify.warning('no zone id available')
 
     def __checkCameraUnderwater(self, task):
-        if camera.getZ(render) < -1.2:
+        if base.camera.getZ(render) < -1.2:
             self.__submergeCamera()
         else:
             self.__emergeCamera()

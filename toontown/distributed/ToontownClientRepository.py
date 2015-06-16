@@ -457,9 +457,9 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         taskMgr.remove('avatarRequestQueueTask')
         OTPClientRepository.OTPClientRepository.exitPlayingGame(self)
         if hasattr(base, 'localAvatar'):
-            camera.reparentTo(render)
-            camera.setPos(0, 0, 0)
-            camera.setHpr(0, 0, 0)
+            base.camera.reparentTo(render)
+            base.camera.setPos(0, 0, 0)
+            base.camera.setHpr(0, 0, 0)
             del self.doId2do[base.localAvatar.getDoId()]
             if base.localAvatar.getDelayDeleteCount() != 0:
                 self.notify.error('could not delete localAvatar, delayDeletes=%s' % (base.localAvatar.getDelayDeleteNames(),))

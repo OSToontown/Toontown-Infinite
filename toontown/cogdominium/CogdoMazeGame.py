@@ -93,7 +93,7 @@ class CogdoMazeGame(DirectObject):
         return
 
     def _initAudio(self):
-        self._audioMgr = CogdoGameAudioManager(Globals.MusicFiles, Globals.SfxFiles, camera, cutoff=Globals.AudioCutoff)
+        self._audioMgr = CogdoGameAudioManager(Globals.MusicFiles, Globals.SfxFiles, base.camera, cutoff=Globals.AudioCutoff)
         self._quakeSfx1 = self._audioMgr.createSfx('quake')
         self._quakeSfx2 = self._audioMgr.createSfx('quake')
 

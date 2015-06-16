@@ -574,6 +574,10 @@ class TalkAssistant(DirectObject.DirectObject):
     def sendOpenTalk(self, message):
         error = None
         doId = base.localAvatar.doId
+        try:
+            message.encode('ascii')
+        except UnicodeEncodeError:
+            return
         if base.config.GetBool('want-talkative-tyler', False):
             if base.localAvatar.zoneId == 2000:
                 tyler = base.cr.doFind('Talkative Tyler')

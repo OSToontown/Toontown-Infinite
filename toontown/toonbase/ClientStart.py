@@ -4,22 +4,12 @@ import __builtin__
 
 __builtin__.process = 'client'
 
-
-# Temporary hack patch:
-__builtin__.__dict__.update(__import__('pandac.PandaModules', fromlist=['*']).__dict__)
-from direct.extensions_native import HTTPChannel_extensions
-from direct.extensions_native import Mat3_extensions
-from direct.extensions_native import VBase3_extensions
-from direct.extensions_native import VBase4_extensions
-from direct.extensions_native import NodePath_extensions
-
-
-from panda3d.core import loadPrcFile
+from pandac.PandaModules import *
 
 
 if __debug__:
     loadPrcFile('config/general.prc')
-    loadPrcFile('config/release/dev.prc')
+    loadPrcFile('config/distribution/dev.prc')
 
 
 from direct.directnotify.DirectNotifyGlobal import directNotify
@@ -57,8 +47,7 @@ loadPrcFileData('Settings: sfx', 'audio-sfx-active %s' % settings['sfx'])
 loadPrcFileData('Settings: musicVol', 'audio-master-music-volume %s' % settings['musicVol'])
 loadPrcFileData('Settings: sfxVol', 'audio-master-sfx-volume %s' % settings['sfxVol'])
 loadPrcFileData('Settings: loadDisplay', 'load-display %s' % settings['loadDisplay'])
-loadPrcFileData('Settings: toonChatSounds', 'toon-chat-sounds %s' % settings['toonChatSounds'])
-
+loadPrcFileData('Settings: toonChatSounds', 'toon-chat-sounds %s' % settings['toonChatSounds'])  
 
 import os
 
@@ -118,7 +107,7 @@ backgroundNodePath.setScale(render2d, VBase3(1))
 backgroundNodePath.find('**/fg').hide()
 logo = OnscreenImage(
     image='phase_3/maps/toontown-logo.png',
-    scale=(1 / (4.0/3.0), 1, 1 / (4.0/3.0)),
+    scale=(0.9625 / (4.0/3.0), 1, 0.83 / (4.0/3.0)),
     pos=backgroundNodePath.find('**/fg').getPos())
 logo.setTransparency(TransparencyAttrib.MAlpha)
 logo.setBin('fixed', 20)
@@ -132,8 +121,7 @@ import TTLocalizer
 from otp.otpbase import OTPGlobals
 OTPGlobals.setDefaultProductPrefix(TTLocalizer.ProductPrefix)
 if base.musicManagerIsValid:
-    themeList = ('phase_3/audio/bgm/tti_theme.ogg', 'phase_3/audio/bgm/tti_theme_2.ogg')
-    music = base.loadMusic(random.choice(themeList))
+    music = base.loadMusic('phase_3/audio/bgm/tti_theme.ogg')
     if music:
         music.setLoop(1)
         music.setVolume(0.9)
@@ -180,7 +168,7 @@ __builtin__.loader = base.loader
 autoRun = ConfigVariableBool('toontown-auto-run', 1)
 if autoRun:
     try:
-        run()
+        base.run()
     except SystemExit:
         raise
     except:

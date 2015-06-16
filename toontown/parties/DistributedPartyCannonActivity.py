@@ -299,7 +299,7 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
             info['launchTime'] = launchTime
             info['toon'] = self.localFlyingToon
             info['hRot'] = cannon.getRotation()
-            camera.wrtReparentTo(self.localFlyingToon)
+            base.camera.wrtReparentTo(self.localFlyingToon)
             flyTask = Task(self.__localFlyTask, self.taskNameFly)
             flyTask.info = info
             seqTask = Task.sequence(shootTask, flyTask)
@@ -483,7 +483,7 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
                 self.notify.debug('toon setting position to %s' % pos)
                 if pos:
                     base.localAvatar.setPos(pos)
-                camera.reparentTo(avatar)
+                base.camera.reparentTo(avatar)
             self.d_setLanded(avatar.doId)
 
     def __updateFlightVelocity(self, trajectory):
@@ -622,25 +622,25 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
         lookAt = toon.getPos(render)
         hpr = toon.getHpr(render)
         if view == 0:
-            camera.wrtReparentTo(render)
-            camera.lookAt(lookAt)
+            base.camera.wrtReparentTo(render)
+            base.camera.lookAt(lookAt)
         elif view == 1:
-            camera.reparentTo(render)
-            camera.setPos(render, 100, 100, 35.25)
-            camera.lookAt(render, lookAt)
+            base.camera.reparentTo(render)
+            base.camera.setPos(render, 100, 100, 35.25)
+            base.camera.lookAt(render, lookAt)
         elif view == 2:
-            if camera.getParent() != self.camNode:
-                camera.wrtReparentTo(self.camNode)
-                camera.setPos(self.cameraPos)
-                camera.lookAt(toon)
+            if base.camera.getParent() != self.camNode:
+                base.camera.wrtReparentTo(self.camNode)
+                base.camera.setPos(self.cameraPos)
+                base.camera.lookAt(toon)
             self.camNode.setPos(toon.getPos(render))
             camHpr = self.camNode.getHpr(toon)
             vec = -Point3(0, 0, 0) - camHpr
             relativeSpeed = math.pow(vec.length() / 60.0, 2) + 0.1
             newHpr = camHpr + vec * deltaT * self.cameraSpeed * relativeSpeed
             self.camNode.setHpr(toon, newHpr)
-            camera.lookAt(self.camNode)
-            camera.setR(render, 0)
+            base.camera.lookAt(self.camNode)
+            base.camera.setR(render, 0)
 
     def __cleanupFlyingToonData(self, toon):
         self.notify.debug('__cleanupFlyingToonData')
@@ -780,7 +780,7 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
             self.__stopLocalFlyTask(self.localFlyingToonId)
             self.notify.debug('stopping flying since we hit %s' % hitNode)
         if self.isLocalToonId(self.localFlyingToon.doId):
-            camera.wrtReparentTo(render)
+            base.camera.wrtReparentTo(render)
         if self.localFlyingDropShadow:
             self.localFlyingDropShadow.reparentTo(hidden)
         pos = collisionEntry.getSurfacePoint(render)

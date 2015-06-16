@@ -347,11 +347,11 @@ class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, 
         self.ballFollowToonSpot.setH(-90)
         self.clubLookatSpot = self.ballFollow.attachNewNode('clubLookat')
         self.clubLookatSpot.setY(-(GolfGlobals.GOLF_BALL_RADIUS + 0.1))
-        camera.reparentTo(self.ballFollow)
+        base.camera.reparentTo(self.ballFollow)
         self.camPosBallFollow = Point3(0.0, -23.0, 12.0)
         self.camHprBallFollow = Point3(0, -16.0, 0)
-        camera.setPos(self.camPosBallFollow)
-        camera.setHpr(self.camHprBallFollow)
+        base.camera.setPos(self.camPosBallFollow)
+        base.camera.setHpr(self.camHprBallFollow)
         if self.holeBottomNodePath.isEmpty():
             holePositions = self.holePositions
             for index in xrange(len(holePositions)):
@@ -1490,7 +1490,7 @@ class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, 
             self.camInterval.pause()
         if base.camera.getParent() == self.ballFollow:
             if doInterval:
-                curHpr = camera.getHpr(render)
+                curHpr = base.camera.getHpr(render)
                 angle = PythonUtil.closestDestAngle2(curHpr[0], 0)
                 self.camInterval = Sequence(Func(base.camera.wrtReparentTo, render), LerpPosHprInterval(base.camera, 2, self.camTopViewPos, self.camTopViewHpr))
                 self.camInterval.start()
@@ -1499,7 +1499,7 @@ class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, 
                 base.camera.setPos(self.camTopViewPos)
                 base.camera.setHpr(self.camTopViewHpr)
         elif doInterval:
-            curHpr = camera.getHpr(self.ballFollow)
+            curHpr = base.camera.getHpr(self.ballFollow)
             angle = PythonUtil.closestDestAngle2(curHpr[0], 0)
             self.camInterval = Sequence(Func(base.camera.wrtReparentTo, self.ballFollow), LerpPosHprInterval(base.camera, 2, self.camPosBallFollow, self.camHprBallFollow))
             self.camInterval.start()

@@ -11,10 +11,6 @@ from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase import ToontownGlobals
 
 
-try:
-    config = simbase.config
-except:
-    config = base.config
 QUEST_MOVIE_CLEAR = 0
 QUEST_MOVIE_REJECT = 1
 QUEST_MOVIE_COMPLETE = 2

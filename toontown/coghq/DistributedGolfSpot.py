@@ -195,8 +195,8 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
         self.grabTrack = self.makeToonGrabInterval(toon)
         if avId == localAvatar.doId:
             self.boss.toCraneMode()
-            camera.reparentTo(self.root)
-            camera.setPosHpr(0, -10, 3, 0, 0, 0)
+            base.camera.reparentTo(self.root)
+            base.camera.setPosHpr(0, -10, 3, 0, 0, 0)
             localAvatar.setPos(self.root, self.toonGolfOffsetPos)
             localAvatar.setHpr(self.root, self.toonGolfOffsetHpr)
             localAvatar.sendCurrentPosition()
@@ -224,9 +224,9 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
         if self.avId == localAvatar.doId:
             self.__disableControlInterface()
             if not self.goingToReward:
-                camera.reparentTo(base.localAvatar)
-                camera.setPos(base.localAvatar.cameraPositions[0][0])
-                camera.setHpr(0, 0, 0)
+                base.camera.reparentTo(base.localAvatar)
+                base.camera.setPos(base.localAvatar.cameraPositions[0][0])
+                base.camera.setHpr(0, 0, 0)
         self.stopAdjustClubTask()
         self.releaseTrack.start()
         self.enableControlKey()
@@ -293,7 +293,7 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
          gui.find('**/CloseBtn_Rllvr'),
          gui.find('**/CloseBtn_UP')), relief=None, scale=2, text=TTLocalizer.BossbotGolfSpotLeave, text_scale=0.04, text_pos=(0, -0.07), text_fg=VBase4(1, 1, 1, 1), pos=(1.05, 0, -0.82), command=self.__exitGolfSpot)
         self.accept('escape', self.__exitGolfSpot)
-        self.accept('control', self.__controlPressed)
+        self.accept(base.JUMP, self.__controlPressed)
         self.accept('control-up', self.__controlReleased)
         self.accept('InputState-forward', self.__upArrow)
         self.accept('InputState-reverse', self.__downArrow)
@@ -313,7 +313,7 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
             self.closeButton = None
         self.__cleanupGolfSpotAdvice()
         self.ignore('escape')
-        self.ignore('control')
+        self.ignore(base.JUMP)
         self.ignore('control-up')
         self.ignore('InputState-forward')
         self.ignore('InputState-reverse')

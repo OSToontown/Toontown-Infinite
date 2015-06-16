@@ -17,7 +17,7 @@ def doSOSs(calls):
 
     def callerFunc(toon, handle):
         toon.setChatAbsolute(TTLocalizer.MovieSOSCallHelp % handle.getName(), CFSpeech | CFTimeout)
-        handle.d_battleSOS(base.localAvatar.doId)
+        handle.d_battleSOS(handle.doId)
 
     def calleeFunc(toon, handle):
         toon.setChatAbsolute(TTLocalizer.MovieSOSCallHelp % handle.getName(), CFSpeech | CFTimeout)

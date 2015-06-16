@@ -56,11 +56,11 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPhotoGame')
     font = ToontownGlobals.getToonFont()
     LOCAL_PHOTO_MOVE_TASK = 'localPhotoMoveTask'
-    FIRE_KEY = 'control'
-    UP_KEY = 'arrow_up'
-    DOWN_KEY = 'arrow_down'
-    LEFT_KEY = 'arrow_left'
-    RIGHT_KEY = 'arrow_right'
+    FIRE_KEY = base.JUMP
+    UP_KEY = base.MOVE_UP
+    DOWN_KEY = base.MOVE_DOWN
+    LEFT_KEY = base.MOVE_LEFT
+    RIGHT_KEY = base.MOVE_RIGHT
     INTRO_TASK_NAME = 'PhotoGameIntro'
     INTRO_TASK_NAME_CAMERA_LERP = 'PhotoGameIntroCamera'
 
@@ -253,7 +253,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         self.tripod.reparentTo(render)
         self.tripod.hide()
         self.__loadToonInTripod(self.localAvId)
-        camera.reparentTo(render)
+        base.camera.reparentTo(render)
         self.__oldCamFar = base.camLens.getFar()
         base.camLens.setFar(FAR_PLANE_DIST)
         self.__setupSubjects()
@@ -314,7 +314,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
                 if row < 0:
                     rowString = '%s' % row
                 pickerNode = CollisionNode('%s %s %s' % (rowString, columnString, rayQuality))
-                pickerNP = camera.attachNewNode(pickerNode)
+                pickerNP = base.camera.attachNewNode(pickerNode)
                 pickerNode.setFromCollideMask(GeomNode.getDefaultCollideMask())
                 pickerRay = CollisionRay()
                 pickerNode.addSolid(pickerRay)
@@ -563,10 +563,10 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         self.notify.debug('judgePhoto')
         self.notify.debug(subject.getName())
         self.notify.debug(str(centerDict[subject]))
-        a1 = camera.getH(render) % 360
+        a1 = base.camera.getH(render) % 360
         a2 = subject.getH(render) % 360
         angle = abs((a1 + 180 - a2) % 360 - 180)
-        self.notify.debug('angle camera:%s subject:%s between:%s' % (camera.getH(render), subject.getH(render), angle))
+        self.notify.debug('angle camera:%s subject:%s between:%s' % (base.camera.getH(render), subject.getH(render), angle))
         self.notify.debug(str(angle))
         centering = centerDict[subject]
         if type(subject) == type(self.subjectToon):
@@ -1326,8 +1326,8 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         return Task.cont
 
     def __putCameraOnTripod(self):
-        camera.setPosHpr(0, 0.0, 0, 0, 0, 0)
-        camera.reparentTo(self.swivel)
+        base.camera.setPosHpr(0, 0.0, 0, 0, 0, 0)
+        base.camera.reparentTo(self.swivel)
         self.swivel.setHpr(self.data['START_HPR'])
 
     def __loadToonInTripod(self, avId):
@@ -1366,12 +1366,12 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
         return
 
     def __startIntro(self):
-        camera.reparentTo(render)
-        camera.setPos(self.data['CAMERA_INTIAL_POSTION'])
-        camera.setHpr(0, 0, 0)
-        camera.lookAt(self.tripod)
-        lookatHpr = camera.getHpr()
-        self.introSequence = LerpPosHprInterval(camera, 4.0, pos=self.tripod.getPos(render), hpr=lookatHpr, startPos=self.data['CAMERA_INTIAL_POSTION'], blendType='easeInOut')
+        base.camera.reparentTo(render)
+        base.camera.setPos(self.data['CAMERA_INTIAL_POSTION'])
+        base.camera.setHpr(0, 0, 0)
+        base.camera.lookAt(self.tripod)
+        lookatHpr = base.camera.getHpr()
+        self.introSequence = LerpPosHprInterval(base.camera, 4.0, pos=self.tripod.getPos(render), hpr=lookatHpr, startPos=self.data['CAMERA_INTIAL_POSTION'], blendType='easeInOut')
         self.introSequence.start()
 
     def construct(self):

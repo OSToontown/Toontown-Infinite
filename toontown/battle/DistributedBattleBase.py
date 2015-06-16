@@ -794,9 +794,9 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                 base.camLens.setMinFov(fov/(4./3.))
 
             camTrack.append(Func(setCamFov, self.camFov))
-            camTrack.append(Func(camera.wrtReparentTo, self))
-            camTrack.append(Func(camera.setPos, self.camJoinPos))
-            camTrack.append(Func(camera.setHpr, self.camJoinHpr))
+            camTrack.append(Func(base.camera.wrtReparentTo, self))
+            camTrack.append(Func(base.camera.setPos, self.camJoinPos))
+            camTrack.append(Func(base.camera.setHpr, self.camJoinHpr))
             return Parallel(joinTrack, camTrack, name=name)
         else:
             return Sequence(joinTrack, name=name)
@@ -1017,7 +1017,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
 
     def __enterLocalToonWaitForInput(self):
         self.notify.debug('enterLocalToonWaitForInput()')
-        camera.setPosHpr(self.camPos, self.camHpr)
+        base.camera.setPosHpr(self.camPos, self.camHpr)
         base.camLens.setMinFov(self.camMenuFov/(4./3.))
         NametagGlobals.setWant2dNametags(False)
         self.townBattle.setState('Attack')
@@ -1242,7 +1242,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             base.cr.playGame.getPlace().setState('battle', self.localToonBattleEvent)
             if localAvatar and hasattr(localAvatar, 'inventory') and localAvatar.inventory:
                 localAvatar.inventory.setInteractivePropTrackBonus(self.interactivePropTrackBonus)
-        camera.wrtReparentTo(self)
+        base.camera.wrtReparentTo(self)
         base.camLens.setMinFov(self.camFov/(4./3.))
         return
 
@@ -1257,10 +1257,10 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             stateName = place.fsm.getCurrentState().getName()
         if stateName == 'died':
             self.movie.reset()
-            camera.reparentTo(render)
-            camera.setPosHpr(localAvatar, 5.2, 5.45, localAvatar.getHeight() * 0.66, 131.5, 3.6, 0)
+            base.camera.reparentTo(render)
+            base.camera.setPosHpr(localAvatar, 5.2, 5.45, localAvatar.getHeight() * 0.66, 131.5, 3.6, 0)
         else:
-            camera.wrtReparentTo(base.localAvatar)
+            base.camera.wrtReparentTo(base.localAvatar)
             messenger.send('localToonLeftBattle')
         base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov/(4./3.))
         return

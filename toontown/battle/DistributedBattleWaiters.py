@@ -32,11 +32,11 @@ class DistributedBattleWaiters(DistributedBattleFinal.DistributedBattleFinal):
         done = Func(callback)
         if self.hasLocalToon():
             self.notify.debug('parenting camera to distributed battle waiters')
-            camera.reparentTo(self)
+            base.camera.reparentTo(self)
             if random.choice([0, 1]):
-                camera.setPosHpr(20, -4, 7, 60, 0, 0)
+                base.camera.setPosHpr(20, -4, 7, 60, 0, 0)
             else:
-                camera.setPosHpr(-20, -4, 7, -60, 0, 0)
+                base.camera.setPosHpr(-20, -4, 7, -60, 0, 0)
         track = Sequence(Wait(0.5), done, name=name)
         track.start(ts)
         self.storeInterval(track, name)
@@ -77,11 +77,11 @@ class DistributedBattleWaiters(DistributedBattleFinal.DistributedBattleFinal):
             delay += 1
 
         if self.hasLocalToon():
-            camera.reparentTo(self)
+            base.camera.reparentTo(self)
             if random.choice([0, 1]):
-                camera.setPosHpr(20, -4, 7, 60, 0, 0)
+                base.camera.setPosHpr(20, -4, 7, 60, 0, 0)
             else:
-                camera.setPosHpr(-20, -4, 7, -60, 0, 0)
+                base.camera.setPosHpr(-20, -4, 7, -60, 0, 0)
         done = Func(callback)
         track = Sequence(suitTrack, done, name=name)
         track.start(ts)
@@ -91,4 +91,4 @@ class DistributedBattleWaiters(DistributedBattleFinal.DistributedBattleFinal):
     def enterWaitForInput(self, ts = 0):
         DistributedBattleFinal.DistributedBattleFinal.enterWaitForInput(self, ts)
         if self.hasLocalToon():
-            camera.reparentTo(self)
+            base.camera.reparentTo(self)

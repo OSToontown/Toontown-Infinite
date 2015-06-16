@@ -26,6 +26,7 @@ from otp.uberdog import SpeedchatRelay/UD
 from otp.distributed import CentralLogger/AI/UD
 from otp.status import StatusDatabase/UD
 from otp.avatar import AvatarHandle
+from otp.uberdog import GlobalOtpObject/AI/UD
 
 typedef uint8 bool;
 
@@ -224,7 +225,7 @@ dclass DistributedAvatar : DistributedSmoothNode, TalkPath_whisper {
   checkAvOnShard(DoId) clsend airecv;
   confirmAvOnShard(DoId avId, int8 isOnShard);
   setTalk(DoId fromAv, DoId fromAcc, string(0-256) avName,
-          string(0-400) chat, TalkModification [], uint8 flags) broadcast;
+          string(0-400) chat, TalkModification [], uint8 flags) broadcast ram;
 };
 
 struct FriendEntry {
@@ -488,4 +489,12 @@ dclass StatusDatabase : DistributedObject {
 
 dclass CallbackObject {
   callback(uint32, bool, uint8);
+};
+
+dclass DistributedObjectGlobal : DistributedObject {
+};
+
+dclass GlobalOtpObject: DistributedObjectGlobal {
+  heartbeat(uint32 channel);
+  heartbeatResponse() airecv;
 };
