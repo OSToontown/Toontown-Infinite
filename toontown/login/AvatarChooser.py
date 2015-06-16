@@ -38,7 +38,6 @@ class AvatarChooser(StateData.StateData):
         self.parentFSM.getCurrentState().addChild(self.fsm)
 
     def enter(self):
-        self.notify.info('AvatarChooser.enter')
         if self.isLoaded == 0:
             self.load()
         base.disableMouse()
