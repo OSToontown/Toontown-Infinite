@@ -660,7 +660,6 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         return False
 
     def _wantShardListComplete(self):
-        print self.activeDistrictMap
         if self._shardsAreReady():
             self.acceptOnce(ToontownDistrictStats.EventName(), self.shardDetailStatsComplete)
             ToontownDistrictStats.refresh()
