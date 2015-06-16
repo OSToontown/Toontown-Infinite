@@ -967,6 +967,7 @@ class MoreOptionsTabPage(DirectFrame):
         base.reloadControls()
         base.localAvatar.controlManager.reload()
         base.localAvatar.chatMgr.reloadWASD()
+        base.localAvatar.controlManager.disable()
         self.settingsChanged = 1
         self.__setWASDButton()
 
