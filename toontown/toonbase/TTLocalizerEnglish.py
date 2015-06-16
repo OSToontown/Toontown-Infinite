@@ -7628,7 +7628,8 @@ NPCToonNames = {20000: 'Tutorial Tom',
  7009: 'Jimmy Thelock',
 # Start with 91913.
 91917: 'Magic Cat',
-91918: 'Trap Cat'}
+91918: 'Trap Cat',
+91919: 'Fisherman Frank'}
 zone2TitleDict = {2513: ('Toon Hall', ''),
  2514: ('Toontown Bank', ''),
  2516: ('Toontown School House', ''),
