@@ -47,8 +47,7 @@ loadPrcFileData('Settings: sfx', 'audio-sfx-active %s' % settings['sfx'])
 loadPrcFileData('Settings: musicVol', 'audio-master-music-volume %s' % settings['musicVol'])
 loadPrcFileData('Settings: sfxVol', 'audio-master-sfx-volume %s' % settings['sfxVol'])
 loadPrcFileData('Settings: loadDisplay', 'load-display %s' % settings['loadDisplay'])
-loadPrcFileData('Settings: toonChatSounds', 'toon-chat-sounds %s' % settings['toonChatSounds'])
-
+loadPrcFileData('Settings: toonChatSounds', 'toon-chat-sounds %s' % settings['toonChatSounds'])  
 
 import os
 
