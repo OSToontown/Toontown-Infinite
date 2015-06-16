@@ -48,7 +48,7 @@ class DistributedEstateAI(DistributedObjectAI):
             self.targets.append(target)
 
         if simbase.config.GetBool('want-estate-fisherman', False):
-            fisherman = NPCToons.createNPC(self.air, 91919,
+            self.fisherman = NPCToons.createNPC(self.air, 91919,
                                 NPCToons.NPCToonDict[91919], self.zoneId)
         
         spot = DistributedFishingSpotAI(self.air)
@@ -92,7 +92,10 @@ class DistributedEstateAI(DistributedObjectAI):
 
         if self.treasurePlanner:
             self.treasurePlanner.stop()
-
+        
+        if simbase.config.GetBool('want-estate-fisherman', False):
+            self.fisherman.requestDelete()
+        
         self.requestDelete()
 
     def setEstateReady(self):
