@@ -5,7 +5,6 @@ DEFAULT_WEEKLY_HOLIDAYS = [
     [FISH_BINGO_NIGHT, 2],  # Wednesday
     [TROLLEY_HOLIDAY, 3],  # Thursday
     [SILLY_SATURDAY_BINGO, 5],  # Saturday
-    [SILLY_SATURDAY_TROLLEY, 5],
 ]
 
 
