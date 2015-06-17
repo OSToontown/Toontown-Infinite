@@ -1,4 +1,7 @@
 from direct.directnotify.DirectNotifyGlobal import *
+from toontown.ai import DistributedTrickOrTreatTargetAI
+from toontown.ai import DistributedWinterCarolingTargetAI
+from toontown.ai.NewsManagerGlobals import HOLIDAY_SHOPKEEPER_ZONES
 from toontown.building import DistributedBuildingMgrAI
 from toontown.dna.DNAParser import DNAStorage, DNAGroup, DNAVisGroup
 from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
@@ -61,6 +64,10 @@ class HoodAI:
         self.createBuildingManagers()
         if simbase.config.GetBool('want-suit-planners', True):
             self.createSuitPlanners()
+        if simbase.air.wantHalloween or simbase.air.holidayManager.isHolidayRunning(ToontownGlobals.TRICK_OR_TREAT):
+            self.startupTrickOrTreat()
+        if simbase.air.wantChristmas or simbase.air.holidayManager.isHolidayRunning(ToontownGlobals.WINTER_CAROLING):
+            self.startupWinterCaroling()
 
     def shutdown(self):
         if self.treasurePlanner:
@@ -184,3 +191,33 @@ class HoodAI:
             suitPlanner.initTasks()
             self.suitPlanners.append(suitPlanner)
             self.air.suitPlanners[zoneId] = suitPlanner
+
+    def startupTrickOrTreat(self):
+        if hasattr(self, 'TrickOrTreatManager'):
+            return
+
+        if self.canonicalHoodId in HOLIDAY_SHOPKEEPER_ZONES[ToontownGlobals.TRICK_OR_TREAT]:
+            self.TrickOrTreatManager = DistributedTrickOrTreatTargetAI.DistributedTrickOrTreatTargetAI(self.air)
+            self.TrickOrTreatManager.generateWithRequired(
+                HOLIDAY_SHOPKEEPER_ZONES[ToontownGlobals.TRICK_OR_TREAT][self.canonicalHoodId]
+            )
+
+    def endTrickOrTreat(self):
+        if hasattr(self, 'TrickOrTreatManager'):
+            self.TrickOrTreatManager.requestDelete()
+            del self.TrickOrTreatManager
+
+    def startupWinterCaroling(self):
+        if hasattr(self, 'WinterCarolingManager'):
+            return
+
+        if self.canonicalHoodId in HOLIDAY_SHOPKEEPER_ZONES[ToontownGlobals.WINTER_CAROLING]:
+            self.WinterCarolingManager = DistributedWinterCarolingTargetAI.DistributedWinterCarolingTargetAI(self.air)
+            self.WinterCarolingManager.generateWithRequired(
+                HOLIDAY_SHOPKEEPER_ZONES[ToontownGlobals.WINTER_CAROLING][self.canonicalHoodId]
+            )
+
+    def endWinterCaroling(self):
+        if hasattr(self, 'WinterCarolingManager'):
+            self.WinterCarolingManager.requestDelete()
+            del self.WinterCarolingManager

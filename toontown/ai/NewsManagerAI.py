@@ -1,9 +1,17 @@
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 
+from toontown.ai.NewsManagerGlobals import DEFAULT_WEEKLY_HOLIDAYS, DEFAULT_YEARLY_HOLIDAYS
+
 
 class NewsManagerAI(DistributedObjectAI):
     notify = directNotify.newCategory('NewsManagerAI')
+
+    def __init__(self, air):
+        DistributedObjectAI.__init__(self, air)
+        self.weeklyHolidays = DEFAULT_WEEKLY_HOLIDAYS
+        self.yearlyHolidays = DEFAULT_YEARLY_HOLIDAYS
+        self.OncelyHolidays = []
 
     def announceGenerate(self):
         DistributedObjectAI.announceGenerate(self)
@@ -53,23 +61,23 @@ class NewsManagerAI(DistributedObjectAI):
     def setInvasionStatus(self, msgType, cogType, numRemaining, skeleton):
         self.sendUpdate('setInvasionStatus', args=[msgType, cogType, numRemaining, skeleton])
 
-    def setHolidayIdList(self, holidays):
+    def d_setHolidayIdList(self, holidays):
         self.sendUpdate('setHolidayIdList', holidays)
 
     def holidayNotify(self):
         pass
 
-    def setWeeklyCalendarHolidays(self, todo0):
-        pass
+    def d_setWeeklyCalendarHolidays(self, weeklyHolidays):
+        self.sendUpdate('setWeeklyCalendarHolidays', [weeklyHolidays])
 
     def getWeeklyCalendarHolidays(self):
-        return []
+        return self.weeklyHolidays
 
-    def setYearlyCalendarHolidays(self, todo0):
-        pass
+    def d_setYearlyCalendarHolidays(self, yearlyHolidays):
+        self.sendUpdate('setYearlyCalendarHolidays', [yearlyHolidays])
 
     def getYearlyCalendarHolidays(self):
-        return []
+        return self.yearlyHolidays
 
     def setOncelyCalendarHolidays(self, todo0):
         pass
@@ -91,4 +99,3 @@ class NewsManagerAI(DistributedObjectAI):
 
     def sendSystemMessage(self, todo0, todo1):
         pass
-
