@@ -4656,6 +4656,7 @@ MapPageYouAreAtHome = 'You are at\nyour estate'
 MapPageYouAreAtSomeonesHome = 'You are at %s estate'
 MapPageGoTo = 'Go To\n%s'
 OptionsPageTitle = 'Options'
+MoreOptionsPageTitle = 'More Options'
 OptionsTabTitle = 'Options\n& Codes'
 OptionsPagePurchase = 'Subscribe'
 OptionsPageLogout = 'Logout'
@@ -7627,7 +7628,8 @@ NPCToonNames = {20000: 'Tutorial Tom',
  7009: 'Jimmy Thelock',
 # Start with 91913.
 91917: 'Magic Cat',
-91918: 'Trap Cat'}
+91918: 'Trap Cat',
+91919: 'Fisherman Frank'}
 zone2TitleDict = {2513: ('Toon Hall', ''),
  2514: ('Toontown Bank', ''),
  2516: ('Toontown School House', ''),
@@ -9833,3 +9835,9 @@ def getBuffString(buffId, buffTime):
 
 def getBuffPosterString(buffId):
     return buffIdStrings[buffId][1]
+
+RemapPrompt = 'Choose the keys you wish to remap.'
+RemapPopup = 'Press the button you wish to remap this control to.'
+
+Controls = ['Move Up:', 'Move Left:', 'Move Down:', 'Move Right:',
+            'Jump:', 'Action Key:', 'Options Hotkey:', 'Chatbox Hotkey:']

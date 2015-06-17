@@ -4,17 +4,7 @@ import __builtin__
 
 __builtin__.process = 'client'
 
-
-# Temporary hack patch:
-__builtin__.__dict__.update(__import__('pandac.PandaModules', fromlist=['*']).__dict__)
-from direct.extensions_native import HTTPChannel_extensions
-from direct.extensions_native import Mat3_extensions
-from direct.extensions_native import VBase3_extensions
-from direct.extensions_native import VBase4_extensions
-from direct.extensions_native import NodePath_extensions
-
-
-from panda3d.core import loadPrcFile
+from pandac.PandaModules import *
 
 
 if __debug__:
@@ -57,8 +47,7 @@ loadPrcFileData('Settings: sfx', 'audio-sfx-active %s' % settings['sfx'])
 loadPrcFileData('Settings: musicVol', 'audio-master-music-volume %s' % settings['musicVol'])
 loadPrcFileData('Settings: sfxVol', 'audio-master-sfx-volume %s' % settings['sfxVol'])
 loadPrcFileData('Settings: loadDisplay', 'load-display %s' % settings['loadDisplay'])
-loadPrcFileData('Settings: toonChatSounds', 'toon-chat-sounds %s' % settings['toonChatSounds'])
-
+loadPrcFileData('Settings: toonChatSounds', 'toon-chat-sounds %s' % settings['toonChatSounds'])  
 
 import os
 

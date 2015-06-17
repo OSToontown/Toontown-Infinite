@@ -234,9 +234,9 @@ class DistributedPairingGame(DistributedMinigame):
         self.orthoWalk = OrthoWalk(orthoDrive, broadcast=not self.isSinglePlayer())
         self.orthoWalk.start()
         self.accept('insert', self.__flipKeyPressed)
-        self.accept('delete', self.__flipKeyPressed)
-        self.accept('time-control', self.__beginSignal)
-        self.accept('time-control-up', self.__endSignal)
+        self.accept(base.ACTION_BUTTON, self.__flipKeyPressed)
+        self.accept('time-'+base.JUMP, self.__beginSignal)
+        self.accept('time-'+base.JUMP+'-up', self.__endSignal)
         self.bonusGlowIndex = 0
         self.bonusGlowCard = self.bonusTraversal[self.bonusGlowIndex]
         self.startBonusTask()

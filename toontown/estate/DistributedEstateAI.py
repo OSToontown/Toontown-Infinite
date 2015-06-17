@@ -11,6 +11,8 @@ from toontown.estate import HouseGlobals
 
 import time
 
+from toontown.toon import NPCToons
+
 
 class DistributedEstateAI(DistributedObjectAI):
     notify = directNotify.newCategory("DistributedEstateAI")
@@ -46,19 +48,33 @@ class DistributedEstateAI(DistributedObjectAI):
             target.generateWithRequired(self.zoneId)
             self.targets.append(target)
 
-        fishingPos = (
-            (49.1029, -124.805, 0.344704, 90, 0, 0),
-            (46.5222, -134.739, 0.390713, 75, 0, 0),
-            (41.31, -144.559, 0.375978, 45, 0, 0),
-            (46.8254, -113.682, 0.46015, 135, 0, 0)
-        )
+        if simbase.config.GetBool('want-estate-fisherman', False):
+            self.fisherman = NPCToons.createNPC(self.air, 91919,
+                                NPCToons.NPCToonDict[91919], self.zoneId)
 
-        for i in xrange(4):
-            spot = DistributedFishingSpotAI(self.air)
-            spot.setPondDoId(self.pond.getDoId())
-            spot.setPosHpr(*fishingPos[i])
-            spot.generateWithRequired(self.zoneId)
-            self.spots.append(spot)
+        spot = DistributedFishingSpotAI(self.air)
+        spot.setPondDoId(self.pond.getDoId())
+        spot.setPosHpr(49.1029, -124.805, 0.344704, 90, 0, 0)
+        spot.generateWithRequired(self.zoneId)
+        self.spots.append(spot)
+
+        spot = DistributedFishingSpotAI(self.air)
+        spot.setPondDoId(self.pond.getDoId())
+        spot.setPosHpr(46.5222, -134.739, 0.390713, 75, 0, 0)
+        spot.generateWithRequired(self.zoneId)
+        self.spots.append(spot)
+
+        spot = DistributedFishingSpotAI(self.air)
+        spot.setPondDoId(self.pond.getDoId())
+        spot.setPosHpr(41.31, -144.559, 0.375978, 45, 0, 0)
+        spot.generateWithRequired(self.zoneId)
+        self.spots.append(spot)
+
+        spot = DistributedFishingSpotAI(self.air)
+        spot.setPondDoId(self.pond.getDoId())
+        spot.setPosHpr(46.8254, -113.682, 0.46015, 135, 0, 0)
+        spot.generateWithRequired(self.zoneId)
+        self.spots.append(spot)
 
         self.createTreasurePlanner()
 
@@ -80,7 +96,10 @@ class DistributedEstateAI(DistributedObjectAI):
 
         if self.treasurePlanner is not None:
             self.treasurePlanner.stop()
-
+        
+        if simbase.config.GetBool('want-estate-fisherman', False):
+            self.fisherman.requestDelete()
+        
         self.requestDelete()
 
     def setEstateReady(self):

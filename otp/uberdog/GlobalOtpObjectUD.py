@@ -10,15 +10,15 @@ class GlobalOtpObjectUD(DistributedObjectGlobalUD):
         DistributedObjectGlobalUD.announceGenerate(self)
         self.senders2Mgrs = {}
 
-    def _makeAvMsg(self, field, values, recipient):
+    def __makeAvMsg(self, field, values, recipient):
         return self.air.dclassesByName['DistributedToonUD'].getFieldByName(field).aiFormatUpdate(
             recipient, recipient, simbase.air.ourChannel, values)
 
     def sendToAvatar(self, avId, field, values):
-        dg = self._makeAvMsg(field, values, avId)
+        dg = self.__makeAvMsg(field, values, avId)
         self.air.send(dg)
 
-    def _makeAIMsg(self, field, values, recipient):
+    def __makeAIMsg(self, field, values, recipient):
         return self.air.dclassesByName[MANAGER_CLASS].getFieldByName(field).aiFormatUpdate(
             recipient, recipient, simbase.air.ourChannel, values)
 
@@ -30,7 +30,7 @@ class GlobalOtpObjectUD(DistributedObjectGlobalUD):
         if not sender:
             sender = self.air.getAvatarIdFromSender()
 
-        dg = self._makeAIMsg(field, values, self.senders2Mgrs.get(sender, sender + 8))
+        dg = self.__makeAIMsg(field, values, self.senders2Mgrs.get(sender, sender + 8))
         self.air.send(dg)
 
     def hello(self, channel):
@@ -43,7 +43,7 @@ class GlobalOtpObjectUD(DistributedObjectGlobalUD):
         # Manager classes must implement their own response to hello's
         self.sendToAI('UDResponse', [])
 
-        self.air.addPostRemove(self._makeAIMsg('UDLost', [], channel))
+        self.air.addPostRemove(self.__makeAIMsg('UDLost', [], channel))
 
     def heartbeat(self, channel):
         if simbase.air.getAvatarIdFromSender() not in self.senders2Mgrs:

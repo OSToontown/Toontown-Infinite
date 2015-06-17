@@ -5,7 +5,7 @@ icon-filename phase_3/etc/icon.ico
 cursor-filename phase_3/etc/toonmono.cur
 
 # Audio:
-audio-library-name p3openal_audio
+audio-library-name null
 
 # Graphics:
 aux-display pandagl
@@ -120,6 +120,7 @@ want-long-pattern-game #f
 want-talkative-tyler #f
 want-yin-yang #f
 want-butterflies #f
+want-estate-fisherman #t
 
 # Developer options:
 want-dev #f

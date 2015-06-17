@@ -75,6 +75,8 @@ class Spellbook:
         return self.currentInvoker.getAdminAccess()
 
     def getTargets(self, word):
+        if word == "":
+            return
         word = self.words.get(word.split()[0].lower())
         if word is None:
             return []
