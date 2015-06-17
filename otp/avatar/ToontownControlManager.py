@@ -126,6 +126,10 @@ class ToontownControlManager(ControlManager.ControlManager):
             token.release()
         self.istWASD = []
 
+        for token in self.WASDTurnTokens:
+            token.release()
+        self.WASDTurnTokens = []
+
         if self.currentControls:
             self.currentControls.disableAvatarControls()
 
