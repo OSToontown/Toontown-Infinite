@@ -68,5 +68,5 @@ class DistributedGagTreeAI(DistributedPlantBaseAI):
         if self.movie == GardenGlobals.MOVIE_REMOVE:
             self.gardenManager.removeFinished(self.plotIndex)
             self.requestDelete()
-
-        DistributedPlantBaseAI.movieDone(self)
+        else:
+            DistributedPlantBaseAI.movieDone(self)
