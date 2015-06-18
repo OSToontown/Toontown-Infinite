@@ -589,7 +589,6 @@ class OptionsTabPage(DirectFrame):
         if not self.displaySettingsChanged:
             return
         taskMgr.remove(self.DisplaySettingsTaskName)
-        settings['res'] = (self.displaySettingsSize[0], self.displaySettingsSize[1])
         settings['fullscreen'] = self.displaySettingsFullscreen
         return Task.done
 
