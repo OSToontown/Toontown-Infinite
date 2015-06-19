@@ -49,8 +49,9 @@ class DistributedPondBingoManager(DistributedObject.DistributedObject, FSM.FSM):
         self.notify.debug('generate: DistributedPondBingoManager')
 
     def delete(self):
-        del self.pond.pondBingoMgr
-        self.pond.pondBingoMgr = None
+        if self.pond:
+            del self.pond.pondBingoMgr
+            self.pond.pondBingoMgr = None
         del self.pond
         self.pond = None
         FSM.FSM.cleanup(self)

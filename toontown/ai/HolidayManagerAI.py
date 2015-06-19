@@ -59,6 +59,10 @@ class HolidayManagerAI:
                 for fishingPond in hood.fishingPonds:
                     fishingPond.bingoMgr.b_enableBingo()
 
+            for estate in self.air.estateManager.estate2toons.keys():
+                if estate.pond:
+                    estate.pond.bingoMgr.enableBingo()
+
     def removeHoliday(self, holidayId):
         if holidayId in self.currentHolidays:
             self.currentHolidays.remove(holidayId)
@@ -77,7 +81,11 @@ class HolidayManagerAI:
         elif holidayId == ToontownGlobals.FISH_BINGO_NIGHT:
             for hood in self.air.hoods:
                 for fishingPond in hood.fishingPonds:
-                    fishingPond.bingoMgr.shouldStop = True
+                    fishingPond.bingoMgr.disableBingo()
+
+            for estate in self.air.estateManager.estate2toons.keys():
+                if estate.pond:
+                    estate.pond.bingoMgr.disableBingo()
 
     def holidayTask(self, task=None):
         for holiday in DEFAULT_YEARLY_HOLIDAYS:

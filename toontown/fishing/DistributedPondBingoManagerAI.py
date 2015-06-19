@@ -71,8 +71,14 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
             self.sendGameStateUpdate(cellId)
 
     def enableBingo(self):
+        if self.state != 'Off':
+            return
         self.createGame()
         self.blockoutBingoTask()
+
+    def disableBingo(self):
+        if self.state != 'Off':
+            self.shouldStop = True
 
     def d_enableBingo(self):
         self.sendUpdate('enableBingo', [])

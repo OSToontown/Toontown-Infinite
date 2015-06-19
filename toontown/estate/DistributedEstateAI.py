@@ -13,8 +13,10 @@ from toontown.safezone.SZTreasurePlannerAI import SZTreasurePlannerAI
 from toontown.safezone import TreasureGlobals
 from toontown.toon import NPCToons
 
+
 class DistributedEstateAI(DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedEstateAI")
+
     def __init__(self, air):
         DistributedObjectAI.__init__(self, air)
         self.toons = [0, 0, 0, 0, 0, 0]
@@ -26,21 +28,28 @@ class DistributedEstateAI(DistributedObjectAI):
         self.lastEpochTimestamp = 0
         self.rentalTimestamp = 0
         self.houses = [None] * 6
-        
+
         self.pond = None
         self.spots = []
-        
+
         self.targets = []
 
         self.owner = None
         
     def generate(self):
         DistributedObjectAI.generate(self)
-        
+
         self.pond = DistributedFishingPondAI(simbase.air)
         self.pond.setArea(ToontownGlobals.MyEstate)
         self.pond.generateWithRequired(self.zoneId)
-            
+
+        self.pond.bingoMgr = DistributedPondBingoManagerAI(self.air)
+        self.pond.bingoMgr.setPondDoId(self.pond.doId)
+        self.pond.bingoMgr.generateWithRequired(self.zoneId)
+
+        if self.air.holidayManager.isHolidayRunning(ToontownGlobals.FISH_BINGO_NIGHT):
+            self.pond.bingoMgr.enableBingo()
+
         for i in xrange(FishingTargetGlobals.getNumTargets(ToontownGlobals.MyEstate)):
             target = DistributedFishingTargetAI(self.air)
             target.setPondDoId(self.pond.getDoId())
