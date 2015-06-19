@@ -1,6 +1,8 @@
 from toontown.ai.NewsManagerGlobals import DEFAULT_YEARLY_HOLIDAYS
 from toontown.toonbase import ToontownGlobals
 
+from otp.ai.MagicWordGlobal import *
+
 from datetime import datetime
 
 HOLIDAY_CHECK_INTERVAL = 21600
@@ -11,6 +13,7 @@ class HolidayManagerAI:
     def __init__(self, air):
         self.air = air
         self.currentHolidays = []
+        self.magicWordHolidays = []
         self.xpMultiplier = 1
         self.setup()
         self.holidayTask()
@@ -51,6 +54,11 @@ class HolidayManagerAI:
             for hood in self.air.hoods:
                 hood.startupWinterCaroling()
 
+        elif holidayId == ToontownGlobals.FISH_BINGO_NIGHT:
+            for hood in self.air.hoods:
+                for fishingPond in hood.fishingPonds:
+                    fishingPond.bingoMgr.b_enableBingo()
+
     def removeHoliday(self, holidayId):
         if holidayId in self.currentHolidays:
             self.currentHolidays.remove(holidayId)
@@ -66,12 +74,19 @@ class HolidayManagerAI:
             for hood in self.air.hoods:
                 hood.endWinterCaroling()
 
+        elif holidayId == ToontownGlobals.FISH_BINGO_NIGHT:
+            for hood in self.air.hoods:
+                for fishingPond in hood.fishingPonds:
+                    fishingPond.bingoMgr.shouldStop = True
+
     def holidayTask(self, task=None):
         for holiday in DEFAULT_YEARLY_HOLIDAYS:
             holidayId = holiday[0]
             now = datetime.now()
             startDate = datetime(now.year, *holiday[1])
             endDate = datetime(now.year, *holiday[2])
+            if holidayId in self.magicWordHolidays:
+                return
             if startDate < now < endDate and holidayId not in self.currentHolidays:
                 self.appendHoliday(holidayId)
                 self.startHoliday(holidayId)
@@ -80,3 +95,23 @@ class HolidayManagerAI:
                 self.endHoliday(holidayId)
 
         taskMgr.doMethodLater(HOLIDAY_CHECK_INTERVAL, self.holidayTask, 'holiday-Task')
+
+
+@magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
+def startHoliday(holidayId):
+    if simbase.air.holidayManager.isHolidayRunning(holidayId):
+        return 'That holiday is already running!'
+    simbase.air.holidayManager.appendHoliday(holidayId)
+    simbase.air.holidayManager.magicWordHolidays.append(holidayId)
+    simbase.air.holidayManager.startHoliday(holidayId)
+    return 'Successfully started holiday %d.' % holidayId
+
+
+@magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
+def stopHoliday(holidayId):
+    if not simbase.air.holidayManager.isHolidayRunning(holidayId):
+        return 'That holiday is\'nt running!'
+    simbase.air.holidayManager.removeHoliday(holidayId)
+    simbase.air.holidayManager.magicWordHolidays.remove(holidayId)
+    simbase.air.holidayManager.endHoliday(holidayId)
+    return 'Successfully stopped holiday %d.' % holidayId

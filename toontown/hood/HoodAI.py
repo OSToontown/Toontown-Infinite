@@ -5,6 +5,7 @@ from toontown.ai.NewsManagerGlobals import HOLIDAY_SHOPKEEPER_ZONES
 from toontown.building import DistributedBuildingMgrAI
 from toontown.dna.DNAParser import DNAStorage, DNAGroup, DNAVisGroup
 from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
+from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
 from toontown.hood import ZoneUtil
 from toontown.safezone import TreasureGlobals
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
@@ -138,6 +139,10 @@ class HoodAI:
         fishingSpots = []
         for (dnaGroup, fishingPond) in zip(fishingPondGroups, self.fishingPonds):
             fishingSpots.extend(self.findFishingSpots(dnaGroup, fishingPond))
+        for fishingPond in self.fishingPonds:
+            fishingPond.bingoMgr = DistributedPondBingoManagerAI(self.air)
+            fishingPond.bingoMgr.setPondDoId(fishingPond.doId)
+            fishingPond.bingoMgr.generateWithRequired(self.zoneId)
 
     def findPartyGates(self, dnaGroup, zoneId):
         partyGates = []
