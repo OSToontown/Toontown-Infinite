@@ -412,6 +412,7 @@ class BingoCardGui(DirectFrame):
         return
 
     def showTutorial(self, messageType):
+        print 'showTutorial %s' % messageType
         if messageType == BG.TutorialIntro:
             self.tutorial['text'] = TTLocalizer.FishBingoHelpMain
         elif messageType == BG.TutorialMark:
@@ -438,7 +439,6 @@ class BingoCardGui(DirectFrame):
     def castingStarted(self):
         if taskMgr.hasTaskNamed(self.taskNameFlashFish):
             if not base.localAvatar.bFishBingoMarkTutorialDone:
-                pass
-                #todo: fix setFishBingoMarkTutorialDone
-                #self.showTutorial(BG.TutorialMark)
-                #base.localAvatar.b_setFishBingoMarkTutorialDone(True)
+                self.showTutorial(BG.TutorialMark)
+                base.localAvatar.bFishBingoMarkTutorialDone = True
+                base.localAvatar.sendUpdate('setFishBingoMarkTutorialDone', [True])

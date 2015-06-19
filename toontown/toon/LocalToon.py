@@ -70,6 +70,7 @@ ClaraBaseXPos = 0.12
 if (__debug__):
     import pdb
 
+
 class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
     neverDisable = 1
     piePowerSpeed = base.config.GetDouble('pie-power-speed', 0.2)

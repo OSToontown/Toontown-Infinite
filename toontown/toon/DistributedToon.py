@@ -1780,6 +1780,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         def setFishBingoTutorialDone(self, bDone):
             self.bFishBingoTutorialDone = bDone
 
+        def getFishBingoTutorialDone(self):
+            return self.bFishBingoTutorialDone
+
         def b_setFishBingoMarkTutorialDone(self, bDone):
             self.d_setFishBingoMarkTutorialDone(bDone)
             self.setFishBingoMarkTutorialDone(bDone)
@@ -1789,6 +1792,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
         def setFishBingoMarkTutorialDone(self, bDone):
             self.bFishBingoMarkTutorialDone = bDone
+
+        def getFishBingoMarkTutorialDone(self):
+            return self.bFishBingoMarkTutorialDone
 
         def b_setPetMovie(self, petId, flag):
             self.d_setPetMovie(petId, flag)

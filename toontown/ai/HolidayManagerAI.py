@@ -63,6 +63,11 @@ class HolidayManagerAI:
                 if estate.pond:
                     estate.pond.bingoMgr.enableBingo()
 
+            self.air.newsManager.setBingoStart()
+
+        elif holidayId == ToontownGlobals.TROLLEY_HOLIDAY:
+            self.air.newsManager.setTrolleyHolidayStart()
+
     def removeHoliday(self, holidayId):
         if holidayId in self.currentHolidays:
             self.currentHolidays.remove(holidayId)
@@ -86,6 +91,11 @@ class HolidayManagerAI:
             for estate in self.air.estateManager.estate2toons.keys():
                 if estate.pond:
                     estate.pond.bingoMgr.disableBingo()
+
+            self.air.newsManager.setBingoEnd()
+
+        elif holidayId == ToontownGlobals.TROLLEY_HOLIDAY:
+            self.air.newsManager.setTrolleyHolidayEnd()
 
     def holidayTask(self, task=None):
         for holiday in DEFAULT_YEARLY_HOLIDAYS:

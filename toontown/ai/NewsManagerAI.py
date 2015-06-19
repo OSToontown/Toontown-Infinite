@@ -2,6 +2,7 @@ from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 
 from toontown.ai.NewsManagerGlobals import DEFAULT_WEEKLY_HOLIDAYS, DEFAULT_YEARLY_HOLIDAYS
+from toontown.toonbase.ToontownGlobals import FISH_BINGO_NIGHT, TROLLEY_HOLIDAY
 
 
 class NewsManagerAI(DistributedObjectAI):
@@ -21,6 +22,10 @@ class NewsManagerAI(DistributedObjectAI):
     def __handleAvatarEntered(self, avatar):
         if self.air.suitInvasionManager.getInvading():
             self.air.suitInvasionManager.notifyInvasionBulletin(avatar.getDoId())
+        if self.air.holidayManager.isHolidayRunning(FISH_BINGO_NIGHT):
+            self.air.sendUpdateToAvatarId(avatar.getDoId(), 'setBingoOngoing', [])
+        if self.air.holidayManager.isHolidayRunning(TROLLEY_HOLIDAY):
+            self.air.sendUpdateToAvatarId(avatar.getDoId(), 'setTrolleyHolidayOngoing', [])
 
     def setPopulation(self, todo0):
         pass
@@ -29,10 +34,10 @@ class NewsManagerAI(DistributedObjectAI):
         pass
 
     def setBingoStart(self):
-        pass
+        self.sendUpdate('setBingoStart', [])
 
     def setBingoEnd(self):
-        pass
+        self.sendUpdate('setBingoEnd', [])
 
     def setCircuitRaceStart(self):
         pass
@@ -41,10 +46,10 @@ class NewsManagerAI(DistributedObjectAI):
         pass
 
     def setTrolleyHolidayStart(self):
-        pass
+        self.sendUpdate('setTrolleyHolidayStart', [])
 
     def setTrolleyHolidayEnd(self):
-        pass
+        self.sendUpdate('setTrolleyHolidayEnd', [])
 
     def setTrolleyWeekendStart(self):
         pass
