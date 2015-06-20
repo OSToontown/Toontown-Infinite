@@ -239,7 +239,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI):
 
     def blockoutBingoTask(self):
         now = datetime.now()
-        timeLeft = 3300 - ((now.minute * 60) + now.second)
+        timeLeft = abs(3300 - ((now.minute * 60) + now.second))
         taskMgr.doMethodLater(timeLeft, self.startBlockoutWait, 'blockoutTask%d' % self.getDoId())
 
     def startBlockoutWait(self, task=None):

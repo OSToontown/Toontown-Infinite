@@ -1,11 +1,12 @@
-from toontown.ai.NewsManagerGlobals import DEFAULT_YEARLY_HOLIDAYS
+from toontown.ai.NewsManagerGlobals import DEFAULT_YEARLY_HOLIDAYS, DEFAULT_WEEKLY_HOLIDAYS
 from toontown.toonbase.HolidayGlobals import *
 
 from otp.ai.MagicWordGlobal import *
 
-from datetime import datetime
+from datetime import datetime, date
 
 HOLIDAY_CHECK_INTERVAL = 21600
+SILLY_SATURDAY_CYCLE = 7200
 
 
 class HolidayManagerAI:
@@ -14,9 +15,11 @@ class HolidayManagerAI:
         self.air = air
         self.currentHolidays = []
         self.magicWordHolidays = []
+        self.currentSillySaturdayCycle = [None, None]
         self.xpMultiplier = 1
         self.setup()
-        self.holidayTask()
+        self.yearlyHolidayTask()
+        self.weeklyHolidayTask()
 
     def setup(self):
         holidays = config.GetString('active-holidays', '')
@@ -54,7 +57,7 @@ class HolidayManagerAI:
             for hood in self.air.hoods:
                 hood.startupWinterCaroling()
 
-        elif holidayId == FISH_BINGO_NIGHT:
+        elif holidayId in (FISH_BINGO_NIGHT, SILLY_SATURDAY_BINGO):
             for hood in self.air.hoods:
                 for fishingPond in hood.fishingPonds:
                     fishingPond.bingoMgr.b_enableBingo()
@@ -65,8 +68,16 @@ class HolidayManagerAI:
 
             self.air.newsManager.setBingoStart()
 
-        elif holidayId == TROLLEY_HOLIDAY:
+        elif holidayId in (TROLLEY_HOLIDAY, SILLY_SATURDAY_TROLLEY):
             self.air.newsManager.setTrolleyHolidayStart()
+
+        if holidayId in (SILLY_SATURDAY_BINGO, SILLY_SATURDAY_TROLLEY):
+            if self.currentSillySaturdayCycle[0] is None:
+                self.currentSillySaturdayCycle = [
+                    0 if holidayId == SILLY_SATURDAY_BINGO else 1, holidayId
+                ]
+            taskMgr.remove('Silly-Saturday')
+            taskMgr.doMethodLater(SILLY_SATURDAY_CYCLE, self.sillySaturdayTask, 'Silly-Saturday')
 
     def removeHoliday(self, holidayId):
         if holidayId in self.currentHolidays:
@@ -83,7 +94,7 @@ class HolidayManagerAI:
             for hood in self.air.hoods:
                 hood.endWinterCaroling()
 
-        elif holidayId == FISH_BINGO_NIGHT:
+        elif holidayId in (FISH_BINGO_NIGHT, SILLY_SATURDAY_BINGO):
             for hood in self.air.hoods:
                 for fishingPond in hood.fishingPonds:
                     fishingPond.bingoMgr.disableBingo()
@@ -94,10 +105,10 @@ class HolidayManagerAI:
 
             self.air.newsManager.setBingoEnd()
 
-        elif holidayId == TROLLEY_HOLIDAY:
+        elif holidayId in (TROLLEY_HOLIDAY, SILLY_SATURDAY_TROLLEY):
             self.air.newsManager.setTrolleyHolidayEnd()
 
-    def holidayTask(self, task=None):
+    def yearlyHolidayTask(self, task=None):
         for holiday in DEFAULT_YEARLY_HOLIDAYS:
             holidayId = holiday[0]
             now = datetime.now()
@@ -112,8 +123,52 @@ class HolidayManagerAI:
                 self.removeHoliday(holidayId)
                 self.endHoliday(holidayId)
 
-        taskMgr.doMethodLater(HOLIDAY_CHECK_INTERVAL, self.holidayTask, 'holiday-Task')
+        taskMgr.doMethodLater(HOLIDAY_CHECK_INTERVAL, self.yearlyHolidayTask, 'yearlyHolidayTask')
 
+    def weeklyHolidayTask(self, task=None):
+        for holiday in DEFAULT_WEEKLY_HOLIDAYS:
+            holidayId = holiday[0]
+            startDay = holiday[1]
+            if holidayId in self.magicWordHolidays:
+                return
+            if startDay == date.today().weekday() and holidayId not in self.currentHolidays:
+                self.appendHoliday(holidayId)
+                self.startHoliday(holidayId)
+            else:
+                if startDay == 5:
+                    holidayId = self.currentSillySaturdayCycle[1]
+
+                if holidayId in self.currentHolidays:
+                    self.removeHoliday(holidayId)
+                    self.endHoliday(holidayId)
+
+                if holidayId == self.currentSillySaturdayCycle[1]:
+                    taskMgr.remove('Silly-Saturday')
+                    self.currentSillySaturdayCycle = [None, None]
+
+        taskMgr.doMethodLater(HOLIDAY_CHECK_INTERVAL, self.weeklyHolidayTask, 'weeklyHolidayTask')
+
+    def sillySaturdayTask(self, task=None):
+        if self.currentSillySaturdayCycle[0] is None:
+            return
+
+        self.endHoliday(self.currentSillySaturdayCycle[1])
+        self.removeHoliday(self.currentSillySaturdayCycle[1])
+
+        self.currentSillySaturdayCycle[0] ^= 1
+
+        if self.currentSillySaturdayCycle[1] == SILLY_SATURDAY_TROLLEY:
+            self.currentSillySaturdayCycle[1] = SILLY_SATURDAY_BINGO
+        else:
+            self.currentSillySaturdayCycle[1] = SILLY_SATURDAY_TROLLEY
+
+        self.appendHoliday(self.currentSillySaturdayCycle[1])
+        self.startHoliday(self.currentSillySaturdayCycle[1])
+
+    def cleanup(self):
+        taskMgr.remove('yearlyHolidayTask')
+        taskMgr.remove('weeklyHolidayTask')
+        taskMgr.remove('Silly-Saturday')
 
 @magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
 def startHoliday(holidayId):
