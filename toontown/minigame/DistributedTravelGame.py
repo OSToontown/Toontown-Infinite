@@ -756,7 +756,7 @@ class DistributedTravelGame(DistributedMinigame):
             self.scrollList.removeAllItems()
         self.indexToVotes = {}
         index = 0
-        for vote in range(available)[::-1]:
+        for vote in xrange(available)[::-1]:
             self.scrollList.addItem(str(-(vote + 1)))
             self.indexToVotes[index] = vote + 1
             index += 1
