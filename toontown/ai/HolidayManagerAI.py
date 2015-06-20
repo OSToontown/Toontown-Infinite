@@ -1,5 +1,5 @@
 from toontown.ai.NewsManagerGlobals import DEFAULT_YEARLY_HOLIDAYS
-from toontown.toonbase import ToontownGlobals
+from toontown.toonbase.HolidayGlobals import *
 
 from otp.ai.MagicWordGlobal import *
 
@@ -31,7 +31,7 @@ class HolidayManagerAI:
             return True
 
     def isMoreXpHolidayRunning(self):
-        if ToontownGlobals.MORE_XP_HOLIDAY in self.currentHolidays:
+        if MORE_XP_HOLIDAY in self.currentHolidays:
             self.xpMultiplier = 2
             return True
         return False
@@ -46,15 +46,15 @@ class HolidayManagerAI:
         simbase.air.newsManager.d_setHolidayIdList([self.currentHolidays])
 
     def startHoliday(self, holidayId):
-        if holidayId == ToontownGlobals.TRICK_OR_TREAT:
+        if holidayId == TRICK_OR_TREAT:
             for hood in self.air.hoods:
                 hood.startupTrickOrTreat()
 
-        elif holidayId == ToontownGlobals.WINTER_CAROLING:
+        elif holidayId == WINTER_CAROLING:
             for hood in self.air.hoods:
                 hood.startupWinterCaroling()
 
-        elif holidayId == ToontownGlobals.FISH_BINGO_NIGHT:
+        elif holidayId == FISH_BINGO_NIGHT:
             for hood in self.air.hoods:
                 for fishingPond in hood.fishingPonds:
                     fishingPond.bingoMgr.b_enableBingo()
@@ -65,7 +65,7 @@ class HolidayManagerAI:
 
             self.air.newsManager.setBingoStart()
 
-        elif holidayId == ToontownGlobals.TROLLEY_HOLIDAY:
+        elif holidayId == TROLLEY_HOLIDAY:
             self.air.newsManager.setTrolleyHolidayStart()
 
     def removeHoliday(self, holidayId):
@@ -75,15 +75,15 @@ class HolidayManagerAI:
         simbase.air.newsManager.d_setHolidayIdList([self.currentHolidays])
 
     def endHoliday(self, holidayId):
-        if holidayId == ToontownGlobals.TRICK_OR_TREAT:
+        if holidayId == TRICK_OR_TREAT:
             for hood in self.air.hoods:
                 hood.endTrickOrTreat()
 
-        elif holidayId == ToontownGlobals.WINTER_CAROLING:
+        elif holidayId == WINTER_CAROLING:
             for hood in self.air.hoods:
                 hood.endWinterCaroling()
 
-        elif holidayId == ToontownGlobals.FISH_BINGO_NIGHT:
+        elif holidayId == FISH_BINGO_NIGHT:
             for hood in self.air.hoods:
                 for fishingPond in hood.fishingPonds:
                     fishingPond.bingoMgr.disableBingo()
@@ -94,7 +94,7 @@ class HolidayManagerAI:
 
             self.air.newsManager.setBingoEnd()
 
-        elif holidayId == ToontownGlobals.TROLLEY_HOLIDAY:
+        elif holidayId == TROLLEY_HOLIDAY:
             self.air.newsManager.setTrolleyHolidayEnd()
 
     def holidayTask(self, task=None):
