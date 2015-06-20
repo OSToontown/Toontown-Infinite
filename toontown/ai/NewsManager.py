@@ -559,14 +559,14 @@ class NewsManager(DistributedObject.DistributedObject):
         base.localAvatar.setSystemMessage(0, TTLocalizer.IdesOfMarchStart)
 
     def holidayNotify(self):
-        for id in self.holidayIdList:
-            if id == 19:
+        for holidayId in self.holidayIdList:
+            if holidayId in (7, 19):
                 self.setBingoOngoing()
-            elif id == 20:
+            elif holidayId == 20:
                 self.setCircuitRaceOngoing()
-            elif id == 21:
+            elif holidayId in (17, 21):
                 self.setTrolleyHolidayOngoing()
-            elif id == 22:
+            elif holidayId == 22:
                 self.setRoamingTrialerWeekendOngoing()
 
     def setWeeklyCalendarHolidays(self, weeklyCalendarHolidays):

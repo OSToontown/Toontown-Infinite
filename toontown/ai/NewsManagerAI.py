@@ -22,10 +22,7 @@ class NewsManagerAI(DistributedObjectAI):
     def __handleAvatarEntered(self, avatar):
         if self.air.suitInvasionManager.getInvading():
             self.air.suitInvasionManager.notifyInvasionBulletin(avatar.getDoId())
-        if self.air.holidayManager.isHolidayRunning(FISH_BINGO_NIGHT):
-            self.air.sendUpdateToAvatarId(avatar.getDoId(), 'setBingoOngoing', [])
-        if self.air.holidayManager.isHolidayRunning(TROLLEY_HOLIDAY):
-            self.air.sendUpdateToAvatarId(avatar.getDoId(), 'setTrolleyHolidayOngoing', [])
+        self.sendUpdateToAvatarId(avatar.getDoId(), 'holidayNotify', [])
 
     def setPopulation(self, todo0):
         pass

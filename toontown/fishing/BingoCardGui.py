@@ -412,7 +412,6 @@ class BingoCardGui(DirectFrame):
         return
 
     def showTutorial(self, messageType):
-        print 'showTutorial %s' % messageType
         if messageType == BG.TutorialIntro:
             self.tutorial['text'] = TTLocalizer.FishBingoHelpMain
         elif messageType == BG.TutorialMark:

@@ -87,7 +87,7 @@ want-goofy #f
 # Trolley minigames:
 want-minigames #t
 want-photo-game #f
-want-travel-game #f
+want-travel-game #t
 
 # Picnic table board games:
 want-game-tables #f
