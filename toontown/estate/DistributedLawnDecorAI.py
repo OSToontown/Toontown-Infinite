@@ -40,10 +40,6 @@ class DistributedLawnDecorAI(DistributedNodeAI):
         self.gardenManager.revertToPlot(self.plotIndex)
 
     def setMovie(self, movie, avId):
-        if not self.gardenManager.house.avatarId == avId:
-            self.notify.warning('Avatar %s tried to access a garden that is not theirs!' % avId)
-            self.sendUpdate('interactionDenied', [avId])
-            return
         self.movie = movie
         self.sendUpdate('setMovie', [movie, avId])
 
