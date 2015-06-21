@@ -994,6 +994,15 @@ class DistributedSellbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.doAnimate('Fb_fall', now=1)
         self.acceptOnce(self.animDoneEvent, self.__continueVictory)
         base.playMusic(self.battleThreeMusic, looping=1, volume=0.9, time=self.battleThreeMusicTime)
+        victoryTrack = Sequence(
+            Wait(6),
+            Parallel(
+                LerpColorScaleInterval(render, 3, Vec4(1, 1, 1, 1)),
+                LerpColorScaleInterval(aspect2d, 3, Vec4(1, 1, 1, 1)),
+                LerpColorScaleInterval(self.skyNode, 3, Vec4(1, 1, 1, 1))
+            )
+        )
+        victoryTrack.start()
 
     def __continueVictory(self):
         self.stopAnimate()

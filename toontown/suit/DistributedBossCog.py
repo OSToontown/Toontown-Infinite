@@ -864,7 +864,26 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
             dustCloud.setDepthWrite(0)
             dustCloud.setBin('fixed', 0)
             dustCloud.createTrack()
-            suitsOff.append(Sequence(Func(dustCloud.reparentTo, toon), Parallel(dustCloud.track, Sequence(Wait(0.3), Func(toon.takeOffSuit), Func(toon.sadEyes), Func(toon.blinkEyes), Func(toon.play, 'slip-backward'), Wait(0.7))), Func(dustCloud.detachNode), Func(dustCloud.destroy)))
+            suitsOff.append(
+                Sequence(
+                    Func(dustCloud.reparentTo, toon),
+                    Parallel(
+                        dustCloud.track,
+                        Sequence(
+                            Wait(0.3),
+                            Func(toon.takeOffSuit),
+                            Func(toon.sadEyes),
+                            Func(toon.blinkEyes),
+                            Func(toon.play, 'slip-backward'),
+                            Wait(0.7),
+                        )
+                    ),
+                    Func(dustCloud.detachNode),
+                    Func(dustCloud.destroy),
+                    Wait(3),
+                    Func(toon.loop, 'neutral'),
+                )
+            )
 
         seq.append(suitsOff)
         return seq
@@ -962,7 +981,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
 
         self.toMovieMode()
         base.camera.reparentTo(self.elevatorModel)
-        base.camera.setPosHpr(0, 30, 8, 180, 0, 0)
+        base.camera.setPosHpr(0, 25, 8, 180, 0, 0)
         base.playMusic(self.elevatorMusic, looping=1, volume=1.0)
         ival = Sequence(ElevatorUtils.getRideElevatorInterval(self.elevatorType), ElevatorUtils.getRideElevatorInterval(self.elevatorType), self.openDoors, Func(base.camera.wrtReparentTo, render), Func(self.__doneElevator))
         intervalName = 'ElevatorMovie'
