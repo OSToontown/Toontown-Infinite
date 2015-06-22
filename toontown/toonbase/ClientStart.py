@@ -186,8 +186,6 @@ if autoRun:
     try:
         base.run()
     except SystemExit:
-        raise
-    except:
-        from direct.showbase import PythonUtil
-        print PythonUtil.describeException()
-        raise
+        pass
+    except Exception as e:
+        raise e
