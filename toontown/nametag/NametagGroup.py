@@ -1,5 +1,6 @@
 from direct.task.Task import Task
 from pandac.PandaModules import VBase4, PandaNode
+from direct.distributed.ClockDelta import globalClockDelta
 
 from toontown.margins.MarginVisible import MarginVisible
 from toontown.nametag import NametagGlobals
@@ -283,7 +284,7 @@ class NametagGroup:
     def getChatPageIndex(self):
         return self.chatPageIndex
 
-    def setChatText(self, chatText, timeout=False):
+    def setChatText(self, chatText, timeout=False, timestamp=None):
         # If we are currently displaying chat text, we need to "stomp" it. In
         # other words, we need to clear the current chat text, pause for a
         # brief moment, and then display the new chat text:
@@ -306,6 +307,8 @@ class NametagGroup:
                 delay = self.CHAT_TIMEOUT_MIN
             elif delay > self.CHAT_TIMEOUT_MAX:
                 delay = self.CHAT_TIMEOUT_MAX
+            if timestamp is not None:
+                delay -= min(globalClockDelta.localElapsedTime(timestamp, bits=16), delay)
             self.chatTimeoutTask = taskMgr.doMethodLater(
                 delay, self.clearChatText, self.chatTimeoutTaskName)
 

@@ -477,12 +477,12 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         else:
             return Task.cont
 
-    def setTalk(self, fromAV, fromAC, avatarName, chat, mods, flags):
-        timestamp = time.strftime('%m-%d-%Y %H:%M:%S', time.localtime())
+    def setTalk(self, fromAV, fromAC, avatarName, chat, mods, flags, timestamp):
+        localTimestamp = time.strftime('%m-%d-%Y %H:%M:%S', time.localtime())
         if fromAV == 0:
-            print ':%s: setTalk: %r, %r, %r' % (timestamp, self.doId, self.name, chat)
+            print ':%s: setTalk: %r, %r, %r' % (localTimestamp, self.doId, self.name, chat)
         else:
-            print ':%s: setTalk: %r, %r, %r' % (timestamp, fromAV, avatarName, chat)
+            print ':%s: setTalk: %r, %r, %r' % (localTimestamp, fromAV, avatarName, chat)
 
         if base.cr.avatarFriendsManager.checkIgnored(fromAV):
             self.d_setWhisperIgnored(fromAV)
@@ -494,7 +494,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             if base.localAvatar.sleepFlag == 1:
                 base.cr.ttiFriendsManager.d_sleepAutoReply(fromAV)
         newText, scrubbed = self.scrubTalk(chat, mods)
-        self.displayTalk(newText)
+        self.displayTalk(newText, timestamp=timestamp)
         base.talkAssistant.receiveOpenTalk(fromAV, avatarName, fromAC, None, newText)
 
     def isAvFriend(self, avId):
@@ -2250,7 +2250,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.nametag.setChatText(chatString, timeout=bool(chatFlags & CFTimeout))
         self.playCurrentDialogue(dialogue, chatFlags - CFSpeech, interrupt)
 
-    def displayTalk(self, chatString, mods=None):
+    def displayTalk(self, chatString, mods=None, timestamp=None):
         flags = CFSpeech | CFTimeout
         self.nametag.setChatType(NametagGlobals.CHAT)
         if base.talkAssistant.isThought(chatString):
@@ -2259,7 +2259,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             chatString = base.talkAssistant.removeThoughtPrefix(chatString)
         else:
             self.nametag.setChatBalloonType(NametagGlobals.CHAT_BALLOON)
-        self.nametag.setChatText(chatString, timeout=(flags & CFTimeout))
+        self.nametag.setChatText(chatString, timeout=(flags & CFTimeout), timestamp=timestamp)
         if base.toonChatSounds:
             self.playCurrentDialogue(None, flags, interrupt=1)
 

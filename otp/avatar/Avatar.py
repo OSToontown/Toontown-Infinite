@@ -388,7 +388,7 @@ class Avatar(Actor, ShadowCaster):
     def setChatMuted(self, chatString, chatFlags, dialogue = None, interrupt = 1, quiet = 0):
         pass
 
-    def displayTalk(self, chatString):
+    def displayTalk(self, chatString, timestamp=None):
         if not base.cr.avatarFriendsManager.checkIgnored(self.doId):
             self.clearChat()
             self.nametag.setChatType(NametagGlobals.CHAT)
@@ -399,7 +399,7 @@ class Avatar(Actor, ShadowCaster):
                 self.nametag.setChatText(chatString)
             else:
                 self.nametag.setChatBalloonType(NametagGlobals.CHAT_BALLOON)
-                self.nametag.setChatText(chatString, timeout=True)
+                self.nametag.setChatText(chatString, timeout=True, timestamp=timestamp)
 
     def clearChat(self):
         self.nametag.clearChatText()

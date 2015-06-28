@@ -230,9 +230,9 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
     def d_setChat(self, chatString, chatFlags):
         self.sendUpdate('setChat', [chatString, chatFlags, 0])
 
-    def setTalk(self, fromAV, fromAC, avatarName, chat, mods, flags):
+    def setTalk(self, fromAV, fromAC, avatarName, chat, mods, flags, timestamp):
         newText, scrubbed = self.scrubTalk(chat, mods)
-        self.displayTalk(newText)
+        self.displayTalk(newText, timestamp=timestamp)
         if base.talkAssistant.isThought(newText):
             newText = base.talkAssistant.removeThoughtPrefix(newText)
             base.talkAssistant.receiveThought(fromAV, avatarName, fromAC, None, newText, scrubbed)
