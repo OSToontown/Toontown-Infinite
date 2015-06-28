@@ -188,6 +188,9 @@ class Nametag3d(Nametag, Clickable3d):
         self.panel.setScale(self.panelWidth, 1, self.panelHeight)
 
     def animateChatBalloon(self):
+        if (self.chatBalloon is None) or (self.chatBalloon.isEmpty()):
+            return
+
         if self.chatBalloonAnimTrack is not None:
             self.chatBalloonAnimTrack.finish()
             self.chatBalloonAnimTrack = None
