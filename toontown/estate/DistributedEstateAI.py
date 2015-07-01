@@ -2,6 +2,7 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 
 from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
 from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTargetAI
+from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
 from toontown.fishing import FishingTargetGlobals
 from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 from toontown.safezone.SZTreasurePlannerAI import SZTreasurePlannerAI
