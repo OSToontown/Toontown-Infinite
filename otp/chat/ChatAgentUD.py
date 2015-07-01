@@ -39,5 +39,5 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         dg = dclass.aiFormatUpdate(
             'setTalk', sender, sender, self.air.ourChannel,
             [0, 0, '', cleanMessage, modifications, 0,
-             globalClockDelta.getRealNetworkTime(bits=32)])
+             globalClockDelta.getRealNetworkTime(bits=16)])
         self.air.send(dg)
