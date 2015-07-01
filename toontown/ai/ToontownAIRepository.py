@@ -104,6 +104,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.magicWordManager.generateWithRequired(2)
         self.newsManager = NewsManagerAI(self)
         self.newsManager.generateWithRequired(2)
+        self.holidayManager = HolidayManagerAI(self)
         self.safeZoneManager = SafeZoneManagerAI(self)
         self.safeZoneManager.generateWithRequired(2)
         self.tutorialManager = TutorialManagerAI(self)
@@ -137,7 +138,6 @@ class ToontownAIRepository(ToontownInternalRepository):
             self.partyManager.generateWithRequired(2)
             self.globalPartyMgr = self.generateGlobalObject(
                 OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
-        self.holidayManager = HolidayManagerAI(self)
 
     def createSafeZones(self):
         NPCToons.generateZone2NpcDict()
@@ -203,6 +203,9 @@ class ToontownAIRepository(ToontownInternalRepository):
         if self.config.GetBool('want-cog-headquarters', True):
             self.notify.info('Creating Cog headquarters...')
             self.createCogHeadquarters()
+
+        self.notify.info('Starting Holiday Manager...')
+        self.holidayManager.start()
 
         self.notify.info('Making district available...')
         self.distributedDistrict.b_setAvailable(1)

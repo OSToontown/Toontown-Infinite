@@ -18,6 +18,8 @@ class HolidayManagerAI:
         self.currentSillySaturdayCycle = [None, None]
         self.xpMultiplier = 1
         self.setup()
+
+    def start(self):
         self.yearlyHolidayTask()
         self.weeklyHolidayTask()
 
