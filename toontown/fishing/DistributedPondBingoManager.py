@@ -49,8 +49,9 @@ class DistributedPondBingoManager(DistributedObject.DistributedObject, FSM.FSM):
         self.notify.debug('generate: DistributedPondBingoManager')
 
     def delete(self):
-        del self.pond.pondBingoMgr
-        self.pond.pondBingoMgr = None
+        if self.pond:
+            del self.pond.pondBingoMgr
+            self.pond.pondBingoMgr = None
         del self.pond
         self.pond = None
         FSM.FSM.cleanup(self)
@@ -177,7 +178,6 @@ class DistributedPondBingoManager(DistributedObject.DistributedObject, FSM.FSM):
     def setJackpot(self, jackpot):
         self.jackpot = jackpot
 
-    #todo: fix crash
     def enterOff(self, args = None):
         self.notify.debug('enterOff: Enter Off State')
         del self.spot

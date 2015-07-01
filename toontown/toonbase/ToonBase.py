@@ -73,9 +73,9 @@ class ToonBase(OTPBase.OTPBase):
 
                 res = resolutions[0]
 
-            # Store our result:
+            # Store our result
             settings['res'] = res
-
+            
             # Reload the graphics pipe:
             properties = WindowProperties()
 

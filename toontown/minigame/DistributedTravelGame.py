@@ -133,6 +133,7 @@ class DistributedTravelGame(DistributedMinigame):
         self.notify.debug('load')
         DistributedMinigame.load(self)
         self.sky = loader.loadModel('phase_3.5/models/props/TT_sky')
+        self.sky.setZ(self.sky.getZ() + 5)
         self.gameBoard = loader.loadModel('phase_4/models/minigames/toon_cannon_gameground')
         self.gameBoard.setPosHpr(100, 0, 0, 0, 0, 0)
         self.gameBoard.setScale(1.0)
@@ -621,7 +622,7 @@ class DistributedTravelGame(DistributedMinigame):
         finalHpr = Vec3(self.cameraTopView[3], self.cameraTopView[4], self.cameraTopView[5])
         if self.FlyCameraUp:
             if self.FocusOnTrolleyWhileMovingUp:
-                camIval1.append(LerpPosInterval(camera, duration - setRightHprTime, finalPos, name='cameraMove'))
+                camIval1.append(LerpPosInterval(base.camera, duration - setRightHprTime, finalPos, name='cameraMove'))
                 camIval2 = Sequence(LerpHprInterval(base.camera, setRightHprTime, finalHpr, name='cameraHpr'))
             else:
                 camIval2 = Sequence(LerpPosHprInterval(base.camera, setRightHprTime, finalPos, finalHpr, blendType='easeIn', name='cameraHpr'))
@@ -755,7 +756,7 @@ class DistributedTravelGame(DistributedMinigame):
             self.scrollList.removeAllItems()
         self.indexToVotes = {}
         index = 0
-        for vote in xrange(available)[::-1]:
+        for vote in range(available)[::-1]:
             self.scrollList.addItem(str(-(vote + 1)))
             self.indexToVotes[index] = vote + 1
             index += 1

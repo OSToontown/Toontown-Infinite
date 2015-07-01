@@ -5,9 +5,7 @@ from toontown.safezone import DistributedButterflyAI
 from toontown.safezone import DistributedDGFlowerAI
 from toontown.safezone import DistributedTrolleyAI
 from toontown.toonbase import ToontownGlobals
-#from toontown.ai import DistributedGreenToonEffectMgrAI
-from toontown.ai import DistributedTrickOrTreatTargetAI
-from toontown.ai import DistributedWinterCarolingTargetAI
+from toontown.ai import DistributedGreenToonEffectMgrAI
 
 
 class DGHoodAI(HoodAI.HoodAI):
@@ -34,17 +32,9 @@ class DGHoodAI(HoodAI.HoodAI):
                 self.createClassicChar()
         if simbase.config.GetBool('want-butterflies', True):
             self.createButterflies()
-            
-        #self.GreenToonEffectManager = DistributedGreenToonEffectMgrAI.DistributedGreenToonEffectMgrAI(self.air)
-        #self.GreenToonEffectManager.generateWithRequired(5819)
-        
-        if simbase.air.wantHalloween:
-            self.TrickOrTreatTargetManager = DistributedTrickOrTreatTargetAI.DistributedTrickOrTreatTargetAI(self.air)
-            self.TrickOrTreatTargetManager.generateWithRequired(5620)
-        
-        if simbase.air.wantChristmas:
-            self.WinterCarolingTargetManager = DistributedWinterCarolingTargetAI.DistributedWinterCarolingTargetAI(self.air)
-            self.WinterCarolingTargetManager.generateWithRequired(5626)
+
+        if simbase.air.holidayManager.isHolidayRunning(ToontownGlobals.IDES_OF_MARCH):
+            self.startupGreenToonManager()
 
     def shutdown(self):
         HoodAI.HoodAI.shutdown(self)
@@ -75,3 +65,13 @@ class DGHoodAI(HoodAI.HoodAI):
                 butterfly.setState(0, 0, 0, 1, 1)
                 butterfly.generateWithRequired(self.zoneId)
                 self.butterflies.append(butterfly)
+
+    def startupGreenToonManager(self):
+        if hasattr(self, 'GreenToonEffectManager'):
+            return
+        self.GreenToonEffectManager = DistributedGreenToonEffectMgrAI.DistributedGreenToonEffectMgrAI(self.air)
+        self.GreenToonEffectManager.generateWithRequired(5819)
+
+    def stopGreenToonManager(self):
+        if hasattr(self, 'GreenToonEffectManager'):
+            self.GreenToonEffectManager.requestDelete()

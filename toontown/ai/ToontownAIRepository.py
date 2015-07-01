@@ -120,7 +120,6 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.promotionMgr = PromotionManagerAI.PromotionManagerAI(self)
         self.cogPageManager = CogPageManagerAI.CogPageManagerAI()
         self.bankManager = BankManagerAI.BankManagerAI(self)
-        self.holidayManager = HolidayManagerAI(self)
         if self.wantFishing:
             self.fishManager = FishManagerAI(self)
         if self.wantHousing:
@@ -138,6 +137,7 @@ class ToontownAIRepository(ToontownInternalRepository):
             self.partyManager.generateWithRequired(2)
             self.globalPartyMgr = self.generateGlobalObject(
                 OTP_DO_ID_GLOBAL_PARTY_MANAGER, 'GlobalPartyManager')
+        self.holidayManager = HolidayManagerAI(self)
 
     def createSafeZones(self):
         NPCToons.generateZone2NpcDict()

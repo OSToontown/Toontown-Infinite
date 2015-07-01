@@ -1,7 +1,9 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
-# TODO: OTP should not depend on Toontown... Hrrm.
+from direct.distributed.ClockDelta import globalClockDelta
+
 from toontown.chat.TTWhiteList import TTWhiteList
+
 
 class ChatAgentUD(DistributedObjectGlobalUD):
     notify = DirectNotifyGlobal.directNotify.newCategory("ChatAgentUD")
@@ -33,10 +35,9 @@ class ChatAgentUD(DistributedObjectGlobalUD):
 
         self.air.writeServerEvent('chat-said', sender, message, cleanMessage)
 
-        # TODO: The above is probably a little too ugly for my taste... Maybe AIR
-        # should be given an API for sending updates for unknown objects?
-        DistributedAvatar = self.air.dclassesByName['DistributedAvatarUD']
-        dg = DistributedAvatar.aiFormatUpdate('setTalk', sender, sender,
-                                              self.air.ourChannel,
-                                              [0, 0, '', cleanMessage, modifications, 0])
+        dclass = self.air.dclassesByName['DistributedAvatarUD']
+        dg = dclass.aiFormatUpdate(
+            'setTalk', sender, sender, self.air.ourChannel,
+            [0, 0, '', cleanMessage, modifications, 0,
+             globalClockDelta.getRealNetworkTime(bits=16)])
         self.air.send(dg)

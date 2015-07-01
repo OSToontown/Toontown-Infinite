@@ -1,8 +1,19 @@
 #!/usr/bin/env python2
+import gc
+
+
+# Due to the newer Panda3D versions being less stable on the C++ side of things,
+# we need to disable the garbage collector during startup or a thread related
+# error will cause an AttributeError.
+# ~ Chan
+gc.disable()
+
+
 import __builtin__
 
 
 __builtin__.process = 'client'
+
 
 from pandac.PandaModules import *
 
@@ -166,12 +177,15 @@ del version
 base.loader = base.loader
 __builtin__.loader = base.loader
 autoRun = ConfigVariableBool('toontown-auto-run', 1)
+
+# Now that everything is loaded we can enable the garbage collector again.
+gc.enable()
+gc.collect()
+
 if autoRun:
     try:
         base.run()
     except SystemExit:
-        raise
-    except:
-        from direct.showbase import PythonUtil
-        print PythonUtil.describeException()
-        raise
+        pass
+    except Exception as e:
+        raise e
