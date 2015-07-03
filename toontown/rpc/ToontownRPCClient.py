@@ -92,7 +92,7 @@ class ToontownRPCMethod:
 
         self.channel.sendExtraHeader('Accept', 'application/json')
         self.channel.sendExtraHeader('Content-Type', 'application/json')
-        self.channel.sendExtraHeader('User-Agent', 'TTI-RPCClient/0.1')
+        self.channel.sendExtraHeader('User-Agent', 'RPCClient (Toontown Infinite; src)')
 
         data = json.dumps({'jsonrpc': '2.0', 'method': self.name,
                            'params': params, 'id': id(self)})
