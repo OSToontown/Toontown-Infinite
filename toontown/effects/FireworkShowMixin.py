@@ -4,11 +4,57 @@ from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToontownGlobals import *
 from toontown.toonbase import TTLocalizer
 from toontown.parties import PartyGlobals
-from toontown.hood import *
 import Fireworks
 import FireworkShows
-from FireworkGlobals import skyTransitionDuration, preShowPauseDuration, postShowPauseDuration, preNormalMusicPauseDuration
+from FireworkGlobals import skyTransitionDuration, preShowPauseDuration
 from toontown.effects.FireworkShow import FireworkShow
+
+FIREWORK_SHOW_LOCATION = {
+    ToontownCentral: (150, 0, 80, 90, 0, 0),
+    DonaldsDock: (150, 0, 50, 90, 0, 0),
+    MinniesMelodyland: (150, -25, 40, 90, 0, 0),
+    TheBrrrgh: (-200, -60, 50, 270, 0, 0),
+    DaisyGardens: (-80, -50, 60, 0, 0, 0),
+    OutdoorZone: (-450, -80, 140, 300, 0, 0),
+    GoofySpeedway: (60, -350, 80, 20, 0, 0),
+    DonaldsDreamland: (-160, 0, 80, 270, 0, 0),
+    PartyHood: (0, -400, 120, 0, 0, 0)
+}
+
+PRESHOW_DICT = {
+    JULY4_FIREWORKS: [
+        TTLocalizer.FireworksInstructions,
+        TTLocalizer.FireworksJuly4Beginning,
+        TTLocalizer.FireworksJuly4Ending,
+        ['tt_summer', 'firework_music']
+    ],
+    NEWYEARS_FIREWORKS: [
+        TTLocalizer.FireworksInstructions,
+        TTLocalizer.FireworksNewYearsEveBeginning,
+        TTLocalizer.FireworksNewYearsEveEnding,
+        ['new_years_fireworks_music', 'tt_s_ara_gen_fireworks_auldLangSyne']
+    ],
+    PartyGlobals.FireworkShows.Summer: [
+        TTLocalizer.FireworksActivityInstructions,
+        TTLocalizer.FireworksActivityBeginning,
+        TTLocalizer.FireworksActivityEnding,
+        ['tt_party1', 'tt_party2']
+    ],
+    COMBO_FIREWORKS: [
+        TTLocalizer.FireworksInstructions,
+        TTLocalizer.FireworksComboBeginning,
+        TTLocalizer.FireworksComboEnding,
+        ['new_years_fireworks_music', 'tt_s_ara_gen_fireworks_auldLangSyne']
+    ]
+}
+
+POSTSHOW_DICT = {
+    JULY4_FIREWORKS: TTLocalizer.FireworksJuly4Ending,
+    NEWYEARS_FIREWORKS: TTLocalizer.FireworksNewYearsEveEnding,
+    PartyGlobals.FireworkShows.Summer: TTLocalizer.FireworksActivityEnding,
+    COMBO_FIREWORKS: TTLocalizer.FireworksComboEnding
+}
+
 
 class FireworkShowMixin:
     notify = DirectNotifyGlobal.directNotify.newCategory('FireworkShowMixin')
@@ -27,12 +73,11 @@ class FireworkShowMixin:
         if self.currentShow:
             self.currentShow.pause()
             self.currentShow = None
-            if base.cr.config.GetBool('want-old-fireworks', 0):
+            if base.config.GetBool('want-old-fireworks', False):
                 ivalMgr.finishIntervalsMatching('shootFirework*')
             else:
                 self.destroyFireworkShow()
-        from toontown.hood import DDHood
-        if isinstance(self.getHood(), DDHood.DDHood):
+        if self.getHood().id == DonaldsDock:
             self.getHood().whiteFogColor = Vec4(0.8, 0.8, 0.8, 1)
         self.restoreCameraLens()
         if hasattr(self.getHood(), 'loader'):
@@ -65,45 +110,27 @@ class FireworkShowMixin:
             self.currentShow = self.getFireworkShowIval(eventId, style, songId, t)
             if self.currentShow:
                 self.currentShow.start(t)
-        else:
-            self.createFireworkShow()
-            if t > self.fireworkShow.getShowDuration():
-                return
-            preShow = self.preShow(eventId, songId, t)
-            postShow = self.postShow(eventId)
-            beginFireworkShow = Func(self.beginFireworkShow, max(0, t), root)
-            self.currentShow = Sequence(preShow, beginFireworkShow, Wait(max(0, self.fireworkShow.getShowDuration() - max(0, t))), postShow)
-            self.currentShow.start()
+            return
+
+        self.createFireworkShow()
+        if t > self.fireworkShow.getShowDuration():
+            return
+        preShow = self.preShow(eventId, songId, t)
+        postShow = self.postShow(eventId)
+        beginFireworkShow = Func(self.beginFireworkShow, max(0, t), root)
+        self.currentShow = Sequence(
+            preShow, beginFireworkShow, Wait(max(0, self.fireworkShow.getShowDuration() - max(0, t))), postShow
+        )
+        self.currentShow.start()
         return
 
     def preShow(self, eventId, songId, startT):
-        if eventId == JULY4_FIREWORKS:
-            instructionMessage = TTLocalizer.FireworksInstructions
-            startMessage = TTLocalizer.FireworksJuly4Beginning
-            endMessage = TTLocalizer.FireworksJuly4Ending
-            songs = ['tt_summer', 'firework_music']
-            musicFile = 'phase_4/audio/bgm/%s.ogg' % songs[songId]
-        elif eventId == NEWYEARS_FIREWORKS:
-            instructionMessage = TTLocalizer.FireworksInstructions
-            startMessage = TTLocalizer.FireworksNewYearsEveBeginning
-            endMessage = TTLocalizer.FireworksNewYearsEveEnding
-            songs = ['new_years_fireworks_music', 'tt_s_ara_gen_fireworks_auldLangSyne']
-            musicFile = 'phase_4/audio/bgm/%s.ogg' % songs[songId]
-        elif eventId == PartyGlobals.FireworkShows.Summer:
-            instructionMessage = TTLocalizer.FireworksActivityInstructions
-            startMessage = TTLocalizer.FireworksActivityBeginning
-            endMessage = TTLocalizer.FireworksActivityEnding
-            songs = ['tt_party1', 'tt_party2']
-            musicFile = 'phase_4/audio/bgm/%s.ogg' % songs[songId]
-        elif eventId == COMBO_FIREWORKS:
-            instructionMessage = TTLocalizer.FireworksInstructions
-            startMessage = TTLocalizer.FireworksComboBeginning
-            endMessage = TTLocalizer.FireworksComboEnding
-            songs = ['new_years_fireworks_music', 'tt_s_ara_gen_fireworks_auldLangSyne']
-            musicFile = 'phase_4/audio/bgm/%s.ogg' % songs[songId]
-        else:
+        if eventId not in PRESHOW_DICT:
             FireworkShowMixin.notify.warning('Invalid fireworks event ID: %d' % eventId)
             return None
+
+        instructionMessage, startMessage, endMessage, songs = PRESHOW_DICT[eventId]
+        musicFile = 'phase_4/audio/bgm/%s.ogg' % songs[songId]
 
         self.showMusic = loader.loadMusic(musicFile)
         self.showMusic.setVolume(1)
@@ -133,29 +160,53 @@ class FireworkShowMixin:
                 self.fireworkShow.setColorScaleOff(0)
             return
 
+        if self.__checkHoodValidity() and hasattr(base.cr.playGame, 'hood') and base.cr.playGame.hood \
+                and hasattr(base.cr.playGame.hood, 'sky') and base.cr.playGame.hood.sky:
+            return Sequence(
+                Func(base.localAvatar.setSystemMessage, 0, startMessage),
+                Parallel(
+                    LerpColorScaleInterval(base.cr.playGame.hood.sky, 2.5, Vec4(0.0, 0.0, 0.0, 1.0)),
+                    LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 2.5, Vec4(0.25, 0.25, 0.35, 1)),
+                    LerpColorScaleInterval(base.localAvatar, 2.5, Vec4(0.85, 0.85, 0.85, 1)), Func(__lightDecorationOn__)
+                ),
+                Func(base.setBackgroundColor, Vec4(0, 0, 0, 1)),
+                Func(self.__checkDDFog), Func(base.camLens.setFar, 1000.0),
+                Func(base.cr.playGame.hood.sky.hide),
+                Func(base.localAvatar.setSystemMessage, 0, instructionMessage),
+                Func(self.getLoader().music.stop),
+                Wait(2.0),
+                Func(base.playMusic, self.showMusic, 0, 1, 0.8, max(0, startT))
+            )
+        return None
+
     def restoreCameraLens(self):
         hood = self.getHood()
-        if hood != None:
+        if hood is not None:
             if hood.id == GoofySpeedway or hood.id == OutdoorZone:
                 base.camLens.setFar(SpeedwayCameraFar)
             else:
                 base.camLens.setFar(DefaultCameraFar)
 
     def postShow(self, eventId):
-        if eventId == JULY4_FIREWORKS:
-            endMessage = TTLocalizer.FireworksJuly4Ending
-        elif eventId == NEWYEARS_FIREWORKS:
-            endMessage = TTLocalizer.FireworksNewYearsEveEnding
-        elif eventId == PartyGlobals.FireworkShows.Summer:
-            endMessage = TTLocalizer.FireworksActivityEnding
-        elif eventId == COMBO_FIREWORKS:
-            endMessage = TTLocalizer.FireworksComboEnding
-        else:
+        endMessage = POSTSHOW_DICT.get(eventId)
+        if endMessage is None:
             FireworkShowMixin.notify.warning('Invalid fireworks event ID: %d' % eventId)
             return None
 
         if self.__checkHoodValidity() and hasattr(base.cr.playGame.hood, 'sky') and base.cr.playGame.hood.sky:
-            postShow = Sequence(Func(base.cr.playGame.hood.sky.show), Parallel(LerpColorScaleInterval(base.cr.playGame.hood.sky, 2.5, Vec4(1, 1, 1, 1)), LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 2.5, Vec4(1, 1, 1, 1)), LerpColorScaleInterval(base.localAvatar, 2.5, Vec4(1, 1, 1, 1))), Func(self.__restoreDDFog), Func(self.restoreCameraLens), Func(base.setBackgroundColor, DefaultBackgroundColor), Func(self.showMusic.stop), Func(base.localAvatar.setSystemMessage, 0, endMessage))
+            postShow = Sequence(
+                Func(base.cr.playGame.hood.sky.show),
+                Parallel(
+                    LerpColorScaleInterval(base.cr.playGame.hood.sky, 2.5, Vec4(1, 1, 1, 1)),
+                    LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 2.5, Vec4(1, 1, 1, 1)),
+                    LerpColorScaleInterval(base.localAvatar, 2.5, Vec4(1, 1, 1, 1))
+                ),
+                Func(self.__restoreDDFog),
+                Func(self.restoreCameraLens),
+                Func(base.setBackgroundColor, DefaultBackgroundColor),
+                Func(self.showMusic.stop),
+                Func(base.localAvatar.setSystemMessage, 0, endMessage)
+            )
         if self.restorePlaygroundMusic:
             postShow.append(Wait(2.0))
             postShow.append(Func(base.playMusic, self.getLoader().music, 1, 1, 0.8))
@@ -175,34 +226,10 @@ class FireworkShowMixin:
         if self.fireworkShow and not self.fireworkShow.isPlaying():
             self.fireworkShow.begin(timeStamp)
             self.fireworkShow.reparentTo(root)
-            hood = self.getHood()
-            if isinstance(hood, TTHood.TTHood):
-                self.fireworkShow.setPos(150, 0, 80)
-                self.fireworkShow.setHpr(90, 0, 0)
-            elif isinstance(hood, BRHood.BRHood):
-                self.fireworkShow.setPos(-200, -60, 50)
-                self.fireworkShow.setHpr(270, 0, 0)
-            elif isinstance(hood, MMHood.MMHood):
-                self.fireworkShow.setPos(150, -25, 40)
-                self.fireworkShow.setHpr(90, 0, 0)
-            elif isinstance(hood, DGHood.DGHood):
-                self.fireworkShow.setPos(-80, -50, 60)
-                self.fireworkShow.setHpr(0, 0, 0)
-            elif isinstance(hood, DLHood.DLHood):
-                self.fireworkShow.setPos(-160, 0, 80)
-                self.fireworkShow.setHpr(270, 0, 0)
-            elif isinstance(hood, GSHood.GSHood):
-                self.fireworkShow.setPos(60, -350, 80)
-                self.fireworkShow.setHpr(20, 0, 0)
-            elif isinstance(hood, DDHood.DDHood):
-                self.fireworkShow.setPos(150, 0, 50)
-                self.fireworkShow.setHpr(90, 0, 0)
-            elif isinstance(hood, OZHood.OZHood):
-                self.fireworkShow.setPos(-450, -80, 140)
-                self.fireworkShow.setHpr(300, 0, 0)
-            elif isinstance(hood, PartyHood.PartyHood):
-                self.fireworkShow.setPos(0, -400, 120)
-                self.fireworkShow.lookAt(0, 0, 0)
+            hoodId = self.getHood().id
+            if hoodId in FIREWORK_SHOW_LOCATION:
+                self.fireworkShow.setPosHpr(*FIREWORK_SHOW_LOCATION[hoodId])
+            if hoodId == PartyHood:
                 self.fireworkShow.setScale(1.8)
 
     def getFireworkShowIval(self, eventId, index, songId, startT):
@@ -231,12 +258,12 @@ class FireworkShowMixin:
             self.getSky().clearColorScale()
 
     def getLoader(self):
-        if base.cr.playGame.hood != None:
+        if base.cr.playGame.hood is not None:
             return base.cr.playGame.hood.loader
         return
 
     def getHood(self):
-        if base.cr.playGame.hood != None:
+        if base.cr.playGame.hood is not None:
             return base.cr.playGame.hood
         return
 
@@ -253,29 +280,25 @@ class FireworkShowMixin:
         return None
 
     def __checkDDFog(self):
-        from toontown.hood import DDHood
-        if isinstance(self.getHood(), DDHood.DDHood):
+        if self.getHood().id == DonaldsDock:
             self.getHood().whiteFogColor = Vec4(0.2, 0.2, 0.2, 1)
             if hasattr(base.cr.playGame.getPlace(), 'cameraSubmerged'):
                 if not base.cr.playGame.getPlace().cameraSubmerged:
                     self.getHood().setWhiteFog()
 
     def __restoreDDFog(self):
-        from toontown.hood import DDHood
-        if isinstance(self.getHood(), DDHood.DDHood):
+        if self.getHood().id == DonaldsDock:
             self.getHood().whiteFogColor = Vec4(0.8, 0.8, 0.8, 1)
             if hasattr(base.cr.playGame.getPlace(), 'cameraSubmerged'):
                 if not base.cr.playGame.getPlace().cameraSubmerged:
                     self.getHood().setWhiteFog()
 
     def __checkStreetValidity(self):
-        if hasattr(base.cr.playGame, 'getPlace') and base.cr.playGame.getPlace() and hasattr(base.cr.playGame.getPlace(), 'loader') and base.cr.playGame.getPlace().loader and hasattr(base.cr.playGame.getPlace().loader, 'geom') and base.cr.playGame.getPlace().loader.geom:
-            return True
-        else:
-            return False
+        return hasattr(base.cr.playGame, 'getPlace') and base.cr.playGame.getPlace()\
+            and hasattr(base.cr.playGame.getPlace(), 'loader') and base.cr.playGame.getPlace().loader\
+            and hasattr(base.cr.playGame.getPlace().loader, 'geom') and base.cr.playGame.getPlace().loader.geom
 
     def __checkHoodValidity(self):
-        if hasattr(base.cr.playGame, 'hood') and base.cr.playGame.hood and hasattr(base.cr.playGame.hood, 'loader') and base.cr.playGame.hood.loader and hasattr(base.cr.playGame.hood.loader, 'geom') and base.cr.playGame.hood.loader.geom:
-            return True
-        else:
-            return False
+        return hasattr(base.cr.playGame, 'hood') and base.cr.playGame.hood\
+            and hasattr(base.cr.playGame.hood, 'loader') and base.cr.playGame.hood.loader\
+            and hasattr(base.cr.playGame.hood.loader, 'geom') and base.cr.playGame.hood.loader.geom

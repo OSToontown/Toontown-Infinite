@@ -1,9 +1,11 @@
+from direct.distributed.ClockDelta import globalClockDelta
 from direct.directnotify.DirectNotifyGlobal import *
 from toontown.ai import DistributedTrickOrTreatTargetAI
 from toontown.ai import DistributedWinterCarolingTargetAI
 from toontown.ai.NewsManagerGlobals import HOLIDAY_SHOPKEEPER_ZONES
 from toontown.building import DistributedBuildingMgrAI
 from toontown.dna.DNAParser import DNAStorage, DNAGroup, DNAVisGroup
+from toontown.effects.DistributedFireworkShowAI import DistributedFireworkShowAI
 from toontown.fishing.DistributedFishingPondAI import DistributedFishingPondAI
 from toontown.fishing.DistributedPondBingoManagerAI import DistributedPondBingoManagerAI
 from toontown.hood import ZoneUtil
@@ -69,6 +71,8 @@ class HoodAI:
             self.startupTrickOrTreat()
         if simbase.air.wantChristmas or simbase.air.holidayManager.isHolidayRunning(ToontownGlobals.WINTER_CAROLING):
             self.startupWinterCaroling()
+        if simbase.air.wantFireworks:
+            self.generateFireworkShow()
 
     def shutdown(self):
         if self.treasurePlanner:
@@ -226,3 +230,10 @@ class HoodAI:
         if hasattr(self, 'WinterCarolingManager'):
             self.WinterCarolingManager.requestDelete()
             del self.WinterCarolingManager
+
+    def generateFireworkShow(self):
+        self.fireworkShow = DistributedFireworkShowAI(self.air)
+        self.fireworkShow.generateWithRequired(self.zoneId)
+
+    def startFireworks(self, showType, showIndex):
+        self.fireworkShow.b_startShow(showType, showIndex, globalClockDelta.getRealNetworkTime())

@@ -1,9 +1,11 @@
 from toontown.ai.NewsManagerGlobals import DEFAULT_YEARLY_HOLIDAYS, DEFAULT_WEEKLY_HOLIDAYS
+from toontown.effects.FireworkShows import shows
 from toontown.toonbase.HolidayGlobals import *
 
 from otp.ai.MagicWordGlobal import *
 
 from datetime import datetime, date
+import random
 
 HOLIDAY_CHECK_INTERVAL = 21600
 SILLY_SATURDAY_CYCLE = 7200
@@ -59,6 +61,11 @@ class HolidayManagerAI:
             for hood in self.air.hoods:
                 hood.startupWinterCaroling()
 
+        elif holidayId == JULY4_FIREWORKS:
+            now = datetime.now()
+            minutesLeft = abs(60 - now.minute)
+            taskMgr.doMethodLater(minutesLeft * 60, self.fireworkTask, 'fireworkShowTask')
+
         elif holidayId in (FISH_BINGO_NIGHT, SILLY_SATURDAY_BINGO):
             for hood in self.air.hoods:
                 for fishingPond in hood.fishingPonds:
@@ -95,6 +102,9 @@ class HolidayManagerAI:
         elif holidayId == WINTER_CAROLING:
             for hood in self.air.hoods:
                 hood.endWinterCaroling()
+
+        elif holidayId == JULY4_FIREWORKS:
+            taskMgr.remove('fireworkShowTask')
 
         elif holidayId in (FISH_BINGO_NIGHT, SILLY_SATURDAY_BINGO):
             for hood in self.air.hoods:
@@ -167,10 +177,24 @@ class HolidayManagerAI:
         self.appendHoliday(self.currentSillySaturdayCycle[1])
         self.startHoliday(self.currentSillySaturdayCycle[1])
 
+    def fireworkTask(self, task=None):
+        showType = JULY4_FIREWORKS
+        numShows = len(shows.get(showType, []))
+        showIndex = random.randint(0, numShows - 1)
+
+        for hood in self.air.hoods:
+            hood.startFireworks(showType, showIndex)
+
+        now = datetime.now()
+        minutesLeft = abs(60 - now.minute)
+        taskMgr.doMethodLater(minutesLeft * 60, self.fireworkTask, 'fireworkShowTask')
+
     def cleanup(self):
         taskMgr.remove('yearlyHolidayTask')
         taskMgr.remove('weeklyHolidayTask')
         taskMgr.remove('Silly-Saturday')
+        taskMgr.remove('fireworkShowTask')
+
 
 @magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
 def startHoliday(holidayId):
