@@ -321,10 +321,15 @@ class ToonBase(OTPBase.OTPBase):
         nametags3d = render.findAllMatches('**/nametag3d')
         nametags2d = render2d.findAllMatches('**/Nametag2d')
         hide = False
+        # Check if anything we're supposed to hide is visible
         for nametag in nametags2d:
-            # We want hiding to be #1 priority
             if not nametag.isHidden():
                 hide = True
+        for nametag in nametags3d:
+            if not nametag.isHidden():
+                hide = True
+                
+        # If anything is visible, hide, else we will show everything
         for nametag in nametags3d:
             if hide:
                 nametag.hide()
