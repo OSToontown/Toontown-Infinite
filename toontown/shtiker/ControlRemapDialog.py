@@ -20,14 +20,14 @@ class ControlRemap:
         self.dialog = TTDialog.TTGlobalDialog(
             dialogName='ControlRemap', doneEvent='doneRemapping', style=TTDialog.TwoChoice,
             text=RemapPrompt, text_wordwrap=24,
-            text_pos=(0, -0.7), suppressKeys = True, suppressMouse = True
+            text_pos=(0, 0, -0.8), suppressKeys = True, suppressMouse = True
         )
         scale = self.dialog.component('image0').getScale()
-        scale.setX(((scale[0] * 3.5) / base.getAspectRatio()) * 1.2)
-        scale.setZ(scale[2] * 3)
+        scale.setX(((scale[0] * 2.5) / base.getAspectRatio()) * 1.2)
+        scale.setZ(scale[2] * 2.5)
         self.dialog.component('image0').setScale(scale)
         button_x = -0.6
-        button_y = 0.6
+        button_y = 0.4
         labelPos = (0, 0, 0.1)
 
         self.upKey = OptionButton(
