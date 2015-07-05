@@ -107,10 +107,10 @@ class DistributedGardenPlot(DistributedLawnDecor.DistributedLawnDecor):
         return plantText
 
     def canBePlanted(self):
-        retval = True
         if not base.localAvatar.doId == self.getOwnerId():
-            retval = False
-        return retval
+            return False
+
+        return True
 
     def plantSomething(self):
         whatCanBePlanted = GardenGlobals.whatCanBePlanted(self.ownerIndex, self.plot)
