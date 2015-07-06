@@ -292,7 +292,7 @@ class NametagGroup:
             elif delay > self.CHAT_TIMEOUT_MAX:
                 delay = self.CHAT_TIMEOUT_MAX
             if timestamp is not None:
-                delay -= min(globalClockDelta.localElapsedTime(timestamp, bits=16), delay)
+                delay -= min(globalClockDelta.localElapsedTime(timestamp, bits=32), delay)
             if not delay:
                 return
 

@@ -478,12 +478,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             return Task.cont
 
     def setTalk(self, fromAV, fromAC, avatarName, chat, mods, flags, timestamp):
-        localTimestamp = time.strftime('%m-%d-%Y %H:%M:%S', time.localtime())
-        if fromAV == 0:
-            print ':%s: setTalk: %r, %r, %r' % (localTimestamp, self.doId, self.name, chat)
-        else:
-            print ':%s: setTalk: %r, %r, %r' % (localTimestamp, fromAV, avatarName, chat)
-
         if base.cr.avatarFriendsManager.checkIgnored(fromAV):
             self.d_setWhisperIgnored(fromAV)
             return
