@@ -331,9 +331,6 @@ class TownBattle(StateData.StateData):
     def enterAttack(self):
         self.attackPanel.enter()
         self.accept(self.attackPanelDoneEvent, self.__handleAttackPanelDone)
-        for toonPanel in self.toonPanels:
-            toonPanel.setValues(0, BattleBase.NO_ATTACK)
-
         return None
 
     def exitAttack(self):
