@@ -121,7 +121,7 @@ want-talkative-tyler #f
 want-yin-yang #f
 want-butterflies #f
 want-estate-fisherman #t
-want-fireworks #f
+want-fireworks #t
 
 # Developer options:
 want-dev #f

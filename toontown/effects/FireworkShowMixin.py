@@ -77,19 +77,21 @@ class FireworkShowMixin:
                 ivalMgr.finishIntervalsMatching('shootFirework*')
             else:
                 self.destroyFireworkShow()
-        if self.getHood().id == DonaldsDock:
-            self.getHood().whiteFogColor = Vec4(0.8, 0.8, 0.8, 1)
+        hood = self.getHood()
+        if hood is not None:
+            if hood.id == DonaldsDock:
+                hood.whiteFogColor = Vec4(0.8, 0.8, 0.8, 1)
         self.restoreCameraLens()
-        if hasattr(self.getHood(), 'loader'):
-            self.getGeom().clearColorScale()
-        if hasattr(self.getHood(), 'sky'):
-            self.getSky().show()
-            self.getSky().clearColorScale()
+        if hood is not None:
+            if hasattr(hood, 'loader'):
+                self.getGeom().clearColorScale()
+            if hasattr(hood, 'sky'):
+                self.getSky().show()
+                self.getSky().clearColorScale()
         if hasattr(base, 'localAvatar') and base.localAvatar:
             base.localAvatar.clearColorScale()
         base.setBackgroundColor(DefaultBackgroundColor)
         self.ignoreAll()
-        return
 
     def startMusic(self):
         if self.timestamp:
