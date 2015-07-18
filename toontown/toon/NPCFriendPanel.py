@@ -126,7 +126,7 @@ class NPCFriendCard(DirectFrame):
         trashClosedButton = trashcanGui.find('**/TrashCan_CLSD')
         trashOpenedButton = trashcanGui.find('**/TrashCan_OPEN')
         trashRolloverButton = trashcanGui.find('**/TrashCan_RLVR')
-        self.sosDeleteButton = DirectButton(parent=self.front, relief=None, text=('', 'Delete', 'Delete', ''), text_fg=self.normalTextColor, text_scale=0.28, text_align=TextNode.ACenter, image=(trashClosedButton, trashOpenedButton, trashRolloverButton), image_pos=(Vec3(0, 0, 0.08)), pos=(1.25, 0, 0.6), scale=2, command=self.__handleDeleteNPCFriend)
+        self.sosDeleteButton = DirectButton(parent=self.front, relief=None, text=('', TTLocalizer.NPCFriendPageDelete, TTLocalizer.NPCFriendPageDelete, ''), text_fg=self.normalTextColor, text_scale=0.28, text_align=TextNode.ACenter, image=(trashClosedButton, trashOpenedButton, trashRolloverButton), image_pos=(Vec3(0, 0, 0.08)), pos=(1.25, 0, 0.6), scale=2, command=self.__handleDeleteNPCFriend)
         self.sosCountInfo = DirectLabel(parent=self.front, relief=None, text='', text_fg=self.normalTextColor, text_scale=0.75, text_align=TextNode.ALeft, textMayChange=1, pos=(0.0, 0, -1.0))
         star = loader.loadModel('phase_3.5/models/gui/name_star')
         self.rarityStars = []
@@ -150,9 +150,9 @@ class NPCFriendCard(DirectFrame):
         buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
         okButton = (buttons.find('**/ChtBx_OKBtn_UP'), buttons.find('**/ChtBx_OKBtn_DN'), buttons.find('**/ChtBx_OKBtn_Rllvr'))
         cancelButton = (buttons.find('**/CloseBtn_UP'), buttons.find('**/CloseBtn_DN'), buttons.find('**/CloseBtn_Rllvr'))
-        self.confirmationDialog = DirectFrame(parent=hidden, relief=None, state='normal', text='Are you sure you want to delete 1 of these SOSs?', frameSize=(-1, 1, -1, 1), text_wordwrap=10, geom=DGG.getDefaultDialogGeom(), geom_color=ToontownGlobals.GlobalDialogColor, geom_scale=(0.88, 1, 0.55), geom_pos=(0, 0, -.08), text_scale=0.08, text_pos=(0, 0.08))
-        DirectButton(self.confirmationDialog, image=okButton, relief=None, text='OK', text_scale=0.05, text_pos=(0.0, -0.1), textMayChange=0, pos=(-0.1, 0.0, -0.21), command=self.__deleteNPCFriend)
-        DirectButton(self.confirmationDialog, image=cancelButton, relief=None, text='Cancel', text_scale=0.05, text_pos=(0.0, -0.1), textMayChange=0, pos=(0.1, 0.0, -0.21), command=self.__closeConfirmationDialog)
+        self.confirmationDialog = DirectFrame(parent=hidden, relief=None, state='normal', text=TTLocalizer.NPCFriendPageDeleteConfirmation, frameSize=(-1, 1, -1, 1), text_wordwrap=10, geom=DGG.getDefaultDialogGeom(), geom_color=ToontownGlobals.GlobalDialogColor, geom_scale=(0.88, 1, 0.55), geom_pos=(0, 0, -.08), text_scale=0.08, text_pos=(0, 0.08))
+        DirectButton(self.confirmationDialog, image=okButton, relief=None, text=TTLocalizer.lOK, text_scale=0.05, text_pos=(0.0, -0.1), textMayChange=0, pos=(-0.1, 0.0, -0.21), command=self.__deleteNPCFriend)
+        DirectButton(self.confirmationDialog, image=cancelButton, relief=None, text=TTLocalizer.lCancel, text_scale=0.05, text_pos=(0.0, -0.1), textMayChange=0, pos=(0.1, 0.0, -0.21), command=self.__closeConfirmationDialog)
         buttons.removeNode()
         self.confirmationDialog.reparentTo(aspect2d)
 

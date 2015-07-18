@@ -185,7 +185,6 @@ SkeletonP = 'Skelecogs'
 Av2Cog = 'a Version 2.0 Cog'
 v2Cog = 'Version 2.0 Cog'
 v2CogP = 'Version 2.0 Cogs'
-ASkeleton = 'a Skelecog'
 Foreman = 'Factory Foreman'
 ForemanP = 'Factory Foremen'
 AForeman = 'a Factory Foreman'
@@ -4161,6 +4160,8 @@ InventoryPageSinglePoint = 'You will get a new\n%(trackName)s gag when you\nget 
 InventoryPageNoAccess = 'You do not have access to the %s track yet.'
 AchievementsPageTitle = 'Achievements'
 NPCFriendPageTitle = 'SOS Toons'
+NPCFriendPageDelete = 'Delete'
+NPCFriendPageDeleteConfirmation = 'Are you sure you want to delete 1 of these SOSs?'
 PartyDateFormat = '%(mm)s %(dd)d, %(yyyy).4d'
 PartyTimeFormat = '%d:%.2d %s'
 PartyTimeFormatMeridiemAM = 'am'
@@ -6149,7 +6150,6 @@ BottomStylesDescriptions = {'bbs1': 'plain w/ pockets',
  'hw_bs5': 'Halloween SuperToon Shorts male',
  'hw_bs6': 'Halloween Vampire NoCape Shorts male',
  'hw_bs7': 'Halloween Dinosaur Shorts male',
- 'sil_bs1': 'Silly Cog-Crusher Shorts',
  'gsk1': 'solid',
  'gsk2': 'polka dots (special)',
  'gsk3': 'vertical stripes',
