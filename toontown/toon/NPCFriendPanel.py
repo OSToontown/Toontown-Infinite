@@ -147,17 +147,12 @@ class NPCFriendCard(DirectFrame):
         if self.confirmationDialog is not None:
             self.confirmationDialog.destroy()
             self.confirmationDialog = None
-        print('handleDeleteNPCFriend: 1')
         buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
         okButton = (buttons.find('**/ChtBx_OKBtn_UP'), buttons.find('**/ChtBx_OKBtn_DN'), buttons.find('**/ChtBx_OKBtn_Rllvr'))
         cancelButton = (buttons.find('**/CloseBtn_UP'), buttons.find('**/CloseBtn_DN'), buttons.find('**/CloseBtn_Rllvr'))
-        print('handleDeleteNPCFriend: 2')
         self.confirmationDialog = DirectFrame(parent=hidden, relief=None, state='normal', text='Are you sure you want to delete 1 of these SOSs?', frameSize=(-1, 1, -1, 1), text_wordwrap=10, geom=DGG.getDefaultDialogGeom(), geom_color=ToontownGlobals.GlobalDialogColor, geom_scale=(0.88, 1, 0.55), geom_pos=(0, 0, -.08), text_scale=0.08, text_pos=(0, 0.08))
-        print('handleDeleteNPCFriend: 3')
         DirectButton(self.confirmationDialog, image=okButton, relief=None, text='OK', text_scale=0.05, text_pos=(0.0, -0.1), textMayChange=0, pos=(-0.1, 0.0, -0.21), command=self.__deleteNPCFriend)
-        print('handleDeleteNPCFriend: 4')
         DirectButton(self.confirmationDialog, image=cancelButton, relief=None, text='Cancel', text_scale=0.05, text_pos=(0.0, -0.1), textMayChange=0, pos=(0.1, 0.0, -0.21), command=self.__closeConfirmationDialog)
-        print('handleDeleteNPCFriend: 5')
         buttons.removeNode()
         self.confirmationDialog.reparentTo(aspect2d)
 
