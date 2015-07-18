@@ -161,14 +161,15 @@ class NPCFriendCard(DirectFrame):
         npcId = self['NPCID']
         text = self.sosCountInfo['text']
         npcCount = int(text.split(' ')[0])
+        base.localAvatar.sendUpdate('attemptSubtractNPCFriend', [npcId])
         if npcCount > 1:
             npcCount -= 1
         else:
-            self.destroy()
-            return
+            self.front.hide()
+            self.back.show()
         text = str(npcCount) + ' ' + text.split(' ')[1]
         self.sosCountInfo['text'] = text
-        base.localAvatar.sendUpdate('attemptSubtractNPCFriend', [npcId])
+
 
     def __closeConfirmationDialog(self):
         if self.confirmationDialog is not None:
