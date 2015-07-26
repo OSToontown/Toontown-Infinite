@@ -81,11 +81,16 @@ class DistributedPlantBaseAI(DistributedLawnDecorAI):
     def updateFromTimestamp(self):
         seconds = self.gardenManager.getTimestamp() - self.timestamp
         cycles = seconds / GardenGlobals.GROWTH_INTERVAL
-        unwateredCycles = self.growthLevel - cycles
+        unwateredCycles = abs(self.growthLevel - cycles)
         self.waterLevel = max(self.waterLevel - unwateredCycles, -1)
         if self.waterLevel < 0:
             # This tree is wilted, don't grow it.
             return
+
+        if self.waterLevel > 127:
+            # Oh no, a broken garden!
+            self.waterLevel = 0
+
         self.growthLevel = min(cycles, GardenGlobals.MAX_GROWTH_LEVEL)
 
     def pack(self, gardenData):
