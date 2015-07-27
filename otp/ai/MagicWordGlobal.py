@@ -1,6 +1,8 @@
-from direct.showbase import PythonUtil
+import traceback
 
-class MagicError(Exception): pass
+
+class MagicError(Exception):
+    pass
 
 
 def ensureAccess(access, msg='Insufficient access'):
@@ -36,7 +38,7 @@ class Spellbook:
         except MagicError as e:
             return e.message
         except Exception:
-            return PythonUtil.describeException(backTrace=1)
+            return traceback.format_exc()
         finally:
             self.currentInvoker = None
             self.currentTarget = None
