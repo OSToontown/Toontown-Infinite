@@ -29,9 +29,6 @@ class DistributedHouseDoor(DistributedDoor.DistributedDoor):
     def getTriggerName(self):
         return 'door_trigger_' + str(self.houseId)
 
-    def hideDoorParts(self):
-        pass
-
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
         if self.doorType == DoorTypes.EXT_STANDARD:
