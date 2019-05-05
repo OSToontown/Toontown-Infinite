@@ -1,4 +1,4 @@
-import semidbm
+import anydbm as semidbm
 import base64
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 from direct.distributed.PyDatagram import *

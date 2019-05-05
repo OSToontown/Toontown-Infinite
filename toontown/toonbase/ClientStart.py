@@ -62,6 +62,7 @@ loadPrcFileData('Settings: toonChatSounds', 'toon-chat-sounds %s' % settings['to
 
 import os
 
+'''
 from toontown.toonbase.ContentPacksManager import ContentPackError
 from toontown.toonbase.ContentPacksManager import ContentPacksManager
 
@@ -76,7 +77,7 @@ __builtin__.ContentPackError = ContentPackError
 __builtin__.contentPacksMgr = ContentPacksManager(
     filepath=contentPacksFilepath, sortFilename=contentPacksSortFilename)
 contentPacksMgr.applyAll()
-
+'''
 
 import time
 import sys
