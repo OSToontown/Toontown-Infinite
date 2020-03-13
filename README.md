@@ -1,6 +1,6 @@
 <img src="https://i.ibb.co/drdyL5q/icon.png" align="right" width="200"/>
 
-# Toontown Stride
+# Toontown Infinite
 A Toontown Infinite Source that just works.
 
 # ❓ What is Toontown Infinite
