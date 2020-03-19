@@ -35,6 +35,17 @@ class Clickable(FSM, PandaNode, DirectObject):
         self.accept(leavePattern.replace('%r', self.regionName), self.__handleMouseLeave)
         self.accept(buttonDownPattern.replace('%r', self.regionName), self.__handleMouseDown)
         self.accept(buttonUpPattern.replace('%r', self.regionName), self.__handleMouseUp)
+    
+    def __setattr__(self, key, value):
+        if key == 'state':
+            self.__dict__[key] = value
+        else:
+            return super(Clickable, self).__setattr__(key, value)
+ 
+    def __getattribute__(self, item):
+        if item == 'state':
+            return self.__dict__[item]
+        return super(Clickable, self).__getattribute__(item)
 
     def destroy(self):
         self.ignoreAll()

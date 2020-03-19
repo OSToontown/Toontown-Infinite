@@ -16,7 +16,11 @@ __builtin__.process = 'client'
 
 
 from pandac.PandaModules import *
+from panda3d.core import NodePath
 
+for dtool in ('children', 'parent', 'name'):
+    del NodePath.DtoolClassDict[dtool]
+    
 
 if __debug__:
     loadPrcFile('config/general.prc')
