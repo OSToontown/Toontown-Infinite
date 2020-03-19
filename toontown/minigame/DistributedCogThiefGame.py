@@ -62,7 +62,7 @@ class DistributedCogThiefGame(DistributedMinigame):
     def load(self):
         self.notify.debug('load')
         DistributedMinigame.load(self)
-        self.music = base.loadMusic('phase_4/audio/bgm/MG_CogThief.ogg')
+        self.music = base.loader.loadMusic('phase_4/audio/bgm/MG_CogThief.ogg')
         self.initCogInfo()
         for barrelIndex in xrange(CTGG.NumBarrels):
             barrel = loader.loadModel('phase_4/models/minigames/cogthief_game_gagTank')

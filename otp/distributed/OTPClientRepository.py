@@ -935,7 +935,7 @@ class OTPClientRepository(ClientRepositoryBase):
             delay = 0
         else:
             delay = 3
-        taskMgr.doMethodLater(delay, doneWait, self.noShardsWaitTaskName)
+        #taskMgr.doMethodLater(delay, doneWait, self.noShardsWaitTaskName)
 
     def exitNoShardsWait(self):
         taskMgr.remove(self.noShardsWaitTaskName)

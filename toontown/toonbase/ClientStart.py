@@ -128,7 +128,7 @@ clickToStart.setColorScale(0, 0, 0, 0)
 music = None
 if base.musicManagerIsValid:
     themeList = ('phase_3/audio/bgm/tti_theme.ogg', 'phase_3/audio/bgm/tti_theme.ogg')
-    music = base.loadMusic(random.choice(themeList))
+    music = base.loader.loadMusic(random.choice(themeList))
     if music:
         music.setLoop(1)
         music.setVolume(0.9)
@@ -139,11 +139,11 @@ if base.musicManagerIsValid:
 else:
     music = None
     #if ToontownGlobals.HALLOWEEN_PROPS in base.clientHolidayIdList:
-    #    music = base.loadMusic('phase_3/audio/bgm/tti_theme_halloween.ogg')
+    #    music = base.loader.loadMusic('phase_3/audio/bgm/tti_theme_halloween.ogg')
     #if ToontownGlobals.WACKY_WINTER_DECORATIONS in base.clientHolidayIdList:
-    #    music = base.loadMusic('phase_3/audio/bgm/tti_theme_christmas.ogg')
+    #    music = base.loader.loadMusic('phase_3/audio/bgm/tti_theme_christmas.ogg')
     #else:
-    #    music = base.loadMusic('phase_3/audio/bgm/tti_theme.ogg')
+    #    music = base.loader.loadMusic('phase_3/audio/bgm/tti_theme.ogg')
     if music is not None:
         music.setLoop(1)
         music.setVolume(0.9)
