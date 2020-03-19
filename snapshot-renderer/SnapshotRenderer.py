@@ -10,7 +10,7 @@ loadPrcFileData("",
    show-frame-rate-meter 0
    sync-video 0
    default-model-extension .bam
-   model-path ../../resources
+   model-path ../resources
 """)
 from direct.showbase.ShowBase import ShowBase 
 base = ShowBase() 

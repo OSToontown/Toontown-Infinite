@@ -18,7 +18,7 @@ Support is currently being worked on for MacOS and Non Arch Based Linux Distros
 To get the source running you need to install the [Panda3D](https://github.com/NormalNed/Toontown-Infinite/blob/master/Panda3D-1.11.0.exe) located in this repo.
 
 ### Installing Pip Dependencies
-The next part is to get our Dependencies. To get them open a Command Prompt Window inside of the Toontown Stride folder and run
+The next part is to get our Dependencies. To get them open a Command Prompt Window inside of the Toontown Infinite folder and run
 ```bash
 ppython -m pip install -r requirements.txt
 ```
@@ -47,7 +47,7 @@ python2 get-pip.py
 ```
 
 ### Installing Pip Dependencies
-The next part is to get our Dependencies. Open a Terminal inside of the Stride Project and follow these instructions below.
+The next part is to get our Dependencies. Open a Terminal inside of the Infinite Project and follow these instructions below.
 ```bash
 pip2.7 install -r requirements.txt
 ```
@@ -68,7 +68,7 @@ Now run the [Start.sh](Start.sh) file to launch the game.
 
 # 📝 Notice
 
-This repository contains code derived from the [BigNed repository.](https://github.com/BigNed/ToontownStride)
+This repository contains code derived from the [BigNed repository.](https://github.com/BigNed/ToontownInfinite)
 
 BigNed is operated by rocketprogrammer, toonjoey, Jeeperpretzel, and EliasTDev.
 

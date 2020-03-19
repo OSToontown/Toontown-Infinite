@@ -16,6 +16,8 @@ from direct.showbase.PythonUtil import *
 from direct.task import Task
 from direct.task.TaskManagerGlobal import *
 from otp.otpbase import BackupManager
+from toontown.toonbase import PythonUtil
+from toontown.toonbase.PythonUtil import *
 from pandac.PandaModules import *
 
 

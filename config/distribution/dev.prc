@@ -5,7 +5,7 @@ distribution dev
 audio-library-name p3openal_audio
 
 # Art assets:
-model-path ../resources
+model-path resources
 
 # Server:
 server-version dev
