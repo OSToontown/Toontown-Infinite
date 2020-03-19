@@ -57,6 +57,7 @@ class Clickable(FSM, PandaNode, DirectObject):
         if self.contents is not None:
             self.contents.removeNode()
             self.contents = None
+        return
 
     def getUniqueName(self):
         return 'Clickable-' + str(id(self))
@@ -73,7 +74,7 @@ class Clickable(FSM, PandaNode, DirectObject):
     def isHovering(self):
         return self.__hovering
 
-    def setClickState(self, clickState):
+    def setClickEvent(self, event, extraArgs = None):
         self.lastClickState = self.clickState
         self.clickState = clickState
 

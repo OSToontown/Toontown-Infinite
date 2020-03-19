@@ -463,57 +463,29 @@ class ToonBase(OTPBase.OTPBase):
         self.downloadWatcher.cleanup()
         self.downloadWatcher = None
 
-    def startShow(self, cr, launcherServer=None):
-        self.cr = cr
-        base.graphicsEngine.renderFrame()
-        self.downloadWatcher = ToontownDownloadWatcher.ToontownDownloadWatcher(
-            TTLocalizer.LauncherPhaseNames)
-        if launcher.isDownloadComplete():
-            self.cleanupDownloadWatcher()
+    def startShow(self, gameserver = None):
+        if self.cr is None:
+            return
         else:
-            self.acceptOnce('launcherAllPhasesComplete',
-                            self.cleanupDownloadWatcher)
-        gameServer = os.environ.get('TTI_GAMESERVER', 'localhost')
-        # Get the base port.
-        serverPort = base.config.GetInt('server-port', 7199)
-
-        # Get the number of client-agents.
-        clientagents = base.config.GetInt('client-agents', 1) - 1
-
-        # Get a new port.
-        serverPort += (random.randint(0, clientagents) * 100)
-
-        serverList = []
-        for name in gameServer.split(';'):
-            url = URLSpec(name, 1)
+            if gameserver is None:
+                gameserver = os.environ.get('TTI_GAMESERVER', '66.38.72.39')
+            gameserverPort = base.config.GetInt('server-port', 7199)
+            clientagents = base.config.GetInt('client-agents', 1) - 1
+            gameserverPort += random.randint(0, clientagents) * 100
+            gameserver = URLSpec(gameserver, 1)
             if base.config.GetBool('server-force-ssl', False):
-                url.setScheme('s')
-            if not url.hasPort():
-                url.setPort(serverPort)
-            serverList.append(url)
+                gameserver.setScheme('s')
+            if not gameserver.hasPort():
+                gameserver.setPort(gameserverPort)
+            self.cr.loginFSM.request('connect', [[gameserver]])
+            self.ttAccess = ToontownAccess.ToontownAccess()
+            self.ttAccess.initModuleInfo()
+            self.lastSpeedHackCheck = time.time()
+            self.lastTrueClockTime = TrueClock.getGlobalPtr().getLongTime()
+            taskMgr.add(self.__speedHackCheckTick, 'speedHackCheck-tick')
+            return
 
-        if len(serverList) == 1:
-            failover = base.config.GetString('server-failover', '')
-            serverURL = serverList[0]
-            for arg in failover.split():
-                try:
-                    port = int(arg)
-                    url = URLSpec(serverURL)
-                    url.setPort(port)
-                except:
-                    url = URLSpec(arg, 1)
 
-                if url != serverURL:
-                    serverList.append(url)
-
-        cr.loginFSM.request('connect', [serverList])
-        self.ttAccess = ToontownAccess.ToontownAccess()
-        self.ttAccess.initModuleInfo()
-
-        # Start detecting speed hacks:
-        self.lastSpeedHackCheck = time.time()
-        self.lastTrueClockTime = TrueClock.getGlobalPtr().getLongTime()
-        taskMgr.add(self.__speedHackCheckTick, 'speedHackCheck-tick')
 
     def __speedHackCheckTick(self, task):
         elapsed = time.time() - self.lastSpeedHackCheck
