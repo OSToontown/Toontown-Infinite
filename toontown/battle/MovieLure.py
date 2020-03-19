@@ -425,7 +425,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
         if suit.maxHP <= 42:
             suitTrack.append(midairSuitExplodeTrack(suit, battle))
             damageTrack = Sequence(Wait(2.4), Func(suit.showHpText, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
-            explosionSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
+            explosionSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
             soundTrack = Sequence(
                 SoundInterval(globalBattleSoundCache.getSound('TL_dynamite.ogg'), duration=2.0, node=suit),
                 SoundInterval(explosionSound, duration=0.6, node=suit)
@@ -453,7 +453,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
             suitTrack.append(Func(battle.movie.clearRestoreColor))
 
             damageTrack = Sequence(Wait(2.3), Func(suit.showHpText, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
-            explosionSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
+            explosionSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
             soundTrack = Sequence(
                 SoundInterval(globalBattleSoundCache.getSound('TL_dynamite.ogg'), duration=2.0, node=suit),
                 SoundInterval(explosionSound, duration=0.6, node=suit)
@@ -485,7 +485,7 @@ def midairSuitExplodeTrack(suit, battle):
     suitPos.setZ(suitPos.getZ() + 17)
     suitTrack.append(Wait(0.15))
     suitTrack.append(Func(MovieUtil.avatarHide, suit))
-    deathSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
+    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
     deathSoundTrack = Sequence(Wait(0.5), SoundInterval(deathSound, volume=0.8))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')

@@ -107,6 +107,6 @@ class ClientServicesManager(DistributedObjectGlobal):
         whisper.manage(base.marginManager)
 
         if self.systemMessageSfx is None:
-            self.systemMessageSfx = base.loadSfx('phase_3/audio/sfx/clock03.ogg')
+            self.systemMessageSfx = base.loader.loadSfx('phase_3/audio/sfx/clock03.ogg')
 
         base.playSfx(self.systemMessageSfx)
