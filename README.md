@@ -3,7 +3,7 @@
 
 <img src="https://i.ibb.co/drdyL5q/icon.png" align="right" width="200"/>
 
-# Toontown Infinite
+# Toontown Infinite [![Discord][discordImg]][discordLink]
 A Toontown Infinite Source that just works.
 
 # ❓ What is Toontown Infinite
@@ -65,4 +65,8 @@ sudo ldconfig
 
 ### Running the Game
 Now run the [Start.sh](Start.sh) file to launch the game.
+
+[discordImg]: https://img.shields.io/discord/690332444364505315.svg?logo=discord&logoWidth=18&colorB=7289DA&style=for-the-badge
+
+[discordLink]: https://discord.gg/jnaK6JD
 
